@@ -8,6 +8,17 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Demo mode banner and signup errors
+
+### What changed
+- Dashboard shows an amber banner when demo mode is active (explains Marcus Chen sample user vs real Supabase signup).
+- Sign-up page displays errors from `/api/auth/signup` instead of failing silently.
+
+### Files
+- `app/(dashboard)/layout.tsx`, `app/(auth)/signup/page.tsx`
+
+---
+
 ## 2026-05-25 — Vercel + Supabase deployment guide
 
 ### What changed

@@ -19,6 +19,7 @@ export default function SignupPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     full_name: "",
     email: "",
@@ -34,6 +35,7 @@ export default function SignupPage() {
       setStep(2);
       return;
     }
+    setError("");
     setLoading(true);
     try {
       const res = await fetch("/api/auth/signup", {
@@ -41,11 +43,15 @@ export default function SignupPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+      const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) {
+        setError(data.error ?? "Could not create account. Please try again.");
         return;
       }
       router.push("/dashboard");
       router.refresh();
+    } catch {
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -141,6 +147,11 @@ export default function SignupPage() {
               </div>
             </>
           )}
+          {error ? (
+            <p className="text-sm text-red-600 text-center" role="alert">
+              {error}
+            </p>
+          ) : null}
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin mx-auto" />
