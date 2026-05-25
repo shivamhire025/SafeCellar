@@ -8,6 +8,18 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — GitHub remote linked
+
+### What changed
+- Local repo connected to [github.com/shivamhire025/SafeCellar](https://github.com/shivamhire025/SafeCellar).
+- Merged GitHub's initial `README.md` commit with local history (`--allow-unrelated-histories`).
+- Pushed full prototype to `origin/main`; local `main` tracks `origin/main`.
+
+### Files
+- Git only (no app code changes). Root `README.md` from GitHub preserved alongside `safecellar/README.md`.
+
+---
+
 ## 2026-05-24 — Initial MVP scaffold (Phase 1 P0)
 
 ### Project setup
