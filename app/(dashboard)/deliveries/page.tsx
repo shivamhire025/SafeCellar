@@ -7,7 +7,28 @@ import { Topbar } from "@/components/layout/topbar";
 import { Button } from "@/components/ui/button";
 import { DeliveriesClient } from "./deliveries-client";
 
-export default async function DeliveriesPage() {
+const DELIVERY_FILTERS = [
+  "all",
+  "ordered",
+  "in_transit",
+  "inventory_pending",
+  "complete",
+] as const;
+type DeliveryFilter = (typeof DELIVERY_FILTERS)[number];
+
+function parseFilter(filter?: string): DeliveryFilter {
+  if (filter && DELIVERY_FILTERS.includes(filter as DeliveryFilter)) {
+    return filter as DeliveryFilter;
+  }
+  return "all";
+}
+
+export default async function DeliveriesPage({
+  searchParams,
+}: {
+  searchParams?: { filter?: string };
+}) {
+  const initialFilter = parseFilter(searchParams?.filter);
   const session = await getSession();
   const deliveries = await deliveriesRepository.getDeliveries();
 
@@ -26,7 +47,10 @@ export default async function DeliveriesPage() {
           </Button>
         }
       >
-        <DeliveriesClient initialDeliveries={deliveries} />
+        <DeliveriesClient
+          initialDeliveries={deliveries}
+          initialFilter={initialFilter}
+        />
       </PageShell>
     </>
   );

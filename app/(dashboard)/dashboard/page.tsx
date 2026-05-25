@@ -12,6 +12,7 @@ import { RecentActivity } from "@/components/dashboard/recent-activity";
 import { getSession } from "@/lib/auth";
 import { trainingRepository } from "@/lib/training/repository";
 import { TrainingAlertCard } from "@/components/dashboard/training-alert-card";
+import { previewsFromReviewQueue } from "@/lib/dashboard/card-previews";
 import type { ComplianceStats } from "@/types/database";
 
 export default async function DashboardPage() {
@@ -41,6 +42,11 @@ export default async function DashboardPage() {
     ];
   }
 
+  const reviewQueue = isDemoMode()
+    ? demoStore.getSdsReviewQueue()
+    : await chemicalsRepository.getSdsReviewQueue();
+  const reviewQueuePreviews = previewsFromReviewQueue(reviewQueue, 2);
+
   const activity = await activityRepository.getActivityLog(10);
   const missingTraining = await trainingRepository.getWorkersMissingInitialTraining();
 
@@ -51,13 +57,13 @@ export default async function DashboardPage() {
         title="Compliance Overview"
         description="Chemical safety compliance readiness at a glance"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-          <div className="lg:col-span-1">
-            <ComplianceScoreCard stats={stats} />
-          </div>
-          <div className="lg:col-span-2">
-            <ComplianceBreakdown stats={stats} />
-          </div>
+        <div className="space-y-4 mb-6">
+          <ComplianceScoreCard stats={stats} />
+          <ComplianceBreakdown
+            stats={stats}
+            actions={actions}
+            reviewQueuePreviews={reviewQueuePreviews}
+          />
         </div>
         <div className="mb-6">
           <TrainingAlertCard missingCount={missingTraining} />

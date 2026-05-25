@@ -55,9 +55,13 @@ export function NotificationsMenu() {
   const [open, setOpen] = useState(false);
 
   const load = useCallback(() => {
-    fetch("/api/notifications")
-      .then((res) => (res.ok ? res.json() : []))
-      .then((data: HighRiskNotification[]) => setItems(data))
+    fetch("/api/notifications", { credentials: "same-origin" })
+      .then(async (res) => {
+        if (!res.ok) return [] as HighRiskNotification[];
+        const data = await res.json();
+        return Array.isArray(data) ? data : [];
+      })
+      .then((data) => setItems(data))
       .catch(() => setItems([]))
       .finally(() => setLoading(false));
   }, []);
@@ -74,7 +78,7 @@ export function NotificationsMenu() {
   const criticalCount = items.filter((i) => i.priority === "critical").length;
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
       <DropdownMenuTrigger asChild>
         <button
           type="button"

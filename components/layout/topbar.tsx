@@ -18,7 +18,7 @@ export function Topbar({
     .toUpperCase();
 
   return (
-    <header className="h-[60px] bg-white border-b border-neutral-200 flex items-center justify-between px-6 flex-shrink-0">
+    <header className="sticky top-0 z-30 h-[60px] bg-white border-b border-neutral-200 flex items-center justify-between px-6 flex-shrink-0">
       <h2 className="text-xl font-semibold text-neutral-900">
         <AbbreviationText text={title} />
       </h2>

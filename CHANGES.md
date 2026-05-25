@@ -8,6 +8,101 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Dashboard cards URL sync fix
+
+### What changed
+- **Chemicals / Deliveries**: `useSearchParams` wrapped in `Suspense` (fixes Next.js runtime error and broken CSS chunks in dev after Fast Refresh).
+- **URL tab sync**: `useEffect` depends only on `searchParams` to avoid redundant state updates.
+
+### Files
+- `app/(dashboard)/chemicals/chemicals-client.tsx`, `app/(dashboard)/deliveries/deliveries-client.tsx`
+
+---
+
+## 2026-05-25 — Compliance gauge arc math fix
+
+### What changed
+- Gauge uses explicit SVG arc paths (no stroke-dash); ticks sit outside the arc at 0/25/50/75/100%.
+- Fixed `aspect-[9/5]` + `preserveAspectRatio` so the semicircle is not squashed in layout.
+
+### Files
+- `components/dashboard/compliance-score-card.tsx`
+
+---
+
+## 2026-05-25 — Compliance gauge tick marks
+
+### What changed
+- Dashboard compliance score arc shows scale tick marks every 10% (emphasized at 0/25/50/75/100).
+
+### Files
+- `components/dashboard/compliance-score-card.tsx`
+
+---
+
+## 2026-05-25 — Notifications bell fix
+
+### What changed
+- **Supabase mode**: Notifications API now includes incomplete incidents (was hard-coded to `[]`).
+- **SDS review queue**: Non-resolved queue items surface in the bell (not only `pending`).
+- **Dropdown**: `modal={false}`, higher z-index, sticky topbar; removed broken `animate-in` classes that depended on a missing Tailwind plugin.
+- **Fetch**: Safer JSON parsing for `/api/notifications`.
+
+### Files
+- `lib/notifications/repository.ts`, `lib/notifications/build-high-risk-notifications.ts`
+- `components/layout/notifications-menu.tsx`, `components/layout/topbar.tsx`, `components/ui/dropdown-menu.tsx`
+
+---
+
+## 2026-05-25 — Dashboard card title styling
+
+### What changed
+- Compliance overview card titles are **bold** and use **severity/status colors** (red, amber, brand) instead of neutral gray.
+
+### Files
+- `components/dashboard/dashboard-stat-card.tsx`, `components/dashboard/compliance-score-card.tsx`
+
+---
+
+## 2026-05-25 — Dashboard cards: remove accent borders
+
+### What changed
+- Removed colored left-border accents on compliance overview cards; severity still shown via icon tint and status pills.
+
+### Files
+- `components/dashboard/dashboard-stat-card.tsx`, `components/dashboard/compliance-score-card.tsx`
+
+---
+
+## 2026-05-25 — Dashboard cards layout fix
+
+### What changed
+- **Compliance score card**: Vertical stack on small screens; removed duplicate status banner box; attention breakdown on separate lines to prevent text overlap.
+- **Overview layout**: Score card full width above three breakdown tiles (was cramped in a 1/3 column).
+- **Stat card previews**: Hidden by default; show as hover popover above footer (no longer always visible in layout).
+
+### Files
+- `components/dashboard/compliance-score-card.tsx`, `components/dashboard/dashboard-stat-card.tsx`, `components/dashboard/compliance-breakdown.tsx`, `app/(dashboard)/dashboard/page.tsx`
+
+---
+
+## 2026-05-25 — Dashboard compliance cards UX
+
+### What changed
+- **`/dashboard` Compliance Overview**: Score card shows inspection-readiness status (from `buildComplianceSummary`), accessible gauge label, attention breakdown linking to `#pending-actions`, and clearer CTA copy.
+- **Breakdown tiles** (SDS Status, Delivery Queue, SDS Review Queue): Scannable stat rows with badges, dynamic severity borders, descriptive footer links, hover/focus previews of top pending items, and empty-state copy when queues are clear.
+- **Deep links**: `/chemicals?tab=missing|review_due|compliant` and `/deliveries?filter=inventory_pending` sync tab/filter state with the URL (back/forward supported).
+- Shared `DashboardStatCard` shell and `lib/dashboard/card-previews.ts` for preview data from pending actions and SDS review queue.
+
+### Files
+- `components/dashboard/dashboard-stat-card.tsx`, `components/dashboard/compliance-score-card.tsx`, `components/dashboard/compliance-breakdown.tsx`, `components/dashboard/pending-actions.tsx`
+- `lib/dashboard/card-previews.ts`
+- `app/(dashboard)/dashboard/page.tsx`
+- `app/(dashboard)/chemicals/page.tsx`, `app/(dashboard)/chemicals/chemicals-client.tsx`
+- `app/(dashboard)/deliveries/page.tsx`, `app/(dashboard)/deliveries/deliveries-client.tsx`
+
+---
+
 ## 2026-05-25 — CS Permits create UI
 
 ### What changed

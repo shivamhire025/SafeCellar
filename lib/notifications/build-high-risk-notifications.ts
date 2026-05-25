@@ -81,7 +81,7 @@ export function buildHighRiskNotifications(input: {
     });
 
   reviewQueue
-    .filter((r) => r.status === "pending")
+    .filter((r) => r.status !== "resolved")
     .forEach((item) => {
       if (
         seen.has(`missing-${item.chemical_id}`) ||

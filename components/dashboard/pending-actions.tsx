@@ -16,7 +16,10 @@ interface PendingAction {
 export function PendingActions({ actions }: { actions: PendingAction[] }) {
   if (actions.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
+      <div
+        id="pending-actions"
+        className="bg-white rounded-xl border border-neutral-200 shadow-sm p-6 scroll-mt-6"
+      >
         <h3 className="text-base font-semibold text-neutral-900 mb-4">
           Pending Actions
         </h3>
@@ -31,7 +34,10 @@ export function PendingActions({ actions }: { actions: PendingAction[] }) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
+    <div
+      id="pending-actions"
+      className="bg-white rounded-xl border border-neutral-200 shadow-sm p-6 scroll-mt-6"
+    >
       <h3 className="text-base font-semibold text-neutral-900 mb-4">
         Pending Actions
       </h3>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -22,12 +23,49 @@ const statusLabels: Record<DeliveryStatus, string> = {
   complete: "Complete",
 };
 
-export function DeliveriesClient({
+function DeliveriesFiltersFallback() {
+  return (
+    <div className="flex gap-2 flex-wrap mb-4">
+      {filters.map((f) => (
+        <div
+          key={f.key}
+          className="h-9 w-28 animate-pulse rounded-md bg-neutral-100"
+        />
+      ))}
+    </div>
+  );
+}
+
+function DeliveriesClientInner({
   initialDeliveries,
+  initialFilter = "all",
 }: {
   initialDeliveries: Delivery[];
+  initialFilter?: string;
 }) {
-  const [filter, setFilter] = useState("all");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [filter, setFilter] = useState(initialFilter);
+
+  useEffect(() => {
+    const urlFilter = searchParams.get("filter") ?? "all";
+    const valid = filters.some((f) => f.key === urlFilter);
+    if (valid) {
+      setFilter(urlFilter);
+    }
+  }, [searchParams]);
+
+  function selectFilter(key: string) {
+    setFilter(key);
+    const params = new URLSearchParams(searchParams.toString());
+    if (key === "all") {
+      params.delete("filter");
+    } else {
+      params.set("filter", key);
+    }
+    const qs = params.toString();
+    router.replace(qs ? `/deliveries?${qs}` : "/deliveries", { scroll: false });
+  }
 
   const filtered = useMemo(() => {
     if (filter === "all") return initialDeliveries;
@@ -40,7 +78,7 @@ export function DeliveriesClient({
         {filters.map((f) => (
           <button
             key={f.key}
-            onClick={() => setFilter(f.key)}
+            onClick={() => selectFilter(f.key)}
             className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 ${
               filter === f.key
                 ? "bg-brand-700 text-white"
@@ -87,5 +125,16 @@ export function DeliveriesClient({
         )}
       </div>
     </div>
+  );
+}
+
+export function DeliveriesClient(props: {
+  initialDeliveries: Delivery[];
+  initialFilter?: string;
+}) {
+  return (
+    <Suspense fallback={<DeliveriesFiltersFallback />}>
+      <DeliveriesClientInner {...props} />
+    </Suspense>
   );
 }

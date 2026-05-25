@@ -5,7 +5,22 @@ import { getSession } from "@/lib/auth";
 import { ChemicalInventoryActions } from "@/components/chemicals/chemical-inventory-actions";
 import { ChemicalsClient } from "./chemicals-client";
 
-export default async function ChemicalsPage() {
+const CHEMICAL_TABS = ["all", "missing", "review_due", "compliant"] as const;
+type ChemicalTab = (typeof CHEMICAL_TABS)[number];
+
+function parseTab(tab?: string): ChemicalTab {
+  if (tab && CHEMICAL_TABS.includes(tab as ChemicalTab)) {
+    return tab as ChemicalTab;
+  }
+  return "all";
+}
+
+export default async function ChemicalsPage({
+  searchParams,
+}: {
+  searchParams?: { tab?: string };
+}) {
+  const initialTab = parseTab(searchParams?.tab);
   const session = await getSession();
   const chemicals = await chemicalsRepository.getChemicals();
   const counts = {
@@ -23,7 +38,11 @@ export default async function ChemicalsPage() {
         description="Every chemical in your facility. Each must have a compliant SDS."
         actions={<ChemicalInventoryActions />}
       >
-        <ChemicalsClient initialChemicals={chemicals} counts={counts} />
+        <ChemicalsClient
+          initialChemicals={chemicals}
+          counts={counts}
+          initialTab={initialTab}
+        />
       </PageShell>
     </>
   );

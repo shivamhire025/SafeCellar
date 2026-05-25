@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -20,15 +21,52 @@ const tabs = [
   { key: "compliant", label: "Compliant" },
 ] as const;
 
-export function ChemicalsClient({
+function ChemicalsFiltersFallback() {
+  return (
+    <div className="flex gap-2 flex-wrap mb-4">
+      {tabs.map((t) => (
+        <div
+          key={t.key}
+          className="h-9 w-24 animate-pulse rounded-md bg-neutral-100"
+        />
+      ))}
+    </div>
+  );
+}
+
+function ChemicalsClientInner({
   initialChemicals,
   counts,
+  initialTab = "all",
 }: {
   initialChemicals: Chemical[];
   counts: Record<string, number>;
+  initialTab?: string;
 }) {
-  const [tab, setTab] = useState<string>("all");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [tab, setTab] = useState(initialTab);
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const urlTab = searchParams.get("tab") ?? "all";
+    const valid = tabs.some((t) => t.key === urlTab);
+    if (valid) {
+      setTab(urlTab);
+    }
+  }, [searchParams]);
+
+  function selectTab(key: string) {
+    setTab(key);
+    const params = new URLSearchParams(searchParams.toString());
+    if (key === "all") {
+      params.delete("tab");
+    } else {
+      params.set("tab", key);
+    }
+    const qs = params.toString();
+    router.replace(qs ? `/chemicals?${qs}` : "/chemicals", { scroll: false });
+  }
 
   const filtered = useMemo(() => {
     let list = initialChemicals;
@@ -56,7 +94,7 @@ export function ChemicalsClient({
           {tabs.map((t) => (
             <button
               key={t.key}
-              onClick={() => setTab(t.key)}
+              onClick={() => selectTab(t.key)}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 ${
                 tab === t.key
                   ? "bg-brand-700 text-white"
@@ -183,5 +221,17 @@ export function ChemicalsClient({
         </div>
       )}
     </div>
+  );
+}
+
+export function ChemicalsClient(props: {
+  initialChemicals: Chemical[];
+  counts: Record<string, number>;
+  initialTab?: string;
+}) {
+  return (
+    <Suspense fallback={<ChemicalsFiltersFallback />}>
+      <ChemicalsClientInner {...props} />
+    </Suspense>
   );
 }

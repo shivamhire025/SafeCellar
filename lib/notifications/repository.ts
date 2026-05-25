@@ -1,6 +1,7 @@
 import { demoStore } from "@/lib/demo-store";
 import { chemicalsRepository } from "@/lib/chemicals/repository";
 import { deliveriesRepository } from "@/lib/deliveries/repository";
+import { incidentsRepository } from "@/lib/incidents/repository";
 import { isDemoMode } from "@/lib/demo-mode";
 import { buildHighRiskNotifications } from "@/lib/notifications/build-high-risk-notifications";
 import type { HighRiskNotification } from "@/types/database";
@@ -11,17 +12,18 @@ export const notificationsRepository = {
       return demoStore.getHighRiskNotifications();
     }
 
-    const [chemicals, reviewQueue, deliveries] = await Promise.all([
+    const [chemicals, reviewQueue, deliveries, incidents] = await Promise.all([
       chemicalsRepository.getChemicals(),
       chemicalsRepository.getSdsReviewQueue(),
       deliveriesRepository.getDeliveries(),
+      incidentsRepository.getIncidents(),
     ]);
 
     return buildHighRiskNotifications({
       chemicals,
       reviewQueue,
       deliveries,
-      incidents: [],
+      incidents,
     });
   },
 };
