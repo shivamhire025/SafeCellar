@@ -1,4 +1,5 @@
 import PDFDocument from "pdfkit";
+import { getComplianceTerminology } from "@/lib/compliance/terminology";
 import type { HazcomPacketData } from "@/lib/reports/hazcom-packet";
 import {
   buildComplianceSummary,
@@ -26,6 +27,7 @@ export function generateHazcomPdf(data: HazcomPacketData): Promise<Buffer> {
     doc.on("error", reject);
 
     const { org, chemicals, stats, trainingRecords, generatedAt } = data;
+    const terms = getComplianceTerminology(org.regulatory_profile);
     const summary = buildComplianceSummary(stats);
     const address = [org.address, org.city, org.state, org.zip]
       .filter(Boolean)
@@ -34,7 +36,7 @@ export function generateHazcomPdf(data: HazcomPacketData): Promise<Buffer> {
     doc
       .fontSize(18)
       .fillColor("#1D4ED8")
-      .text("Hazard Communication Program", { align: "left" });
+      .text(terms.pdfDocumentTitle, { align: "left" });
     doc
       .fontSize(10)
       .fillColor("#6B7280")
@@ -128,10 +130,7 @@ export function generateHazcomPdf(data: HazcomPacketData): Promise<Buffer> {
     doc
       .fontSize(8)
       .fillColor("#6B7280")
-      .text(
-        "SafeCellar assists with compliance documentation. The employer remains responsible for OSHA compliance.",
-        { width: 500 }
-      );
+      .text(terms.disclaimer, { width: 500 });
 
     doc.end();
   });

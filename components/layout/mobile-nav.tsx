@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   ClipboardCheck,
-  ClipboardList,
+  FileCheck,
   FlaskConical,
   LayoutDashboard,
   Settings,
@@ -17,7 +17,7 @@ const navItems = [
   { href: "/chemicals", icon: FlaskConical },
   { href: "/deliveries", icon: Truck },
   { href: "/sds-review", icon: ClipboardCheck },
-  { href: "/incidents", icon: ClipboardList },
+  { href: "/compliance", icon: FileCheck },
   { href: "/settings", icon: Settings },
 ];
 

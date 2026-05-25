@@ -9,17 +9,26 @@ export function TrainingAlertCard({ missingCount }: { missingCount: number }) {
       <GraduationCap className="h-5 w-5 text-amber-700 flex-shrink-0 mt-0.5" />
       <div>
         <p className="text-sm font-semibold text-amber-900">
-          {missingCount} worker{missingCount === 1 ? "" : "s"} missing initial HazCom training
+          {missingCount} worker{missingCount === 1 ? "" : "s"} missing initial
+          hazardous-chemical training
         </p>
         <p className="text-sm text-amber-800 mt-1">
-          OSHA 1910.1200(h) requires training records. Log completion on each worker profile.
+          Document training on each worker profile for inspection readiness.
         </p>
-        <Link
-          href="/workers"
-          className="text-sm font-medium text-brand-700 hover:underline mt-2 inline-block"
-        >
-          View worker roster →
-        </Link>
+        <div className="flex flex-wrap gap-3 mt-2">
+          <Link
+            href="/workers"
+            className="text-sm font-medium text-brand-700 hover:underline"
+          >
+            View worker roster →
+          </Link>
+          <Link
+            href="/compliance"
+            className="text-sm font-medium text-brand-700 hover:underline"
+          >
+            Compliance & Exports →
+          </Link>
+        </div>
       </div>
     </div>
   );

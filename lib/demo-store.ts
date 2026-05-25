@@ -57,6 +57,7 @@ const demoOrg: Organization = {
   zip: "97201",
   hazcom_responsible_person: "Marcus Chen",
   sds_access_method: "both",
+  regulatory_profile: "ca",
   created_at: daysAgo(90),
   updated_at: daysAgo(1),
 };

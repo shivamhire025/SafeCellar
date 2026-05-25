@@ -8,6 +8,25 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Compliance & Exports hub
+
+### What changed
+- **`/compliance` (Compliance & Exports)**: One-stop page for inspection readiness, written program (WHMIS / HazCom by jurisdiction), regulatory profile (Canada / US / both), and all exports.
+- **Download Compliance Packet** (`/api/reports/compliance-packet`): ZIP with written program PDF/HTML, compliance summary JSON, SDS folder, and CSVs (activity, SDS review, deliveries, training records). Legacy `/api/reports/inspection-packet` re-exports the same handler.
+- **PDF fix**: `serverComponentsExternalPackages: ['pdfkit']` in `next.config.mjs` so HazCom/WHMIS PDFs generate correctly (was failing with missing `Helvetica.afm`).
+- **`regulatory_profile`** on organizations (`us` | `ca` | `both`); jurisdiction-aware PDF/HTML copy via `lib/compliance/terminology.ts`.
+- **Download UX**: `DownloadButton` uses `fetch` + blob so PDF/ZIP failures show toasts instead of `.txt` error files.
+- **IA cleanup**: HazCom program and audit exports removed from Settings and Chemicals; sidebar + mobile nav link to `/compliance`.
+
+### Files
+- `supabase/migrations/004_regulatory_profile.sql`, `lib/compliance/terminology.ts`
+- `app/(dashboard)/compliance/page.tsx`, `components/compliance/*`
+- `app/api/reports/compliance-packet/route.ts`, `app/api/reports/training-records/route.ts`
+- `lib/reports/csv-builders.ts`, `lib/reports/packet-readme.ts`
+- `next.config.mjs`, `components/layout/sidebar.tsx`, `components/layout/mobile-nav.tsx`
+
+---
+
 ## 2026-05-25 — OSHA documentation readiness
 
 ### What changed
@@ -25,6 +44,14 @@ This file tracks implementation and UX changes made during development.
 - `app/(dashboard)/workers/[id]/`, `app/(dashboard)/equipment/`, `app/(dashboard)/permits/`
 - `components/settings/hazcom-program-form.tsx`, `components/chemicals/sds-viewer.tsx`, `components/dashboard/training-alert-card.tsx`
 - `package.json` (pdfkit, jszip), `docs/SUPABASE.md`
+
+---
+
+## 2026-05-25 — Equipment add on live Supabase
+
+### What changed
+- Applied migration `003_osha_documentation` to the linked Supabase project. The `equipment` table (and related OSHA tables) were missing, so inserts failed with “Could not add equipment” when `NEXT_PUBLIC_DEMO_MODE=false`.
+- Ensure all three migrations in `supabase/migrations/` are applied on any Supabase environment before using equipment, permits, incidents, or training features.
 
 ---
 

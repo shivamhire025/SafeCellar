@@ -9,6 +9,7 @@ const PROTECTED_ROUTES = [
   "/sds-review",
   "/incidents",
   "/workers",
+  "/compliance",
   "/settings",
   "/bug-reports",
   "/equipment",

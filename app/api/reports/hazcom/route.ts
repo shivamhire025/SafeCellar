@@ -37,20 +37,28 @@ export async function GET(request: Request) {
   const date = new Date().toISOString().slice(0, 10);
 
   if (format === "pdf") {
-    const pdf = await generateHazcomPdf(data);
-    return new NextResponse(new Uint8Array(pdf), {
-      headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="hazcom-program-${slug}-${date}.pdf"`,
-      },
-    });
+    try {
+      const pdf = await generateHazcomPdf(data);
+      return new NextResponse(new Uint8Array(pdf), {
+        headers: {
+          "Content-Type": "application/pdf",
+          "Content-Disposition": `attachment; filename="written-program-${slug}-${date}.pdf"`,
+        },
+      });
+    } catch (err) {
+      console.error("hazcom-pdf", err);
+      return NextResponse.json(
+        { error: "Could not generate PDF", message: String(err) },
+        { status: 500 }
+      );
+    }
   }
 
   const html = buildHazcomHtml(data);
   return new NextResponse(html, {
     headers: {
       "Content-Type": "text/html; charset=utf-8",
-      "Content-Disposition": `attachment; filename="hazcom-program-${slug}-${date}.html"`,
+      "Content-Disposition": `attachment; filename="written-program-${slug}-${date}.html"`,
     },
   });
 }

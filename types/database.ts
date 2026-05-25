@@ -14,6 +14,7 @@ export type SdsReviewReason =
 export type SdsReviewStatus = "pending" | "in_progress" | "resolved";
 export type UserRole = "admin" | "worker";
 export type FacilityType = "brewery" | "winery" | "both";
+export type RegulatoryProfile = "us" | "ca" | "both";
 
 export type IncidentType =
   | "near_miss"
@@ -114,6 +115,7 @@ export interface Organization {
   hazcom_multi_employer?: string | null;
   hazcom_training_approach?: string | null;
   sds_access_method?: SdsAccessMethod | null;
+  regulatory_profile?: RegulatoryProfile | null;
   created_at: string;
   updated_at: string;
 }

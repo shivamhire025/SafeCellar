@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { getComplianceColor } from "@/lib/constants";
 import type { ComplianceStats } from "@/types/database";
 
@@ -52,6 +53,12 @@ export function ComplianceScoreCard({ stats }: { stats: ComplianceStats }) {
           <p className="text-sm text-neutral-500 mt-1">
             {stats.needsAttention} items need attention
           </p>
+          <Link
+            href="/compliance"
+            className="text-sm font-medium text-brand-700 hover:underline mt-2 inline-block"
+          >
+            Compliance & Exports →
+          </Link>
         </div>
       </div>
     </div>

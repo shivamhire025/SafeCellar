@@ -14,6 +14,7 @@ const pageTitles: Record<string, string> = {
   "/sds-review": "SDS Review Queue",
   "/incidents": "Incident Log",
   "/workers": "Worker Roster",
+  "/compliance": "Compliance & Exports",
   "/settings": "Settings",
 };
 

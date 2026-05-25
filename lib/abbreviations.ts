@@ -18,7 +18,12 @@ export const ABBREVIATIONS: Record<string, AbbreviationEntry> = {
   HazCom: {
     full: "Hazard Communication",
     description:
-      "OSHA standard requiring employers to inform workers about chemical hazards via SDS and labeling.",
+      "U.S. OSHA standard requiring employers to inform workers about chemical hazards via SDS and labeling.",
+  },
+  WHMIS: {
+    full: "Workplace Hazardous Materials Information System",
+    description:
+      "Canadian system for classifying hazardous products and communicating hazards via SDS and labels in the workplace.",
   },
   PPE: {
     full: "Personal Protective Equipment",

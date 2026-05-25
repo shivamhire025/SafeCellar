@@ -8,6 +8,7 @@ import {
   ChevronRight,
   ClipboardCheck,
   ClipboardList,
+  FileCheck,
   FlaskConical,
   HardHat,
   LayoutDashboard,
@@ -31,6 +32,7 @@ const navItems = [
   { href: "/sds-review", icon: ClipboardCheck, label: "SDS Review" },
   { href: "/incidents", icon: ClipboardList, label: "Incidents" },
   { href: "/workers", icon: Users, label: "Workers" },
+  { href: "/compliance", icon: FileCheck, label: "Compliance & Exports" },
   { href: "/equipment", icon: HardHat, label: "Equipment" },
   { href: "/permits", icon: Shield, label: "CS Permits" },
 ];

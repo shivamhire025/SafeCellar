@@ -49,7 +49,7 @@ export default async function DashboardPage() {
       <Topbar title="Dashboard" userName={session?.full_name ?? "User"} />
       <PageShell
         title="Compliance Overview"
-        description="Your facility's OSHA readiness at a glance"
+        description="Chemical safety compliance readiness at a glance"
       >
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
           <div className="lg:col-span-1">

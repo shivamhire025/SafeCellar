@@ -37,6 +37,7 @@ npm run supabase:db:push
 
 1. `supabase/migrations/001_initial_schema.sql`
 2. `supabase/migrations/002_rls_and_storage.sql`
+3. `supabase/migrations/003_osha_documentation.sql`
 
 ### 3. Environment variables
 

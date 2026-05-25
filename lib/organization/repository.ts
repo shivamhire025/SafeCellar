@@ -2,7 +2,11 @@ import { demoStore } from "@/lib/demo-store";
 import { getSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { isDemoMode } from "@/lib/demo-mode";
-import type { Organization, SdsAccessMethod } from "@/types/database";
+import type {
+  Organization,
+  RegulatoryProfile,
+  SdsAccessMethod,
+} from "@/types/database";
 
 export type UpdateOrganizationInput = {
   hazcom_responsible_person?: string | null;
@@ -11,6 +15,7 @@ export type UpdateOrganizationInput = {
   hazcom_multi_employer?: string | null;
   hazcom_training_approach?: string | null;
   sds_access_method?: SdsAccessMethod | null;
+  regulatory_profile?: RegulatoryProfile | null;
 };
 
 export const organizationRepository = {
