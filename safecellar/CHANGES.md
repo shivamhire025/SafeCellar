@@ -8,6 +8,17 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Vercel 404 fix (root directory)
+
+### What changed
+- Added `safecellar/vercel.json` with Next.js framework preset and demo env vars.
+- Added `docs/VERCEL.md` with Root Directory = `safecellar` instructions (fixes Vercel 404 when building repo root).
+
+### Files
+- `safecellar/vercel.json`, `docs/VERCEL.md`, `README.md`
+
+---
+
 ## 2026-05-25 — GitHub documentation and push (empty remote)
 
 ### What changed

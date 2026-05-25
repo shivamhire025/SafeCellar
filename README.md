@@ -57,6 +57,17 @@ Demo mode is enabled via `NEXT_PUBLIC_DEMO_MODE=true` in `.env.local`.
 - **[safecellar/README.md](./safecellar/README.md)** — setup, env vars, routes, API
 - **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** — system overview (no product spec)
 
+## Deploy on Vercel
+
+The app must deploy from the **`safecellar`** folder, not the repo root.
+
+1. Import [github.com/shivamhire025/SafeCellar](https://github.com/shivamhire025/SafeCellar) on Vercel.
+2. Set **Root Directory** → `safecellar` (required; otherwise you get **404**).
+3. Add env var `NEXT_PUBLIC_DEMO_MODE=true`.
+4. Redeploy.
+
+Step-by-step: **[docs/VERCEL.md](./docs/VERCEL.md)**
+
 ## Scripts
 
 Run from `safecellar/`:
