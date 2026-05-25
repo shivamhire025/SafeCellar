@@ -1,0 +1,2 @@
+-- Demo seed data reference (app uses in-memory demo store when NEXT_PUBLIC_DEMO_MODE=true)
+-- Run against Supabase after migration when connecting live backend.

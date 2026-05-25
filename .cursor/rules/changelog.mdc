@@ -1,0 +1,40 @@
+---
+description: Keep safecellar/CHANGES.md updated whenever you modify the SafeCellar app
+alwaysApply: true
+---
+
+# Maintain CHANGES.md
+
+After completing any task that changes the SafeCellar application, update **`safecellar/CHANGES.md`**.
+
+## When to update
+
+Update the changelog when you:
+- Add, remove, or change features, routes, or API endpoints
+- Change UI/UX, layout, or copy
+- Fix bugs that affect user-visible behavior
+- Change config, env vars, demo data, or database migrations
+- Refactor in ways that matter to developers reviewing the prototype
+
+Skip updates for: typo-only fixes with no behavior change, dependency bumps with no functional impact, or questions/reviews with no code changes.
+
+## How to update
+
+1. Add a **new section at the top** of the changelog body (below the "References" block), using today's date: `## YYYY-MM-DD — Short title`
+2. Use subsections: `### What changed` (bullets), optional `### Files`
+3. Keep entries concise and factual; link behavior to routes/files where helpful
+4. If the change completes something listed under **Not yet implemented**, remove or update that bullet
+
+## Template
+
+```markdown
+## YYYY-MM-DD — Short title
+
+### What changed
+- Bullet describing user-visible or architectural change
+
+### Files
+- path/relative/to/safecellar/...
+```
+
+Do not duplicate entire prior sections; only append or edit the **Not yet implemented** list when relevant.
