@@ -1,4 +1,5 @@
 import { demoStore } from "@/lib/demo-store";
+import { deliveriesRepository } from "@/lib/deliveries/repository";
 import { getSession } from "@/lib/auth";
 import { isDemoMode } from "@/lib/demo-mode";
 import { createClient } from "@/lib/supabase/server";
@@ -373,6 +374,7 @@ export const chemicalsRepository = {
       | "reviewDueCount"
       | "reviewQueueCount"
       | "needsAttention"
+      | "pendingDeliveries"
     >
   > {
     if (isDemoMode()) {
@@ -385,6 +387,7 @@ export const chemicalsRepository = {
         reviewDueCount: s.reviewDueCount,
         reviewQueueCount: s.reviewQueueCount,
         needsAttention: s.missingCount + s.reviewDueCount + s.reviewQueueCount,
+        pendingDeliveries: s.pendingDeliveries,
       };
     }
 
@@ -405,6 +408,12 @@ export const chemicalsRepository = {
       reviewQueueCount = count ?? 0;
     }
 
+    const pendingDeliveries = (
+      await deliveriesRepository.getDeliveries()
+    ).filter(
+      (d) => d.status === "inventory_pending" || d.status === "delivered"
+    ).length;
+
     return {
       score,
       totalChemicals: total,
@@ -413,6 +422,7 @@ export const chemicalsRepository = {
       reviewDueCount: reviewDue,
       reviewQueueCount,
       needsAttention: missing + reviewDue + reviewQueueCount,
+      pendingDeliveries,
     };
   },
 

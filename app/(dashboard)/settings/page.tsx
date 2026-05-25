@@ -1,5 +1,9 @@
 import Link from "next/link";
 import { demoStore } from "@/lib/demo-store";
+import { organizationRepository } from "@/lib/organization/repository";
+import { chemicalsRepository } from "@/lib/chemicals/repository";
+import { isDemoMode } from "@/lib/demo-mode";
+import { LoadSampleDataButton } from "@/components/settings/load-sample-data-button";
 import { getSession } from "@/lib/auth";
 import { PageShell } from "@/components/layout/page-shell";
 import { Topbar } from "@/components/layout/topbar";
@@ -7,7 +11,12 @@ import { Button } from "@/components/ui/button";
 
 export default async function SettingsPage() {
   const session = await getSession();
-  const org = demoStore.getOrganization();
+  const org =
+    (await organizationRepository.getOrganization()) ??
+    demoStore.getOrganization();
+  const chemicalCount = isDemoMode()
+    ? demoStore.getChemicals().length
+    : (await chemicalsRepository.getChemicals()).length;
   const bugReports = demoStore.getBugReports();
   const openBugs = bugReports.filter((t) => t.status === "open").length;
 
@@ -63,6 +72,18 @@ export default async function SettingsPage() {
             <Link href="/bug-reports">View bug report log</Link>
           </Button>
         </div>
+        {!isDemoMode() && chemicalCount === 0 ? (
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 max-w-xl mt-6">
+            <h3 className="text-base font-semibold text-amber-900 mb-2">
+              Empty inventory
+            </h3>
+            <p className="text-sm text-amber-800 mb-4">
+              Load the prototype sample chemicals, deliveries, workers, and activity
+              for your organization (same data new signups receive).
+            </p>
+            <LoadSampleDataButton />
+          </div>
+        ) : null}
         <p className="text-sm text-neutral-500 mt-6">
           Connect Supabase to enable live data, worker invites, and SDS file storage.
         </p>

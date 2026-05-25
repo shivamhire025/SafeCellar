@@ -10,7 +10,13 @@ export async function GET() {
 
   const chemicalStats = await chemicalsRepository.getComplianceStats();
   return NextResponse.json({
-    ...chemicalStats,
-    pendingDeliveries: 0,
+    score: chemicalStats.score,
+    totalChemicals: chemicalStats.totalChemicals,
+    compliantCount: chemicalStats.compliantCount,
+    missingCount: chemicalStats.missingCount,
+    reviewDueCount: chemicalStats.reviewDueCount,
+    pendingDeliveries: chemicalStats.pendingDeliveries ?? 0,
+    reviewQueueCount: chemicalStats.reviewQueueCount,
+    needsAttention: chemicalStats.needsAttention,
   });
 }

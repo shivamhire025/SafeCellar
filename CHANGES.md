@@ -8,6 +8,20 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Sample data for new Supabase accounts
+
+### What changed
+- **Sign-up** seeds each new organization with prototype data (5 chemicals, 2 deliveries, SDS review queue, 2 workers, activity log, sample address on org).
+- **Settings → Load sample inventory** for existing empty orgs (`POST /api/organization/seed-sample`).
+- Deliveries, workers, activity log, and settings org info read from Supabase when not in demo mode.
+
+### Files
+- `lib/seed/organization-demo-data.ts`, `lib/deliveries/repository.ts`, `lib/workers/repository.ts`, `lib/activity/repository.ts`, `lib/organization/repository.ts`
+- `lib/auth.ts`, `app/api/organization/seed-sample/route.ts`, `components/settings/load-sample-data-button.tsx`
+- Delivery API routes and dashboard/settings/deliveries/workers pages
+
+---
+
 ## 2026-05-25 — Chemicals on Supabase
 
 ### What changed

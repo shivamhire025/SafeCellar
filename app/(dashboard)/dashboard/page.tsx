@@ -1,5 +1,7 @@
 import { demoStore } from "@/lib/demo-store";
 import { chemicalsRepository } from "@/lib/chemicals/repository";
+import { deliveriesRepository } from "@/lib/deliveries/repository";
+import { activityRepository } from "@/lib/activity/repository";
 import { isDemoMode } from "@/lib/demo-mode";
 import { PageShell } from "@/components/layout/page-shell";
 import { Topbar } from "@/components/layout/topbar";
@@ -22,18 +24,22 @@ export default async function DashboardPage() {
   } else {
     const chemicalStats = await chemicalsRepository.getComplianceStats();
     stats = {
-      ...chemicalStats,
-      pendingDeliveries: 0,
+      score: chemicalStats.score,
+      totalChemicals: chemicalStats.totalChemicals,
+      compliantCount: chemicalStats.compliantCount,
+      missingCount: chemicalStats.missingCount,
+      reviewDueCount: chemicalStats.reviewDueCount,
+      pendingDeliveries: chemicalStats.pendingDeliveries ?? 0,
+      reviewQueueCount: chemicalStats.reviewQueueCount,
+      needsAttention: chemicalStats.needsAttention,
     };
     actions = [
       ...(await chemicalsRepository.getPendingChemicalActions()),
-      ...demoStore
-        .getPendingActions()
-        .filter((a) => a.type === "delivery"),
+      ...(await deliveriesRepository.getPendingDeliveryActions()),
     ];
   }
 
-  const activity = demoStore.getActivityLog(10);
+  const activity = await activityRepository.getActivityLog(10);
 
   return (
     <>

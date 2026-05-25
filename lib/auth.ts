@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { demoLogin, demoStore, getDemoSession, isDemoMode } from "@/lib/demo-store";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { seedOrganizationDemoData } from "@/lib/seed/organization-demo-data";
 import type { FacilityType, SessionUser } from "@/types/database";
 
 const DEMO_COOKIE = "safecellar-demo-session";
@@ -117,6 +118,19 @@ export async function signUp(input: {
     await admin.from("organizations").delete().eq("id", org.id);
     await admin.auth.admin.deleteUser(authData.user.id);
     return { success: false, error: profileError.message };
+  }
+
+  const seed = await seedOrganizationDemoData(admin, {
+    organizationId: org.id,
+    userId: authData.user.id,
+    userFullName: input.full_name,
+  });
+
+  if (!seed.ok) {
+    await admin.from("profiles").delete().eq("id", authData.user.id);
+    await admin.from("organizations").delete().eq("id", org.id);
+    await admin.auth.admin.deleteUser(authData.user.id);
+    return { success: false, error: seed.error ?? "Could not seed sample data" };
   }
 
   return signIn(input.email, input.password);

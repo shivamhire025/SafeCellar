@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
-import { demoStore } from "@/lib/demo-store";
+import { deliveriesRepository } from "@/lib/deliveries/repository";
 import { getSession } from "@/lib/auth";
 import { PageShell } from "@/components/layout/page-shell";
 import { Topbar } from "@/components/layout/topbar";
@@ -9,7 +9,7 @@ import { DeliveriesClient } from "./deliveries-client";
 
 export default async function DeliveriesPage() {
   const session = await getSession();
-  const deliveries = demoStore.getDeliveries();
+  const deliveries = await deliveriesRepository.getDeliveries();
 
   return (
     <>

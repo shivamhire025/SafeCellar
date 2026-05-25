@@ -1,19 +1,17 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
 import { chemicalsRepository } from "@/lib/chemicals/repository";
+import { organizationRepository } from "@/lib/organization/repository";
 import { demoStore } from "@/lib/demo-store";
 import { isDemoMode } from "@/lib/demo-mode";
 
 export async function GET() {
   const chemicals = await chemicalsRepository.getChemicals();
-  const org = isDemoMode()
-    ? demoStore.getOrganization()
-    : {
-        name: (await getSession())?.organization_name ?? "Organization",
-        address: null,
-        city: null,
-        state: null,
-      };
+  const org =
+    (await organizationRepository.getOrganization()) ??
+    (isDemoMode() ? demoStore.getOrganization() : null);
+  if (!org) {
+    return new NextResponse("Organization not found", { status: 404 });
+  }
 
   const rows = chemicals.map((c) => ({
     name: c.name,

@@ -1,4 +1,4 @@
-import { demoStore } from "@/lib/demo-store";
+import { workersRepository } from "@/lib/workers/repository";
 import { getSession } from "@/lib/auth";
 import { PageShell } from "@/components/layout/page-shell";
 import { Topbar } from "@/components/layout/topbar";
@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/utils";
 
 export default async function WorkersPage() {
   const session = await getSession();
-  const workers = demoStore.getWorkers();
+  const workers = await workersRepository.getWorkers();
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { demoStore } from "@/lib/demo-store";
+import { deliveriesRepository } from "@/lib/deliveries/repository";
 import { getSession } from "@/lib/auth";
 import { PageShell } from "@/components/layout/page-shell";
 import { Topbar } from "@/components/layout/topbar";
@@ -31,7 +31,7 @@ export default async function DeliveryDetailPage({
   params: { id: string };
 }) {
   const session = await getSession();
-  const delivery = demoStore.getDelivery(params.id);
+  const delivery = await deliveriesRepository.getDelivery(params.id);
   if (!delivery) notFound();
 
   const currentIdx = statusFlow.indexOf(delivery.status);

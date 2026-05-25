@@ -163,6 +163,8 @@ See also [VERCEL.md](./VERCEL.md).
 
 ## Not yet on Supabase
 
-**Chemicals** use Postgres when `NEXT_PUBLIC_DEMO_MODE=false` (inventory, create, import, SDS upload, barcode lookup, dashboard chemical stats).
+**Chemicals, deliveries, workers, activity log, and org settings** use Postgres when `NEXT_PUBLIC_DEMO_MODE=false`.
 
-Still on the demo store: deliveries, incidents, workers, notifications, and dashboard activity log.
+**New sign-ups** automatically receive prototype sample data (chemicals, deliveries, workers, etc.). Existing empty orgs can use **Settings → Load sample inventory**.
+
+Still on the demo store: incidents, bug reports, and notifications.
