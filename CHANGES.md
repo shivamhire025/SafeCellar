@@ -8,6 +8,16 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Notifications from org Supabase data
+
+### What changed
+- High-risk **notifications** bell uses chemicals, SDS queue, and deliveries from the signed-in org (not global demo store / Marcus Chen incidents).
+
+### Files
+- `lib/notifications/build-high-risk-notifications.ts`, `lib/notifications/repository.ts`, `app/api/notifications/route.ts`, `lib/demo-store.ts`
+
+---
+
 ## 2026-05-25 — Sample data for new Supabase accounts
 
 ### What changed

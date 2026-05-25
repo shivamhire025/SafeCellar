@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
-import { demoStore } from "@/lib/demo-store";
+import { getSession } from "@/lib/auth";
+import { isDemoMode } from "@/lib/demo-mode";
+import { notificationsRepository } from "@/lib/notifications/repository";
 
 export async function GET() {
-  return NextResponse.json(demoStore.getHighRiskNotifications());
+  if (!isDemoMode() && !(await getSession())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const notifications = await notificationsRepository.getHighRiskNotifications();
+  return NextResponse.json(notifications);
 }

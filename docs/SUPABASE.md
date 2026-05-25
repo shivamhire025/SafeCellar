@@ -167,4 +167,4 @@ See also [VERCEL.md](./VERCEL.md).
 
 **New sign-ups** automatically receive prototype sample data (chemicals, deliveries, workers, etc.). Existing empty orgs can use **Settings → Load sample inventory**.
 
-Still on the demo store: incidents, bug reports, and notifications.
+Still on the demo store: incidents and bug reports.
