@@ -152,6 +152,24 @@ export interface ComplianceStats {
   needsAttention: number;
 }
 
+export type HighRiskNotificationPriority = "critical" | "high" | "medium";
+
+export type HighRiskNotificationBadge =
+  | "missing"
+  | "review_due"
+  | "gas_hazard"
+  | "sds_queue"
+  | "delivery";
+
+export interface HighRiskNotification {
+  id: string;
+  priority: HighRiskNotificationPriority;
+  title: string;
+  subtitle: string;
+  href: string;
+  badge: HighRiskNotificationBadge;
+}
+
 export interface SessionUser {
   id: string;
   email: string;

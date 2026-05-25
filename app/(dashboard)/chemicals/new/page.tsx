@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { BarcodeScanner } from "@/components/chemicals/barcode-scanner";
+import { BarcodeImageUpload } from "@/components/chemicals/barcode-image-upload";
 import { chemicalSchema, type ChemicalFormValues } from "@/lib/validations/chemical";
 import { CHEMICAL_TYPES, STORAGE_LOCATIONS } from "@/lib/constants";
 import { toast } from "@/components/ui/use-toast";
@@ -122,6 +123,7 @@ export default function NewChemicalPage() {
                   </Button>
                 )}
               </div>
+              <BarcodeImageUpload onScan={handleBarcodeScan} />
             </div>
           </TabsContent>
 

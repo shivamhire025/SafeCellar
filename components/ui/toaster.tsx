@@ -11,12 +11,19 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 
 export function Toaster() {
-  const { toasts } = useToast();
+  const { toasts, dismiss } = useToast();
 
   return (
     <ToastProvider>
       {toasts.map(({ id, title, description, variant, ...props }) => (
-        <Toast key={id} variant={variant} {...props}>
+        <Toast
+          key={id}
+          variant={variant}
+          {...props}
+          onOpenChange={(open) => {
+            if (!open) dismiss(id);
+          }}
+        >
           <div className="grid gap-1">
             {title && <ToastTitle>{title}</ToastTitle>}
             {description && (

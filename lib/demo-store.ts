@@ -4,12 +4,43 @@ import type {
   ComplianceStats,
   Delivery,
   DeliveryItem,
+  HighRiskNotification,
+  HighRiskNotificationPriority,
   Organization,
   Profile,
   SdsReviewItem,
   SessionUser,
   Worker,
 } from "@/types/database";
+import { SDS_REVIEW_REASONS } from "@/lib/constants";
+import type { ChemicalImportRow } from "@/lib/validations/chemical-import";
+import {
+  loadDemoDataSnapshot,
+  saveDemoDataSnapshot,
+  type DemoDataSnapshot,
+} from "@/lib/demo-store-persist";
+
+const SEVERE_HAZARDS = new Set(["toxic", "corrosive", "oxidizer", "asphyxiant"]);
+
+const PRIORITY_RANK: Record<HighRiskNotificationPriority, number> = {
+  critical: 0,
+  high: 1,
+  medium: 2,
+};
+
+function chemicalRiskPriority(c: Chemical): HighRiskNotificationPriority {
+  if (c.chemical_type === "gas_hazard") return "critical";
+  if (
+    c.sds_status === "missing" &&
+    c.hazard_class?.some((h) => SEVERE_HAZARDS.has(h))
+  ) {
+    return "critical";
+  }
+  if (c.sds_status === "missing" || c.sds_status === "review_due") {
+    return "high";
+  }
+  return "medium";
+}
 
 const DEMO_ORG_ID = "org-demo-001";
 const DEMO_USER_ID = "user-demo-001";
@@ -332,6 +363,32 @@ let activityLog: ActivityLogEntry[] = [
   },
 ];
 
+function getDemoDataSnapshot(): DemoDataSnapshot {
+  return {
+    chemicals,
+    deliveries,
+    sdsReviewQueue,
+    workers,
+    activityLog,
+  };
+}
+
+function applyDemoDataSnapshot(snapshot: DemoDataSnapshot) {
+  chemicals = snapshot.chemicals;
+  deliveries = snapshot.deliveries;
+  sdsReviewQueue = snapshot.sdsReviewQueue;
+  workers = snapshot.workers;
+  activityLog = snapshot.activityLog;
+}
+
+applyDemoDataSnapshot(
+  loadDemoDataSnapshot(getDemoDataSnapshot())
+);
+
+function persistDemoState() {
+  saveDemoDataSnapshot(getDemoDataSnapshot());
+}
+
 function attachChemicalsToReviews(): SdsReviewItem[] {
   return sdsReviewQueue.map((item) => ({
     ...item,
@@ -427,7 +484,64 @@ export const demoStore = {
       entity_id: chemical.id,
       created_at: new Date().toISOString(),
     });
+    persistDemoState();
     return chemical;
+  },
+
+  importChemicals(rows: ChemicalImportRow[]): {
+    created: Chemical[];
+    errors: { row: number; message: string }[];
+  } {
+    const created: Chemical[] = [];
+    const errors: { row: number; message: string }[] = [];
+    const base = Date.now();
+
+    rows.forEach((row, index) => {
+      const chemical: Chemical = {
+        id: `chem-${base}-${index}`,
+        organization_id: DEMO_ORG_ID,
+        name: row.name,
+        trade_name: row.trade_name ?? null,
+        manufacturer: row.manufacturer,
+        supplier: row.supplier ?? null,
+        cas_number: row.cas_number ?? null,
+        barcode: row.barcode ?? null,
+        chemical_type: row.chemical_type,
+        storage_location: row.storage_location,
+        notes: row.notes ?? null,
+        hazard_class: row.hazard_class ?? null,
+        sds_status: "missing",
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      chemicals.push(chemical);
+      sdsReviewQueue.push({
+        id: `review-${base}-${index}`,
+        organization_id: DEMO_ORG_ID,
+        chemical_id: chemical.id,
+        reason: "new_chemical",
+        status: "pending",
+        flagged_at: new Date().toISOString(),
+      });
+      created.push(chemical);
+    });
+
+    if (created.length > 0) {
+      activityLog.unshift({
+        id: `act-${base}`,
+        organization_id: DEMO_ORG_ID,
+        actor_id: DEMO_USER_ID,
+        actor_name: "Marcus Chen",
+        action: `bulk imported ${created.length} chemical${created.length === 1 ? "" : "s"}`,
+        entity_type: "chemical",
+        entity_id: created[0].id,
+        created_at: new Date().toISOString(),
+      });
+    }
+
+    persistDemoState();
+    return { created, errors };
   },
 
   updateChemical(id: string, data: Partial<Chemical>): Chemical | undefined {
@@ -438,6 +552,7 @@ export const demoStore = {
       ...data,
       updated_at: new Date().toISOString(),
     };
+    persistDemoState();
     return chemicals[idx];
   },
 
@@ -472,6 +587,7 @@ export const demoStore = {
         entity_id: id,
         created_at: now,
       });
+      persistDemoState();
     }
     return chemical;
   },
@@ -529,6 +645,7 @@ export const demoStore = {
       })),
     };
     deliveries.unshift(delivery);
+    persistDemoState();
     return delivery;
   },
 
@@ -540,6 +657,7 @@ export const demoStore = {
       ...data,
       updated_at: new Date().toISOString(),
     };
+    persistDemoState();
     return deliveries[idx];
   },
 
@@ -580,6 +698,7 @@ export const demoStore = {
       delivery.status = "inventory_pending";
     }
 
+    persistDemoState();
     return delivery.items[itemIdx];
   },
 
@@ -676,5 +795,93 @@ export const demoStore = {
       });
 
     return actions;
+  },
+
+  getHighRiskNotifications(): HighRiskNotification[] {
+    const seen = new Set<string>();
+    const notifications: HighRiskNotification[] = [];
+
+    function push(notification: HighRiskNotification) {
+      if (seen.has(notification.id)) return;
+      seen.add(notification.id);
+      notifications.push(notification);
+    }
+
+    chemicals
+      .filter((c) => c.is_active && c.sds_status === "missing")
+      .forEach((c) => {
+        push({
+          id: `missing-${c.id}`,
+          priority: chemicalRiskPriority(c),
+          title: c.name,
+          subtitle:
+            c.chemical_type === "gas_hazard"
+              ? "Missing SDS — confined space gas hazard"
+              : "SDS missing. Upload before use.",
+          href: `/chemicals/${c.id}#sds-upload`,
+          badge: c.chemical_type === "gas_hazard" ? "gas_hazard" : "missing",
+        });
+      });
+
+    chemicals
+      .filter((c) => c.is_active && c.sds_status === "review_due")
+      .forEach((c) => {
+        push({
+          id: `review-${c.id}`,
+          priority: chemicalRiskPriority(c),
+          title: c.name,
+          subtitle:
+            c.chemical_type === "gas_hazard"
+              ? "Annual SDS review overdue — gas hazard"
+              : "Annual SDS review due",
+          href: `/chemicals/${c.id}`,
+          badge: c.chemical_type === "gas_hazard" ? "gas_hazard" : "review_due",
+        });
+      });
+
+    this.getSdsReviewQueue()
+      .filter((r) => r.status === "pending")
+      .forEach((item) => {
+        if (
+          seen.has(`missing-${item.chemical_id}`) ||
+          seen.has(`review-${item.chemical_id}`)
+        ) {
+          return;
+        }
+        const chemical = item.chemical;
+        const reasonLabel =
+          SDS_REVIEW_REASONS.find((r) => r.value === item.reason)?.label ??
+          item.reason;
+        push({
+          id: `queue-${item.id}`,
+          priority: chemical ? chemicalRiskPriority(chemical) : "medium",
+          title: chemical?.name ?? "Unknown chemical",
+          subtitle: `SDS review queue — ${reasonLabel}`,
+          href: `/chemicals/${item.chemical_id}#sds-upload`,
+          badge: "sds_queue",
+        });
+      });
+
+    deliveries
+      .filter((d) => d.status === "inventory_pending")
+      .forEach((d) => {
+        const unscanned = (d.items ?? []).filter((i) => !i.is_scanned);
+        const needsSds = unscanned.filter((i) => i.sds_review_needed).length;
+        push({
+          id: `delivery-${d.id}`,
+          priority: needsSds > 0 ? "high" : "medium",
+          title: `Delivery ${d.order_number ?? d.supplier}`,
+          subtitle:
+            needsSds > 0
+              ? `${unscanned.length} items to scan (${needsSds} need SDS review)`
+              : `${unscanned.length} items pending inventory scan`,
+          href: `/deliveries/${d.id}`,
+          badge: "delivery",
+        });
+      });
+
+    return notifications.sort(
+      (a, b) => PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority]
+    );
   },
 };

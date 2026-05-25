@@ -39,3 +39,6 @@ next-env.d.ts
 
 # legacy folder (if present locally)
 /safecellar/
+
+# demo mode persisted inventory (local dev)
+.data/

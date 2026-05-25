@@ -11,7 +11,8 @@ type ToasterToast = ToastProps & {
 };
 
 const TOAST_LIMIT = 3;
-const TOAST_REMOVE_DELAY = 5000;
+/** Delay before unmounting after close (matches exit animation). */
+const TOAST_REMOVE_DELAY = 400;
 
 let count = 0;
 function genId() {
@@ -32,7 +33,8 @@ interface State {
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
 const addToRemoveQueue = (toastId: string) => {
-  if (toastTimeouts.has(toastId)) return;
+  const existing = toastTimeouts.get(toastId);
+  if (existing) clearTimeout(existing);
   const timeout = setTimeout(() => {
     toastTimeouts.delete(toastId);
     dispatch({ type: "REMOVE_TOAST", toastId });

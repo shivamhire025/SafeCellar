@@ -8,6 +8,87 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Barcode camera scanner and image upload
+
+### What changed
+- **Camera scanner** (`BarcodeScanner`): waits for the video element before starting, uses rear-camera constraints, `autoPlay`, and absolute positioning so the preview is visible (fixes black screen).
+- **Add Chemical** (`/chemicals/new` → Barcode Scan): **Upload barcode photo** decodes barcodes from an image without opening the camera; same option in the full-screen scanner.
+- Delivery item scanning reuses the fixed camera component.
+
+### Files
+- `components/chemicals/barcode-scanner.tsx`, `components/chemicals/barcode-image-upload.tsx`, `lib/barcode-decode.ts`, `app/(dashboard)/chemicals/new/page.tsx`
+
+---
+
+## 2026-05-25 — Persist demo inventory across login sessions
+
+### What changed
+- Demo mode (bulk import, add chemical, deliveries, scans, SDS uploads) now saves to `.data/demo-store.json` on disk so data survives logout, login, and dev server restarts.
+- Logout only clears the session cookie; inventory is no longer reset to seed data on re-login.
+
+### Files
+- `lib/demo-store-persist.ts`, `lib/demo-store.ts`, `.gitignore`
+
+---
+
+## 2026-05-25 — Toast dismiss fix
+
+### What changed
+- Action toasts (import, scan, etc.) now close when clicking **×** or when the auto-dismiss timer ends.
+- Close button is always visible on toasts (not hover-only).
+
+### Files
+- `components/ui/toaster.tsx`, `components/ui/use-toast.ts`, `components/ui/toast.tsx`
+
+---
+
+## 2026-05-25 — Bulk import on Chemical Inventory
+
+### What changed
+- **Chemical Inventory** (`/chemicals`): **Bulk Import** opens a dialog to download a CSV template, upload or paste CSV, preview valid/invalid rows, and import in one step.
+- Imported chemicals get missing SDS status and SDS review queue entries (same as single add).
+- `POST /api/chemicals/import` accepts validated rows; demo store `importChemicals()` batch-creates records.
+
+### Files
+- `components/chemicals/bulk-import-dialog.tsx`, `components/chemicals/chemical-inventory-actions.tsx`, `lib/chemical-import.ts`, `lib/validations/chemical-import.ts`, `app/api/chemicals/import/route.ts`, `lib/demo-store.ts`, `app/(dashboard)/chemicals/page.tsx`
+
+---
+
+## 2026-05-25 — Topbar notifications for high-risk items
+
+### What changed
+- Bell icon in the top bar opens a dropdown of **high-risk reminders**: missing SDS, overdue reviews, gas hazards, SDS review queue, and pending delivery scans.
+- Badge shows count (red when any critical items exist); each row links to the resolve page.
+- Data from `GET /api/notifications` backed by `demoStore.getHighRiskNotifications()`.
+
+### Files
+- `components/layout/notifications-menu.tsx`, `components/layout/topbar.tsx`, `components/ui/dropdown-menu.tsx`, `app/api/notifications/route.ts`, `lib/demo-store.ts`, `types/database.ts`
+
+---
+
+## 2026-05-25 — Browser speech-to-text on new delivery
+
+### What changed
+- **New Delivery** (`/deliveries/new`): mic buttons on supplier, order number, notes, product name, and barcode use the Web Speech API (no cloud keys).
+- Tap mic to dictate; tap again to stop. Notes append each utterance; other fields replace with the latest phrase.
+- Unsupported browsers (e.g. Firefox) show a toast with guidance.
+
+### Files
+- `hooks/use-speech-recognition.ts`, `lib/speech-recognition.ts`, `types/web-speech.d.ts`, `components/shared/speech-input-button.tsx`, `app/(dashboard)/deliveries/new/page.tsx`
+
+---
+
+## 2026-05-25 — Recent activity log timeline
+
+### What changed
+- Dashboard **Recent Activity** uses dotted dividers and a vertical timeline rail between entries.
+- Each activity with a linked record (chemical, delivery, etc.) is clickable and navigates to that detail page.
+
+### Files
+- `components/dashboard/recent-activity.tsx`, `lib/activity.ts`
+
+---
+
 ## 2026-05-25 — Chemical detail tag layout
 
 ### What changed

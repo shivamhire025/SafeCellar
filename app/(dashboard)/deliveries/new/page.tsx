@@ -11,6 +11,7 @@ import { PageShell } from "@/components/layout/page-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SpeechInputButton } from "@/components/shared/speech-input-button";
 import {
   deliverySchema,
   type DeliveryFormValues,
@@ -31,6 +32,8 @@ export default function NewDeliveryPage() {
   const {
     register,
     handleSubmit,
+    setValue,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<DeliveryFormValues>({
     resolver: zodResolver(deliverySchema),
@@ -62,7 +65,10 @@ export default function NewDeliveryPage() {
   return (
     <>
       <Topbar title="New Delivery" userName="Marcus Chen" />
-      <PageShell title="Create Delivery" description="Log a new chemical order">
+      <PageShell
+        title="Create Delivery"
+        description="Log a new chemical order. Use the mic buttons for voice dictation (Chrome, Edge, or Safari)."
+      >
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="max-w-2xl space-y-6"
@@ -71,12 +77,24 @@ export default function NewDeliveryPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label>Supplier <span className="text-red-500">*</span></Label>
-                <Input {...register("supplier")} />
+                <div className="flex gap-2">
+                  <Input className="flex-1" {...register("supplier")} />
+                  <SpeechInputButton
+                    ariaLabel="Dictate supplier"
+                    onTranscript={(text) => setValue("supplier", text, { shouldValidate: true })}
+                  />
+                </div>
                 {errors.supplier && <p className="text-xs text-red-600">{errors.supplier.message}</p>}
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label>Order Number</Label>
-                <Input {...register("order_number")} />
+                <div className="flex gap-2">
+                  <Input className="flex-1" {...register("order_number")} />
+                  <SpeechInputButton
+                    ariaLabel="Dictate order number"
+                    onTranscript={(text) => setValue("order_number", text)}
+                  />
+                </div>
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label>Order Date <span className="text-red-500">*</span></Label>
@@ -89,30 +107,63 @@ export default function NewDeliveryPage() {
             </div>
             <div className="flex flex-col gap-1.5">
               <Label>Notes</Label>
-              <textarea
-                {...register("notes")}
-                className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-md min-h-[60px]"
-              />
+              <div className="flex gap-2 items-start">
+                <textarea
+                  {...register("notes")}
+                  className="flex-1 w-full px-3 py-2 text-sm border border-neutral-300 rounded-md min-h-[60px]"
+                />
+                <SpeechInputButton
+                  ariaLabel="Dictate notes"
+                  onTranscript={(text) => {
+                    const current = getValues("notes")?.trim();
+                    setValue(
+                      "notes",
+                      current ? `${current} ${text}` : text
+                    );
+                  }}
+                />
+              </div>
             </div>
           </div>
 
           <div className="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
             <h3 className="text-base font-semibold mb-4">Add Items</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
-              <Input
-                placeholder="Product name *"
-                value={itemForm.product_name}
-                onChange={(e) =>
-                  setItemForm({ ...itemForm, product_name: e.target.value })
-                }
-              />
-              <Input
-                placeholder="Barcode"
-                value={itemForm.barcode}
-                onChange={(e) =>
-                  setItemForm({ ...itemForm, barcode: e.target.value })
-                }
-              />
+              <div className="flex gap-2 col-span-2 md:col-span-1">
+                <Input
+                  className="flex-1"
+                  placeholder="Product name *"
+                  value={itemForm.product_name}
+                  onChange={(e) =>
+                    setItemForm({ ...itemForm, product_name: e.target.value })
+                  }
+                />
+                <SpeechInputButton
+                  ariaLabel="Dictate product name"
+                  onTranscript={(text) =>
+                    setItemForm((prev) => ({ ...prev, product_name: text }))
+                  }
+                />
+              </div>
+              <div className="flex gap-2">
+                <Input
+                  className="flex-1"
+                  placeholder="Barcode"
+                  value={itemForm.barcode}
+                  onChange={(e) =>
+                    setItemForm({ ...itemForm, barcode: e.target.value })
+                  }
+                />
+                <SpeechInputButton
+                  ariaLabel="Dictate barcode"
+                  onTranscript={(text) =>
+                    setItemForm((prev) => ({
+                      ...prev,
+                      barcode: text.replace(/\s/g, ""),
+                    }))
+                  }
+                />
+              </div>
               <Input
                 type="number"
                 placeholder="Qty"
