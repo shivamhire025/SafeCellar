@@ -29,9 +29,9 @@ export default async function DashboardLayout({
   const demo = isDemoMode();
 
   return (
-    <div className="flex min-h-screen bg-neutral-100">
+    <div className="flex h-screen overflow-hidden bg-neutral-100">
       <Sidebar userName={session.full_name} />
-      <div className="flex-1 flex flex-col min-w-0 pb-16 md:pb-0">
+      <div className="flex-1 flex flex-col min-h-0 min-w-0 pb-16 md:pb-0">
         {demo ? (
           <div
             className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-sm text-amber-900"
@@ -43,7 +43,7 @@ export default async function DashboardLayout({
             keys are set on Vercel, then redeployed.
           </div>
         ) : null}
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        <main className="flex-1 min-h-0 overflow-y-auto">{children}</main>
       </div>
       <MobileNav />
       <BugReportFab />

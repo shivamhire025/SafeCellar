@@ -8,6 +8,31 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — CS Permits create UI
+
+### What changed
+- **`/permits`**: Shows **Eligible confined spaces** table (equipment with `is_confined_space`) so registered tanks appear before any permit exists.
+- **Create entry permit** form: pick confined equipment, entry date/time, entrants, attendant, hazards (prefill from gas-hazard chemicals and linked inventory), atmospheric readings, rescue plan.
+- **Permit log** table lists created permits with equipment name from `equipment_id` join.
+- Clarifying copy explains equipment registry vs per-entry permits.
+
+### Files
+- `app/(dashboard)/permits/page.tsx`, `components/permits/eligible-equipment-table.tsx`, `components/permits/create-permit-form.tsx`
+- `lib/permits/suggest-hazards.ts`
+
+---
+
+## 2026-05-25 — Sticky dashboard sidebar
+
+### What changed
+- Dashboard shell uses `h-screen overflow-hidden` so the sidebar stays fixed to the viewport while only the main content area scrolls.
+- Sidebar nav scrolls independently when the nav list exceeds screen height.
+
+### Files
+- `app/(dashboard)/layout.tsx`, `components/layout/sidebar.tsx`
+
+---
+
 ## 2026-05-25 — Compliance & Exports hub
 
 ### What changed
@@ -573,5 +598,4 @@ Add a **new dated section at the top** of the changelog entries (below Reference
 - Annual SDS review email reminders (P1).
 - Full onboarding checklist on first dashboard visit.
 - Sidebar expand-on-hover only (current: explicit toggle + persisted state).
-- Full confined space permit create/edit UI (list + demo sample only).
 - OSHA 300/301 structured fields beyond `osha_recordable` flag on incidents.

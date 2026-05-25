@@ -129,7 +129,7 @@ export function Sidebar({ userName }: { userName: string }) {
   return (
     <aside
       className={cn(
-        "hidden md:flex flex-col bg-brand-900 min-h-screen flex-shrink-0 transition-[width] duration-200 ease-in-out",
+        "hidden md:flex flex-col bg-brand-900 h-screen flex-shrink-0 sticky top-0 self-start transition-[width] duration-200 ease-in-out",
         collapsed ? "w-16" : "w-[220px]"
       )}
     >
@@ -181,7 +181,7 @@ export function Sidebar({ userName }: { userName: string }) {
 
       <nav
         className={cn(
-          "flex-1 flex flex-col py-4 gap-1",
+          "flex-1 min-h-0 overflow-y-auto flex flex-col py-4 gap-1",
           collapsed ? "items-center px-2" : "px-0"
         )}
       >

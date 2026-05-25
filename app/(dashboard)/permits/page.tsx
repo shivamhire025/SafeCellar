@@ -1,16 +1,20 @@
-import Link from "next/link";
 import { permitsRepository } from "@/lib/permits/repository";
 import { equipmentRepository } from "@/lib/equipment/repository";
+import { chemicalsRepository } from "@/lib/chemicals/repository";
 import { getSession } from "@/lib/auth";
 import { PageShell } from "@/components/layout/page-shell";
 import { Topbar } from "@/components/layout/topbar";
 import { formatDate } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { EligibleEquipmentTable } from "@/components/permits/eligible-equipment-table";
+import { CreatePermitForm } from "@/components/permits/create-permit-form";
 
 export default async function PermitsPage() {
   const session = await getSession();
-  const permits = await permitsRepository.getPermits();
-  const equipment = await equipmentRepository.getEquipment();
+  const [permits, equipment, chemicals] = await Promise.all([
+    permitsRepository.getPermits(),
+    equipmentRepository.getEquipment(),
+    chemicalsRepository.getChemicals(),
+  ]);
   const confined = equipment.filter((e) => e.is_confined_space);
 
   return (
@@ -18,14 +22,43 @@ export default async function PermitsPage() {
       <Topbar title="Confined Space Permits" userName={session?.full_name ?? "User"} />
       <PageShell
         title="Confined Space Entry Permits"
-        description="OSHA 1910.146 permit records. Hazards can be informed by gas-hazard chemicals in inventory."
+        description="Document authorized entries into confined spaces (29 CFR 1910.146). Equipment registry and entry permits are separate — create a permit for each entry event."
       >
-        <div className="mb-4">
-          <Button variant="secondary" asChild>
-            <Link href="/equipment">Manage equipment</Link>
-          </Button>
+        <EligibleEquipmentTable equipment={confined} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <CreatePermitForm
+            confinedEquipment={confined}
+            chemicals={chemicals}
+            defaultAttendant={session?.full_name}
+          />
+          <div className="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
+            <h3 className="text-base font-semibold text-neutral-900 mb-2">
+              How this works
+            </h3>
+            <ul className="text-sm text-neutral-600 space-y-2 list-disc pl-5">
+              <li>
+                Register tanks and vessels under <strong>Equipment</strong> and
+                mark them as confined spaces.
+              </li>
+              <li>
+                Create an <strong>entry permit</strong> here for each authorized
+                entry — one permit per event, not per asset.
+              </li>
+              <li>
+                Hazards can prefill from gas-hazard chemicals and equipment
+                chemical links in your inventory.
+              </li>
+            </ul>
+          </div>
         </div>
+
         <div className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">
+          <div className="px-4 py-3 border-b border-neutral-200 bg-neutral-50">
+            <h3 className="text-sm font-semibold text-neutral-900">
+              Permit log
+            </h3>
+          </div>
           <table className="w-full text-sm">
             <thead className="bg-neutral-50 border-b border-neutral-200">
               <tr>
@@ -50,7 +83,8 @@ export default async function PermitsPage() {
               {permits.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center text-neutral-500">
-                    No permits yet. Demo includes one sample permit when using demo mode.
+                    No permits yet. Select equipment above and create your first
+                    entry permit.
                   </td>
                 </tr>
               ) : (
@@ -69,11 +103,6 @@ export default async function PermitsPage() {
             </tbody>
           </table>
         </div>
-        {confined.length > 0 && (
-          <p className="text-sm text-neutral-500 mt-4">
-            {confined.length} confined-space equipment item(s) registered. Full permit creation UI can extend the equipment registry in a follow-up.
-          </p>
-        )}
       </PageShell>
     </>
   );
