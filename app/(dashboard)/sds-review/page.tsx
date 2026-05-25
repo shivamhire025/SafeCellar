@@ -21,7 +21,7 @@ export default async function SdsReviewPage() {
       >
         {queue.length === 0 ? (
           <div className="bg-white rounded-xl border border-neutral-200 shadow-sm p-8 text-center">
-            <p className="text-green-600 font-medium">Queue is clear. No pending reviews.</p>
+            <p className="text-brand-600 font-medium">Queue is clear. No pending reviews.</p>
           </div>
         ) : (
           <div className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">

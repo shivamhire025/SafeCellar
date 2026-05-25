@@ -5,17 +5,19 @@ export default {
   theme: {
     extend: {
       colors: {
+        // SafeCellar brand blue — use brand-* utilities (not Tailwind green-*).
+        // 700 = primary actions/links; 900 = sidebar/nav shell.
         brand: {
-          50: "#EBF7F1",
-          100: "#D4EFE0",
-          200: "#A3D9B8",
-          300: "#65C287",
-          400: "#3DAD68",
-          500: "#268F50",
-          600: "#1F7D44",
-          700: "#1A6B3A",
-          800: "#145C31",
-          900: "#0D3D21",
+          50: "#EFF6FF",
+          100: "#DBEAFE",
+          200: "#BFDBFE",
+          300: "#93C5FD",
+          400: "#60A5FA",
+          500: "#3B82F6",
+          600: "#2563EB",
+          700: "#1D4ED8",
+          800: "#1E40AF",
+          900: "#172554",
         },
       },
       fontFamily: {

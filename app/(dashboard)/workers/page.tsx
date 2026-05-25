@@ -50,8 +50,8 @@ export default async function WorkersPage() {
                   </td>
                   <td className="px-4 py-3 text-neutral-400 text-xs">Phase 2</td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex items-center gap-1.5 text-xs text-green-700">
-                      <span className="w-2 h-2 rounded-full bg-green-500" />
+                    <span className="inline-flex items-center gap-1.5 text-xs text-brand-700">
+                      <span className="w-2 h-2 rounded-full bg-brand-500" />
                       Active
                     </span>
                   </td>

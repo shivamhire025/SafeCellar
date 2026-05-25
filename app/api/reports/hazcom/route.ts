@@ -22,7 +22,7 @@ export async function GET() {
   <title>HazCom Report - ${org.name}</title>
   <style>
     body { font-family: Inter, system-ui, sans-serif; margin: 40px; color: #111827; }
-    h1 { color: #1A6B3A; font-size: 24px; }
+    h1 { color: #1D4ED8; font-size: 24px; }
     .subtitle { color: #6B7280; font-size: 14px; margin-bottom: 24px; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th { background: #F3F4F6; text-align: left; padding: 10px; border-bottom: 2px solid #E5E7EB; }

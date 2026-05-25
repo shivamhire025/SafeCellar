@@ -8,7 +8,7 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default: "bg-neutral-100 text-neutral-600",
-        compliant: "bg-green-100 text-green-700 border border-green-200",
+        compliant: "bg-brand-100 text-brand-700 border border-brand-200",
         review_due: "bg-amber-100 text-amber-700 border border-amber-200",
         missing: "bg-red-100 text-red-700 border border-red-200",
         outdated: "bg-red-100 text-red-700 border border-red-200",
@@ -20,7 +20,7 @@ const badgeVariants = cva(
         in_transit: "bg-blue-100 text-blue-700",
         delivered: "bg-amber-100 text-amber-700",
         inventory_pending: "bg-amber-100 text-amber-700",
-        complete: "bg-green-100 text-green-700",
+        complete: "bg-brand-100 text-brand-700",
       },
     },
     defaultVariants: {

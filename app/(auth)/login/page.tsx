@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, FlaskConical, Loader2 } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,16 +41,21 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-neutral-100 flex flex-col items-center justify-center p-4 relative">
+      <Link
+        href="/"
+        className="absolute top-4 left-4 sm:top-6 sm:left-6 inline-flex items-center gap-1.5 text-sm font-medium text-neutral-600 hover:text-brand-700 transition-colors"
+      >
+        <ArrowLeft className="h-4 w-4" aria-hidden />
+        Back
+      </Link>
+
+      <div className="mb-8 flex flex-col items-center gap-2">
+        <Logo href="/" size="lg" />
+        <p className="text-sm text-neutral-500">Inspection-ready. Always.</p>
+      </div>
+
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-md p-8">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <FlaskConical className="h-6 w-6 text-brand-700" />
-          <span className="text-xl font-bold text-brand-700">SafeCellar</span>
-        </div>
-        <p className="text-sm text-neutral-500 text-center mb-6">
-          Inspection-ready. Always.
-        </p>
-        <hr className="border-neutral-200 mb-6" />
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="email">Email address</Label>

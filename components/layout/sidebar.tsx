@@ -18,6 +18,8 @@ import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "safecellar-sidebar-collapsed";
 
+// Sidebar uses brand-900 shell + brand-200/800 for inactive/hover (see tailwind brand scale).
+
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/chemicals", icon: FlaskConical, label: "Chemicals" },
@@ -68,7 +70,7 @@ function NavLink({
           : "mx-2 gap-3 px-3 py-2",
         active
           ? "bg-brand-700 text-white"
-          : "text-[#A3D9B8] hover:bg-[#145C31] hover:text-white"
+          : "text-brand-200 hover:bg-brand-800 hover:text-white"
       )}
     >
       <Icon className="h-5 w-5 flex-shrink-0" />
@@ -116,7 +118,7 @@ export function Sidebar({ userName }: { userName: string }) {
   return (
     <aside
       className={cn(
-        "hidden md:flex flex-col bg-[#0D3D21] min-h-screen flex-shrink-0 transition-[width] duration-200 ease-in-out",
+        "hidden md:flex flex-col bg-brand-900 min-h-screen flex-shrink-0 transition-[width] duration-200 ease-in-out",
         collapsed ? "w-16" : "w-[220px]"
       )}
     >
@@ -145,7 +147,7 @@ export function Sidebar({ userName }: { userName: string }) {
             type="button"
             onClick={toggleCollapsed}
             aria-label="Collapse sidebar"
-            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-[#A3D9B8] hover:bg-[#145C31] hover:text-white transition-colors duration-150"
+            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-brand-200 hover:bg-brand-800 hover:text-white transition-colors duration-150"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -158,7 +160,7 @@ export function Sidebar({ userName }: { userName: string }) {
             type="button"
             onClick={toggleCollapsed}
             aria-label="Expand sidebar"
-            className="group/button relative flex h-8 w-8 items-center justify-center rounded-lg text-[#A3D9B8] hover:bg-[#145C31] hover:text-white transition-colors duration-150"
+            className="group/button relative flex h-8 w-8 items-center justify-center rounded-lg text-brand-200 hover:bg-brand-800 hover:text-white transition-colors duration-150"
           >
             <ChevronRight className="h-4 w-4" />
             <SidebarTooltip label="Expand sidebar" show />
@@ -197,7 +199,7 @@ export function Sidebar({ userName }: { userName: string }) {
               : "mx-2 gap-3 px-3 py-2",
             pathname.startsWith("/settings")
               ? "bg-brand-700 text-white"
-              : "text-[#A3D9B8] hover:bg-[#145C31] hover:text-white"
+              : "text-brand-200 hover:bg-brand-800 hover:text-white"
           )}
         >
           <Settings className="h-5 w-5 flex-shrink-0" />
@@ -211,7 +213,7 @@ export function Sidebar({ userName }: { userName: string }) {
           type="button"
           onClick={handleSignOut}
           className={cn(
-            "group/button relative flex items-center rounded-lg text-[#A3D9B8] hover:bg-[#145C31] hover:text-white transition-colors duration-150",
+            "group/button relative flex items-center rounded-lg text-brand-200 hover:bg-brand-800 hover:text-white transition-colors duration-150",
             collapsed
               ? "mx-auto h-10 w-10 justify-center"
               : "mx-2 gap-3 px-3 py-2 w-[calc(100%-1rem)]"
@@ -238,7 +240,7 @@ export function Sidebar({ userName }: { userName: string }) {
             <SidebarTooltip label={userName} show={mounted && collapsed} />
           </div>
           {!collapsed && (
-            <span className="text-sm font-medium text-[#A3D9B8] truncate">
+            <span className="text-sm font-medium text-brand-200 truncate">
               {userName}
             </span>
           )}

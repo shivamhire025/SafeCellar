@@ -19,7 +19,7 @@ export function PendingActions({ actions }: { actions: PendingAction[] }) {
         <h3 className="text-base font-semibold text-neutral-900 mb-4">
           Pending Actions
         </h3>
-        <div className="flex items-center gap-3 text-green-600 py-4">
+        <div className="flex items-center gap-3 text-brand-600 py-4">
           <CheckCircle2 className="h-5 w-5" />
           <span className="text-sm font-medium">
             All compliance items resolved

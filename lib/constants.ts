@@ -54,13 +54,15 @@ export const STORAGE_LOCATIONS = [
   "Production Floor",
 ] as const;
 
+/** Score bands for compliance gauge (names are thresholds, not UI colors). */
 export const COMPLIANCE_THRESHOLDS = {
   green: 85,
   amber: 60,
 } as const;
 
+/** Arc/text color for compliance score — brand blue when healthy. */
 export function getComplianceColor(score: number): string {
-  if (score >= COMPLIANCE_THRESHOLDS.green) return "#16A34A";
+  if (score >= COMPLIANCE_THRESHOLDS.green) return "#1D4ED8";
   if (score >= COMPLIANCE_THRESHOLDS.amber) return "#D97706";
   return "#DC2626";
 }

@@ -3,17 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --color-primary-900: #0d3d21;
-  --color-primary-800: #145c31;
-  --color-primary-700: #1a6b3a;
-  --color-primary-600: #1f7d44;
-  --color-primary-500: #268f50;
-  --color-primary-400: #3dad68;
-  --color-primary-300: #65c287;
-  --color-primary-200: #a3d9b8;
-  --color-primary-100: #d4efe0;
-  --color-primary-50: #ebf7f1;
+  /* Brand palette (blue). Mirrors tailwind.config.ts brand scale. */
+  --color-primary-900: #172554;
+  --color-primary-800: #1e40af;
+  --color-primary-700: #1d4ed8;
+  --color-primary-600: #2563eb;
+  --color-primary-500: #3b82f6;
+  --color-primary-400: #60a5fa;
+  --color-primary-300: #93c5fd;
+  --color-primary-200: #bfdbfe;
+  --color-primary-100: #dbeafe;
+  --color-primary-50: #eff6ff;
 
+  /* Semantic status colors — kept separate from brand blue. */
   --color-success: #16a34a;
   --color-success-light: #dcfce7;
   --color-warning: #d97706;
@@ -25,11 +27,11 @@
 
   --color-bg-page: #f3f4f6;
   --color-bg-card: #ffffff;
-  --color-bg-sidebar: #0d3d21;
+  --color-bg-sidebar: #172554;
 
-  --primary: 150 60% 27%;
+  --primary: 224 76% 48%;
   --primary-foreground: 0 0% 100%;
-  --ring: 150 60% 27%;
+  --ring: 224 76% 48%;
   --background: 0 0% 100%;
   --foreground: 222 47% 11%;
   --card: 0 0% 100%;

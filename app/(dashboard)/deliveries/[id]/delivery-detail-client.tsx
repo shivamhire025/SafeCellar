@@ -108,7 +108,7 @@ export function DeliveryDetailClient({ delivery }: { delivery: Delivery }) {
                 </td>
                 <td className="px-4 py-3">
                   {item.is_scanned ? (
-                    <span className="flex items-center gap-1 text-green-600 text-xs">
+                    <span className="flex items-center gap-1 text-brand-600 text-xs">
                       <CheckCircle2 className="h-4 w-4" />
                       {formatDate(item.scanned_at)}
                     </span>

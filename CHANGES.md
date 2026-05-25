@@ -8,6 +8,69 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Brand color green to blue (fix stale CSS)
+
+### What changed
+- Cleared stale `.next` Tailwind output that was still serving old green `brand-*` utilities after the palette change.
+- Replaced remaining `green-*` UI (badges, toasts, compliance score arc, status dots, empty states) with `brand-*` blue tokens.
+- High compliance score color in `getComplianceColor()` now uses brand blue (`#1D4ED8`) instead of green.
+
+### Files
+- `lib/constants.ts`, `components/ui/badge.tsx`, `components/ui/toast.tsx`, `components/dashboard/pending-actions.tsx`, `app/(dashboard)/sds-review/page.tsx`, `app/(dashboard)/workers/page.tsx`, `app/(dashboard)/deliveries/[id]/delivery-detail-client.tsx`
+
+---
+
+## 2026-05-25 — Brand color green to blue
+
+### What changed
+- Replaced the green brand palette with blue across design tokens (`brand-50`–`brand-900`), CSS variables, sidebar/mobile nav, and HazCom report heading color.
+- Sidebar and mobile nav now use `bg-brand-900`, `text-brand-200`, and `hover:bg-brand-800` instead of hardcoded green hex values.
+
+### Files
+- `tailwind.config.ts`, `app/globals.css`, `components/layout/sidebar.tsx`, `components/layout/mobile-nav.tsx`, `app/api/reports/hazcom/route.ts`
+
+---
+
+## 2026-05-25 — Landing page brewery hero image
+
+### What changed
+- Added `public/images/brewery-hero.jpg` as full-bleed hero background with brand gradient overlay for readable copy.
+
+### Files
+- `public/images/brewery-hero.jpg`, `components/landing/landing-page.tsx`
+
+---
+
+## 2026-05-25 — Landing page import fix
+
+### What changed
+- Restored `FlaskConical` import in `landing-page.tsx` (used by Chemical inventory feature card).
+
+---
+
+## 2026-05-25 — Login page logo and back navigation
+
+### What changed
+- Shared `Logo` component (`components/brand/logo.tsx`) used on landing and login.
+- Login: larger logo above the card (links to `/`), **Back** button top-left to landing page.
+
+### Files
+- `components/brand/logo.tsx`, `app/(auth)/login/page.tsx`, `components/landing/landing-page.tsx`
+
+---
+
+## 2026-05-25 — Marketing landing page
+
+### What changed
+- Replaced root redirect with a single-page marketing landing at `/`.
+- Nav **Try Now**, hero CTA, and bottom CTA all link to `/login`.
+- Features section highlights Phase 1 P0 capabilities (inventory, SDS, scanning, deliveries, compliance, HazCom export).
+
+### Files
+- `app/page.tsx`, `components/landing/landing-page.tsx`
+
+---
+
 ## 2026-05-25 — Fix Vercel 404: move app to repository root
 
 ### What changed
@@ -76,7 +139,7 @@ Product requirements and design spec should not ship to a public repository. App
 - Created `safecellar/` Next.js 14 App Router app (manual scaffold; `create-next-app` did not complete interactively).
 - Tech stack per PRD §5: Tailwind CSS v3, shadcn-style UI primitives, Supabase client stubs, `@zxing/browser`, `recharts`, `react-pdf` (deps installed; PDF viewer not fully wired).
 - Folder structure per PRD §6: `app/(auth)`, `app/(dashboard)`, `components/`, `lib/`, `hooks/`, `types/`, `supabase/migrations/`.
-- Design tokens in `tailwind.config.ts` and `app/globals.css` (brand green `#1A6B3A`, sidebar `#0D3D21`, page bg `#F3F4F6`).
+- Design tokens in `tailwind.config.ts` and `app/globals.css` (page bg `#F3F4F6`; brand palette updated to blue on 2026-05-25).
 - Demo mode: `NEXT_PUBLIC_DEMO_MODE=true` with in-memory `lib/demo-store.ts` (no Supabase required for local prototype).
 
 ### Phase 1 P0 features
