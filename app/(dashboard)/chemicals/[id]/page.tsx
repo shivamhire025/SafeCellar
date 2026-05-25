@@ -12,6 +12,7 @@ import { ChemicalDetailClient } from "./chemical-detail-client";
 import { formatDate } from "@/lib/utils";
 import { PPE_OPTIONS } from "@/lib/constants";
 import { MapPin } from "lucide-react";
+import { Abbr } from "@/components/shared/abbreviation-tooltip";
 
 export default async function ChemicalDetailPage({
   params,
@@ -47,7 +48,7 @@ export default async function ChemicalDetailPage({
 
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mr-1">
-              PPE
+              <Abbr term="PPE">PPE</Abbr>
             </span>
             {(chemical.ppe_required ?? []).length > 0 ? (
               chemical.ppe_required!.map((ppe) => {
@@ -105,7 +106,9 @@ export default async function ChemicalDetailPage({
                   <dd className="font-medium">{chemical.supplier ?? "N/A"}</dd>
                 </div>
                 <div>
-                  <dt className="text-neutral-500">CAS Number</dt>
+                  <dt className="text-neutral-500">
+                    <Abbr term="CAS">CAS</Abbr> Number
+                  </dt>
                   <dd className="font-mono">{chemical.cas_number ?? "N/A"}</dd>
                 </div>
                 <div>

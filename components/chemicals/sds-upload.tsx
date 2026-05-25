@@ -5,6 +5,7 @@ import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Abbr } from "@/components/shared/abbreviation-tooltip";
 import { toast } from "@/components/ui/use-toast";
 
 interface SdsUploadProps {
@@ -91,7 +92,7 @@ export function SdsUpload({ chemicalId, onSuccess }: SdsUploadProps) {
       >
         <Upload className="h-8 w-8 text-neutral-400 mx-auto mb-3" />
         <p className="text-sm font-medium text-neutral-700">
-          Drop SDS PDF here, or{" "}
+          Drop <Abbr term="SDS">SDS</Abbr> PDF here, or{" "}
           <span className="text-brand-700">click to browse</span>
         </p>
         <p className="text-xs text-neutral-400 mt-1">PDF files only, max 25MB</p>
@@ -101,7 +102,8 @@ export function SdsUpload({ chemicalId, onSuccess }: SdsUploadProps) {
       </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="sds-version">
-          SDS Version / Revision Date <span className="text-red-500">*</span>
+          <Abbr term="SDS">SDS</Abbr> Version / Revision Date{" "}
+          <span className="text-red-500">*</span>
         </Label>
         <Input
           id="sds-version"
@@ -111,7 +113,11 @@ export function SdsUpload({ chemicalId, onSuccess }: SdsUploadProps) {
         />
       </div>
       <Button onClick={handleUpload} disabled={uploading || !file}>
-        {uploading ? "Uploading..." : "Upload SDS PDF"}
+        {uploading ? "Uploading..." : (
+          <>
+            Upload <Abbr term="SDS">SDS</Abbr> PDF
+          </>
+        )}
       </Button>
     </div>
   );

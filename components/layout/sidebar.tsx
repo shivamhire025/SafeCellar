@@ -14,6 +14,7 @@ import {
   Truck,
   Users,
 } from "lucide-react";
+import { AbbreviationText } from "@/components/shared/abbreviation-tooltip";
 import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "safecellar-sidebar-collapsed";
@@ -75,7 +76,9 @@ function NavLink({
     >
       <Icon className="h-5 w-5 flex-shrink-0" />
       {!collapsed && (
-        <span className="text-sm font-medium truncate">{label}</span>
+        <span className="text-sm font-medium truncate">
+          <AbbreviationText text={label} />
+        </span>
       )}
       <SidebarTooltip label={label} show={collapsed} />
     </Link>

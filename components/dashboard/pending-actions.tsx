@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { AbbreviationText } from "@/components/shared/abbreviation-tooltip";
 
 interface PendingAction {
   id: string;
@@ -50,17 +51,21 @@ export function PendingActions({ actions }: { actions: PendingAction[] }) {
                       : "inventory_pending"
                 }
               >
-                {action.badge === "missing"
-                  ? "Missing SDS"
-                  : action.badge === "review_due"
-                    ? "Review Due"
-                    : "Delivery"}
+                {action.badge === "missing" ? (
+                  <AbbreviationText text="Missing SDS" />
+                ) : action.badge === "review_due" ? (
+                  "Review Due"
+                ) : (
+                  "Delivery"
+                )}
               </Badge>
               <div>
                 <p className="text-sm font-medium text-neutral-900">
                   {action.title}
                 </p>
-                <p className="text-xs text-neutral-500">{action.subtitle}</p>
+                <p className="text-xs text-neutral-500">
+                  <AbbreviationText text={action.subtitle} />
+                </p>
               </div>
             </div>
             <Button variant="ghost" size="sm" asChild>

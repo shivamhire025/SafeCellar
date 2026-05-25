@@ -1,6 +1,7 @@
 "use client";
 
 import { NotificationsMenu } from "@/components/layout/notifications-menu";
+import { AbbreviationText } from "@/components/shared/abbreviation-tooltip";
 
 export function Topbar({
   title,
@@ -18,7 +19,9 @@ export function Topbar({
 
   return (
     <header className="h-[60px] bg-white border-b border-neutral-200 flex items-center justify-between px-6 flex-shrink-0">
-      <h2 className="text-xl font-semibold text-neutral-900">{title}</h2>
+      <h2 className="text-xl font-semibold text-neutral-900">
+        <AbbreviationText text={title} />
+      </h2>
       <div className="flex items-center gap-4">
         <NotificationsMenu />
         <div className="flex items-center gap-2">

@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { AbbreviationText } from "@/components/shared/abbreviation-tooltip";
 
 interface EmptyStateProps {
   icon: LucideIcon;
@@ -19,7 +20,9 @@ export function EmptyState({
         <Icon className="h-6 w-6 text-brand-700" />
       </div>
       <h3 className="text-base font-semibold text-neutral-900 mb-2">{title}</h3>
-      <p className="text-sm text-neutral-500 max-w-sm mb-6">{description}</p>
+      <p className="text-sm text-neutral-500 max-w-sm mb-6">
+        <AbbreviationText text={description} />
+      </p>
       {action}
     </div>
   );

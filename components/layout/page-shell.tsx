@@ -1,3 +1,5 @@
+import { AbbreviationText } from "@/components/shared/abbreviation-tooltip";
+
 interface PageShellProps {
   title: string;
   description?: string;
@@ -19,9 +21,13 @@ export function PageShell({
       <div className="flex items-start justify-between mb-6">
         <div>
           {leading && <div className="mb-2">{leading}</div>}
-          <h1 className="text-2xl font-bold text-neutral-900">{title}</h1>
+          <h1 className="text-2xl font-bold text-neutral-900">
+            <AbbreviationText text={title} />
+          </h1>
           {description && (
-            <p className="text-sm text-neutral-500 mt-1">{description}</p>
+            <p className="text-sm text-neutral-500 mt-1">
+              <AbbreviationText text={description} />
+            </p>
           )}
         </div>
         {actions && <div className="flex gap-3">{actions}</div>}

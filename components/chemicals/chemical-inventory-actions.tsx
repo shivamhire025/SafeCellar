@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Download, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BulkImportDialog } from "@/components/chemicals/bulk-import-dialog";
+import { AbbreviationText } from "@/components/shared/abbreviation-tooltip";
 
 export function ChemicalInventoryActions() {
   return (
@@ -11,7 +12,7 @@ export function ChemicalInventoryActions() {
       <Button variant="secondary" asChild>
         <a href="/api/reports/hazcom" download>
           <Download className="h-4 w-4" />
-          Export HazCom Report
+          <AbbreviationText text="Export HazCom Report" />
         </a>
       </Button>
       <BulkImportDialog />

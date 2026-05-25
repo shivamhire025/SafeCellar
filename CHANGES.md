@@ -8,6 +8,18 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Abbreviation hover tooltips
+
+### What changed
+- Known terms (**CIP**, **SDS**, **HazCom**, **PPE**, **OSHA**, **CAS**, **LOTO**) show a dotted underline and tooltip on hover or keyboard focus with the full name and a short description.
+- Applied across page titles/descriptions, sidebar nav, forms, notifications, and dashboard copy via shared `Abbr` / `AbbreviationText` components.
+- **SDS status badges** (Compliant / SDS Missing / Review Due) stay plain text with no abbreviation tooltips.
+
+### Files
+- `lib/abbreviations.ts`, `components/shared/abbreviation-tooltip.tsx`, `components/layout/page-shell.tsx`, `components/layout/topbar.tsx`, `components/layout/sidebar.tsx`, `components/chemicals/chemical-type-badge.tsx`, `components/shared/status-badge.tsx`, and related dashboard/chemical/delivery UI files.
+
+---
+
 ## 2026-05-25 — Barcode camera scanner and image upload
 
 ### What changed

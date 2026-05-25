@@ -23,6 +23,7 @@ import { BarcodeScanner } from "@/components/chemicals/barcode-scanner";
 import { BarcodeImageUpload } from "@/components/chemicals/barcode-image-upload";
 import { chemicalSchema, type ChemicalFormValues } from "@/lib/validations/chemical";
 import { CHEMICAL_TYPES, STORAGE_LOCATIONS } from "@/lib/constants";
+import { Abbr, AbbreviationText } from "@/components/shared/abbreviation-tooltip";
 import { toast } from "@/components/ui/use-toast";
 
 export default function NewChemicalPage() {
@@ -130,7 +131,8 @@ export default function NewChemicalPage() {
           <TabsContent value="manual" className="mt-6">
             {newDetected && (
               <div className="rounded-lg border-l-4 border-blue-500 bg-blue-50 p-4 mb-6 text-sm text-blue-800">
-                New chemical detected. Please complete the SDS information.
+                New chemical detected. Please complete the{" "}
+                <Abbr term="SDS">SDS</Abbr> information.
               </div>
             )}
             <form
@@ -157,7 +159,9 @@ export default function NewChemicalPage() {
                   <Input {...register("supplier")} />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>CAS Number</Label>
+                  <Label>
+                    <Abbr term="CAS">CAS</Abbr> Number
+                  </Label>
                   <Input {...register("cas_number")} className="font-mono" />
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -178,7 +182,7 @@ export default function NewChemicalPage() {
                     <SelectContent>
                       {CHEMICAL_TYPES.map((t) => (
                         <SelectItem key={t.value} value={t.value}>
-                          {t.label}
+                          <AbbreviationText text={t.label} />
                         </SelectItem>
                       ))}
                     </SelectContent>

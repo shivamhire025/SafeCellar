@@ -11,14 +11,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { Abbr, AbbreviationText } from "@/components/shared/abbreviation-tooltip";
 import { cn } from "@/lib/utils";
 import type { HighRiskNotification } from "@/types/database";
+import type { ReactNode } from "react";
 
-const BADGE_LABELS: Record<HighRiskNotification["badge"], string> = {
-  missing: "Missing SDS",
+const BADGE_LABELS: Record<HighRiskNotification["badge"], ReactNode> = {
+  missing: (
+    <>
+      Missing <Abbr term="SDS">SDS</Abbr>
+    </>
+  ),
   review_due: "Review due",
   gas_hazard: "Gas hazard",
-  sds_queue: "SDS queue",
+  sds_queue: (
+    <>
+      <Abbr term="SDS">SDS</Abbr> queue
+    </>
+  ),
   delivery: "Delivery",
 };
 
@@ -142,7 +152,7 @@ export function NotificationsMenu() {
                       {item.title}
                     </p>
                     <p className="text-xs text-neutral-500 line-clamp-2">
-                      {item.subtitle}
+                      <AbbreviationText text={item.subtitle} />
                     </p>
                   </div>
                 </Link>
@@ -167,7 +177,7 @@ export function NotificationsMenu() {
                 className="text-brand-700 font-medium hover:underline"
                 onClick={() => setOpen(false)}
               >
-                SDS review queue
+                <AbbreviationText text="SDS review queue" />
               </Link>
             </div>
           </>

@@ -5,6 +5,7 @@ import {
   FileText,
   Truck,
 } from "lucide-react";
+import { AbbreviationText } from "@/components/shared/abbreviation-tooltip";
 import type { ComplianceStats } from "@/types/database";
 
 export function ComplianceBreakdown({ stats }: { stats: ComplianceStats }) {
@@ -47,7 +48,7 @@ export function ComplianceBreakdown({ stats }: { stats: ComplianceStats }) {
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">
-              {card.title}
+              <AbbreviationText text={card.title} />
             </span>
             <div
               className={`w-8 h-8 rounded-lg ${card.iconBg} flex items-center justify-center`}

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CheckCircle2, ScanBarcode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { AbbreviationText } from "@/components/shared/abbreviation-tooltip";
 import { BarcodeScanner } from "@/components/chemicals/barcode-scanner";
 import { formatDate } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
@@ -99,7 +100,7 @@ export function DeliveryDetailClient({ delivery }: { delivery: Delivery }) {
                   <p className="font-medium">{item.product_name}</p>
                   {item.is_new_chemical && (
                     <Badge variant="inventory_pending" className="mt-1">
-                      New: SDS Required
+                      <AbbreviationText text="New: SDS Required" />
                     </Badge>
                   )}
                 </td>

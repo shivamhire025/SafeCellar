@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { ChemicalTypeBadge } from "@/components/chemicals/chemical-type-badge";
 import { EmptyState } from "@/components/shared/empty-state";
+import { AbbreviationText } from "@/components/shared/abbreviation-tooltip";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
 import { FlaskConical, Plus } from "lucide-react";
@@ -62,7 +63,7 @@ export function ChemicalsClient({
                   : "bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-50"
               }`}
             >
-              {t.label}
+              <AbbreviationText text={t.label} />
               <span className="ml-1.5 text-xs opacity-80">
                 ({counts[t.key] ?? counts.all})
               </span>
@@ -111,7 +112,7 @@ export function ChemicalsClient({
                   Location
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wide">
-                  SDS Status
+                  <AbbreviationText text="SDS Status" />
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Last Verified

@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { Droplets, Flame, Phone, Plus, Skull, Wind } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Abbr } from "@/components/shared/abbreviation-tooltip";
 import { HAZARD_LABEL_INFO } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { Chemical } from "@/types/database";
@@ -167,7 +168,9 @@ export function EmergencyQrCard({ chemical }: { chemical: Chemical }) {
             {chemical.cas_number && (
               <div>
                 <dt className="sr-only">CAS Number</dt>
-                <dd>CAS No: {chemical.cas_number}</dd>
+                <dd>
+                  <Abbr term="CAS">CAS</Abbr> No: {chemical.cas_number}
+                </dd>
               </div>
             )}
             {chemical.molecular_formula && (

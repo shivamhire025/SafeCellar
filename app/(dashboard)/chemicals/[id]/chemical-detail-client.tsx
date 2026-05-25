@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { SdsUpload } from "@/components/chemicals/sds-upload";
+import { Abbr } from "@/components/shared/abbreviation-tooltip";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { formatDate } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
@@ -30,14 +31,16 @@ export function ChemicalDetailClient({
   return (
     <div className="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
       <h3 className="text-base font-semibold text-neutral-900 mb-4">
-        SDS Management
+        <Abbr term="SDS">SDS</Abbr> Management
       </h3>
       <div className="mb-4">
         <StatusBadge status={chemical.sds_status} />
       </div>
       <dl className="grid grid-cols-2 gap-3 text-sm mb-6">
         <div>
-          <dt className="text-neutral-500">SDS Version</dt>
+          <dt className="text-neutral-500">
+            <Abbr term="SDS">SDS</Abbr> Version
+          </dt>
           <dd className="font-medium">{chemical.sds_version ?? "N/A"}</dd>
         </div>
         <div>
@@ -66,7 +69,7 @@ export function ChemicalDetailClient({
       )}
       {chemical.sds_file_path && !showGate && (
         <p className="text-sm text-neutral-500 mt-2">
-          SDS on file: {chemical.sds_file_path}
+          <Abbr term="SDS">SDS</Abbr> on file: {chemical.sds_file_path}
         </p>
       )}
     </div>
