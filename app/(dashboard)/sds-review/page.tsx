@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { demoStore } from "@/lib/demo-store";
+import { chemicalsRepository } from "@/lib/chemicals/repository";
 import { getSession } from "@/lib/auth";
 import { PageShell } from "@/components/layout/page-shell";
 import { Topbar } from "@/components/layout/topbar";
@@ -10,7 +10,7 @@ import { SDS_REVIEW_REASONS } from "@/lib/constants";
 
 export default async function SdsReviewPage() {
   const session = await getSession();
-  const queue = demoStore.getSdsReviewQueue();
+  const queue = await chemicalsRepository.getSdsReviewQueue();
 
   return (
     <>

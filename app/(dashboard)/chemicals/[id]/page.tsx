@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { demoStore } from "@/lib/demo-store";
+import { chemicalsRepository } from "@/lib/chemicals/repository";
 import { getSession } from "@/lib/auth";
 import { PageShell } from "@/components/layout/page-shell";
 import { Topbar } from "@/components/layout/topbar";
@@ -20,7 +20,7 @@ export default async function ChemicalDetailPage({
   params: { id: string };
 }) {
   const session = await getSession();
-  const chemical = demoStore.getChemical(params.id);
+  const chemical = await chemicalsRepository.getChemical(params.id);
   if (!chemical) notFound();
 
   const showGate = chemical.sds_status !== "compliant";

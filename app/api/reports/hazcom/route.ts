@@ -1,9 +1,19 @@
 import { NextResponse } from "next/server";
+import { getSession } from "@/lib/auth";
+import { chemicalsRepository } from "@/lib/chemicals/repository";
 import { demoStore } from "@/lib/demo-store";
+import { isDemoMode } from "@/lib/demo-mode";
 
 export async function GET() {
-  const chemicals = demoStore.getChemicals();
-  const org = demoStore.getOrganization();
+  const chemicals = await chemicalsRepository.getChemicals();
+  const org = isDemoMode()
+    ? demoStore.getOrganization()
+    : {
+        name: (await getSession())?.organization_name ?? "Organization",
+        address: null,
+        city: null,
+        state: null,
+      };
 
   const rows = chemicals.map((c) => ({
     name: c.name,

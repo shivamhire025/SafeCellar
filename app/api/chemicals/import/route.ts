@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
-import { demoStore } from "@/lib/demo-store";
+import { getSession } from "@/lib/auth";
+import { chemicalsRepository } from "@/lib/chemicals/repository";
+import { isDemoMode } from "@/lib/demo-mode";
 import { chemicalImportRowSchema } from "@/lib/validations/chemical-import";
+import type { ChemicalImportRow } from "@/lib/validations/chemical-import";
 
 export async function POST(request: Request) {
+  if (!isDemoMode() && !(await getSession())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body = await request.json();
   const rows = Array.isArray(body.rows) ? body.rows : [];
 
@@ -13,7 +20,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const validRows: Parameters<typeof demoStore.importChemicals>[0] = [];
+  const validRows: ChemicalImportRow[] = [];
   const errors: { row: number; message: string }[] = [];
 
   rows.forEach((row: unknown, index: number) => {
@@ -35,7 +42,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = demoStore.importChemicals(validRows);
+  const result = await chemicalsRepository.importChemicals(validRows);
 
   return NextResponse.json({
     created: result.created,

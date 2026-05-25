@@ -8,6 +8,21 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Chemicals on Supabase
+
+### What changed
+- Chemical inventory CRUD uses **Postgres** when not in demo mode (`lib/chemicals/repository.ts`): list, detail, create, bulk import, SDS verify/upload (storage bucket `sds-files`), barcode lookup.
+- Creates enqueue **SDS review** rows and **activity log** entries for the signed-in org.
+- Dashboard compliance score, pending chemical actions, and **SDS Review Queue** read from Supabase; deliveries/incidents still demo.
+
+### Files
+- `lib/chemicals/repository.ts`
+- `app/api/chemicals/route.ts`, `app/api/chemicals/import/route.ts`, `app/api/chemicals/[id]/verify/route.ts`, `app/api/sds/upload/route.ts`, `app/api/barcode/[code]/route.ts`, `app/api/compliance/route.ts`, `app/api/reports/hazcom/route.ts`
+- `app/(dashboard)/chemicals/page.tsx`, `app/(dashboard)/chemicals/[id]/page.tsx`, `app/(dashboard)/sds-review/page.tsx`, `app/(dashboard)/dashboard/page.tsx`, incident pages (chemical picker)
+- `docs/SUPABASE.md`
+
+---
+
 ## 2026-05-25 — Demo mode banner and signup errors
 
 ### What changed

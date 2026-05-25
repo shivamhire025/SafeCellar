@@ -163,4 +163,6 @@ See also [VERCEL.md](./VERCEL.md).
 
 ## Not yet on Supabase
 
-CRUD for chemicals, deliveries, and incidents still uses the demo store when migrating feature-by-feature. Auth and schema are ready; API routes can be switched to `createClient()` per resource.
+**Chemicals** use Postgres when `NEXT_PUBLIC_DEMO_MODE=false` (inventory, create, import, SDS upload, barcode lookup, dashboard chemical stats).
+
+Still on the demo store: deliveries, incidents, workers, notifications, and dashboard activity log.

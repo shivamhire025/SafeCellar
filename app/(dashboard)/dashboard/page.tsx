@@ -1,4 +1,6 @@
 import { demoStore } from "@/lib/demo-store";
+import { chemicalsRepository } from "@/lib/chemicals/repository";
+import { isDemoMode } from "@/lib/demo-mode";
 import { PageShell } from "@/components/layout/page-shell";
 import { Topbar } from "@/components/layout/topbar";
 import { ComplianceScoreCard } from "@/components/dashboard/compliance-score-card";
@@ -6,11 +8,31 @@ import { ComplianceBreakdown } from "@/components/dashboard/compliance-breakdown
 import { PendingActions } from "@/components/dashboard/pending-actions";
 import { RecentActivity } from "@/components/dashboard/recent-activity";
 import { getSession } from "@/lib/auth";
+import type { ComplianceStats } from "@/types/database";
 
 export default async function DashboardPage() {
   const session = await getSession();
-  const stats = demoStore.getComplianceStats();
-  const actions = demoStore.getPendingActions();
+
+  let stats: ComplianceStats;
+  let actions: Parameters<typeof PendingActions>[0]["actions"];
+
+  if (isDemoMode()) {
+    stats = demoStore.getComplianceStats();
+    actions = demoStore.getPendingActions();
+  } else {
+    const chemicalStats = await chemicalsRepository.getComplianceStats();
+    stats = {
+      ...chemicalStats,
+      pendingDeliveries: 0,
+    };
+    actions = [
+      ...(await chemicalsRepository.getPendingChemicalActions()),
+      ...demoStore
+        .getPendingActions()
+        .filter((a) => a.type === "delivery"),
+    ];
+  }
+
   const activity = demoStore.getActivityLog(10);
 
   return (

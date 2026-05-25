@@ -1,4 +1,4 @@
-import { demoStore } from "@/lib/demo-store";
+import { chemicalsRepository } from "@/lib/chemicals/repository";
 import { PageShell } from "@/components/layout/page-shell";
 import { Topbar } from "@/components/layout/topbar";
 import { getSession } from "@/lib/auth";
@@ -7,7 +7,7 @@ import { ChemicalsClient } from "./chemicals-client";
 
 export default async function ChemicalsPage() {
   const session = await getSession();
-  const chemicals = demoStore.getChemicals();
+  const chemicals = await chemicalsRepository.getChemicals();
   const counts = {
     all: chemicals.length,
     missing: chemicals.filter((c) => c.sds_status === "missing").length,

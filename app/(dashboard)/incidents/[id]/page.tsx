@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { chemicalsRepository } from "@/lib/chemicals/repository";
 import { demoStore } from "@/lib/demo-store";
 import { getSession } from "@/lib/auth";
 import { PageShell } from "@/components/layout/page-shell";
@@ -16,7 +17,7 @@ export default async function IncidentDetailPage({
   const incident = demoStore.getIncident(params.id);
   if (!incident) notFound();
 
-  const chemicals = demoStore.getChemicals();
+  const chemicals = await chemicalsRepository.getChemicals();
 
   return (
     <>
