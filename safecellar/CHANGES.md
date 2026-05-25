@@ -4,7 +4,19 @@ This file tracks implementation and UX changes made during development.
 
 **Maintained by:** Cursor agent (see `.cursor/rules/changelog.mdc`) — append a dated section after each task that changes the app.
 
-**References:** `PRD.md`, `DESIGN.md` (workspace root)
+**References:** `PRD.md`, `DESIGN.md` (workspace root, **local only** — excluded from git via root `.gitignore`)
+
+---
+
+## 2026-05-25 — Exclude PRD/DESIGN from public GitHub
+
+### What changed
+- Root `.gitignore` added: `PRD.md`, `DESIGN.md` not tracked for public remotes.
+- Removed `PRD.md` and `DESIGN.md` from git index (`git rm --cached`); files remain on disk locally.
+- Root and `safecellar/README.md` updated to describe local-only docs.
+
+### Rationale
+Product requirements and design spec should not ship to a public repository. Application code in `safecellar/` is still publishable; use a **private** GitHub repo if the whole monorepo must be remote-backed.
 
 ---
 

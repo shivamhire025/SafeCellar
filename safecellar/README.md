@@ -31,7 +31,7 @@ Demo mode (`NEXT_PUBLIC_DEMO_MODE=true`) runs with in-memory data. No Supabase r
 
 ## Project Structure
 
-See `PRD.md` section 6 for the full folder layout.
+See the App Router layout under `app/` (`(auth)`, `(dashboard)`, `api/`). Full product spec and folder map live in local-only `PRD.md` at the workspace root (not committed to public GitHub).
 
 ## Change log
 

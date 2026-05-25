@@ -1,0 +1,8 @@
+# Product & design specs (keep local — do not publish to public GitHub)
+PRD.md
+DESIGN.md
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
