@@ -8,6 +8,19 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — GitHub documentation and push (empty remote)
+
+### What changed
+- Root `README.md` expanded: features, quick start, scripts, private-docs policy.
+- `safecellar/README.md` rewritten: env table, structure, routes, API, Supabase steps.
+- Added `docs/ARCHITECTURE.md` (public-safe architecture overview).
+- Pushed to empty [github.com/shivamhire025/SafeCellar](https://github.com/shivamhire025/SafeCellar) without `PRD.md` / `DESIGN.md`.
+
+### Files
+- `README.md`, `safecellar/README.md`, `docs/ARCHITECTURE.md`
+
+---
+
 ## 2026-05-25 — Exclude PRD/DESIGN from public GitHub
 
 ### What changed
