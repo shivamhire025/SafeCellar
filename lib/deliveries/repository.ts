@@ -12,15 +12,33 @@ async function requireAuth() {
   return { session, supabase };
 }
 
-function mapDelivery(row: Record<string, unknown>): Delivery {
-  const itemsRaw = row.delivery_items as DeliveryItem[] | DeliveryItem | null | undefined;
+type DeliveryRow = Delivery & {
+  delivery_items?: DeliveryItem[] | DeliveryItem | null;
+};
+
+function mapDelivery(row: DeliveryRow): Delivery {
+  const itemsRaw = row.delivery_items;
   const items = Array.isArray(itemsRaw)
     ? itemsRaw
     : itemsRaw
       ? [itemsRaw]
       : [];
-  const { delivery_items: _items, ...rest } = row;
-  return { ...(rest as Delivery), items };
+  return {
+    id: row.id,
+    organization_id: row.organization_id,
+    order_number: row.order_number,
+    supplier: row.supplier,
+    order_date: row.order_date,
+    expected_date: row.expected_date,
+    delivered_date: row.delivered_date,
+    status: row.status,
+    notes: row.notes,
+    created_by: row.created_by,
+    received_by: row.received_by,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+    items,
+  };
 }
 
 export const deliveriesRepository = {
@@ -43,7 +61,7 @@ export const deliveriesRepository = {
 
     const { data, error } = await query;
     if (error || !data) return [];
-    return data.map((row) => mapDelivery(row as Record<string, unknown>));
+    return data.map((row) => mapDelivery(row as DeliveryRow));
   },
 
   async getDelivery(id: string): Promise<Delivery | undefined> {
@@ -61,7 +79,7 @@ export const deliveriesRepository = {
       .maybeSingle();
 
     if (error || !data) return undefined;
-    return mapDelivery(data as Record<string, unknown>);
+    return mapDelivery(data as DeliveryRow);
   },
 
   async createDelivery(

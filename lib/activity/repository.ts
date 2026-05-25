@@ -22,13 +22,19 @@ export const activityRepository = {
 
     return data.map((row) => {
       const profile = row.profiles as { full_name?: string } | { full_name?: string }[] | null;
-      const name = Array.isArray(profile)
+      const actorName = Array.isArray(profile)
         ? profile[0]?.full_name
         : profile?.full_name;
-      const { profiles: _p, ...entry } = row as Record<string, unknown>;
       return {
-        ...(entry as ActivityLogEntry),
-        actor_name: name ?? undefined,
+        id: row.id,
+        organization_id: row.organization_id,
+        actor_id: row.actor_id,
+        action: row.action,
+        entity_type: row.entity_type,
+        entity_id: row.entity_id,
+        metadata: row.metadata as Record<string, unknown> | null | undefined,
+        created_at: row.created_at,
+        actor_name: actorName ?? undefined,
       };
     });
   },

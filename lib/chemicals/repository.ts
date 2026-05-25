@@ -499,9 +499,16 @@ export const chemicalsRepository = {
     return data.map((row) => {
       const chem = row.chemicals as Chemical | Chemical[] | null;
       const chemical = Array.isArray(chem) ? chem[0] : chem;
-      const { chemicals: _c, ...item } = row as Record<string, unknown>;
       return {
-        ...(item as SdsReviewItem),
+        id: row.id,
+        organization_id: row.organization_id,
+        chemical_id: row.chemical_id,
+        reason: row.reason,
+        status: row.status,
+        flagged_at: row.flagged_at,
+        resolved_at: row.resolved_at,
+        resolved_by: row.resolved_by,
+        notes: row.notes,
         chemical: chemical ?? undefined,
       };
     });
