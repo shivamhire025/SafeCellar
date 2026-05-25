@@ -151,6 +151,43 @@ RLS restricts access to the signed-in user’s organization.
 
 See also [VERCEL.md](./VERCEL.md).
 
+## Marcus Chen demo account (production)
+
+A **real Supabase login** (not in-memory demo mode) with the full sample inventory:
+
+| Field | Value |
+|-------|--------|
+| Email | `demo@safecellar.app` |
+| Organization | Cascade Creek Brewery |
+| User | Marcus Chen (admin) |
+
+### Option A — Run locally against production Supabase
+
+1. Put production `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`.
+2. Optional: `MARCUS_DEMO_PASSWORD=YourSecurePassword` (default `CascadeCreek2025!`).
+3. Run:
+
+```bash
+npm install
+npm run seed:marcus
+```
+
+4. Sign in at your Vercel URL with that email and password (`NEXT_PUBLIC_DEMO_MODE` must stay `false`).
+
+### Option B — Trigger from Vercel (one-time)
+
+1. Add Vercel env vars: `SEED_MARCUS_SECRET` (long random string), optional `MARCUS_DEMO_PASSWORD`.
+2. Redeploy, then:
+
+```bash
+curl -X POST "https://YOUR-APP.vercel.app/api/admin/seed-marcus" \
+  -H "x-seed-secret: YOUR_SEED_MARCUS_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"password":"YourSecurePassword"}'
+```
+
+Re-running is safe: existing users get a password reset; sample data is only inserted if the org has **zero** chemicals.
+
 ## Troubleshooting
 
 | Issue | Fix |

@@ -113,7 +113,7 @@ export default function LoginPage() {
           </Link>
         </p>
         <p className="text-xs text-neutral-400 text-center mt-4">
-          Demo: demo@safecellar.app / any password
+          Shared demo account: demo@safecellar.app — see docs/SUPABASE.md (Marcus Chen)
         </p>
       </div>
     </div>

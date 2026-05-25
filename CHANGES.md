@@ -8,6 +8,17 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Marcus Chen production demo account
+
+### What changed
+- Script `npm run seed:marcus` and `POST /api/admin/seed-marcus` create `demo@safecellar.app` (Marcus Chen, Cascade Creek Brewery) with full sample data on Supabase.
+- Documented in **docs/SUPABASE.md**; login page points to shared demo credentials.
+
+### Files
+- `lib/seed/marcus-demo-account.ts`, `scripts/seed-marcus-account.ts`, `app/api/admin/seed-marcus/route.ts`, `package.json`, `.env.example`, `docs/SUPABASE.md`, `app/(auth)/login/page.tsx`
+
+---
+
 ## 2026-05-25 — Notifications from org Supabase data
 
 ### What changed
