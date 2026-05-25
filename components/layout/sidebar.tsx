@@ -9,9 +9,11 @@ import {
   ClipboardCheck,
   ClipboardList,
   FlaskConical,
+  HardHat,
   LayoutDashboard,
   LogOut,
   Settings,
+  Shield,
   Truck,
   Users,
 } from "lucide-react";
@@ -29,6 +31,8 @@ const navItems = [
   { href: "/sds-review", icon: ClipboardCheck, label: "SDS Review" },
   { href: "/incidents", icon: ClipboardList, label: "Incidents" },
   { href: "/workers", icon: Users, label: "Workers" },
+  { href: "/equipment", icon: HardHat, label: "Equipment" },
+  { href: "/permits", icon: Shield, label: "CS Permits" },
 ];
 
 function SidebarTooltip({

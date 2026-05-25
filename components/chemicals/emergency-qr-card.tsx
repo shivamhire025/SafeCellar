@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { Droplets, Flame, Phone, Plus, Skull, Wind } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -147,14 +148,27 @@ export function EmergencyQrCard({ chemical }: { chemical: Chemical }) {
               <span>Emergency: {chemical.emergency_contact}</span>
             </div>
           )}
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={handlePrint}
-            className="print:hidden mt-4 w-fit bg-red-600 text-white hover:bg-red-700 border-0 font-semibold"
-          >
-            Print Emergency Card
-          </Button>
+          <div className="print:hidden mt-4 flex flex-wrap gap-2">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={handlePrint}
+              className="w-fit bg-red-600 text-white hover:bg-red-700 border-0 font-semibold"
+            >
+              Print Emergency Card
+            </Button>
+            {chemical.emergency_public_token && (
+              <Button variant="secondary" size="sm" asChild className="w-fit">
+                <Link
+                  href={`/emergency/${chemical.emergency_public_token}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Worker emergency page
+                </Link>
+              </Button>
+            )}
+          </div>
         </div>
 
         <div className="rounded-lg border-2 border-red-800 bg-red-600 p-4 shadow-md text-white">

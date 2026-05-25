@@ -200,8 +200,15 @@ Re-running is safe: existing users get a password reset; sample data is only ins
 
 ## Not yet on Supabase
 
-**Chemicals, deliveries, workers, activity log, and org settings** use Postgres when `NEXT_PUBLIC_DEMO_MODE=false`.
+**Chemicals, deliveries, workers, activity log, training records, incidents, equipment, confined space permits, and org HazCom settings** use Postgres when `NEXT_PUBLIC_DEMO_MODE=false` (after migration `003_osha_documentation.sql`).
 
 **New sign-ups** automatically receive prototype sample data (chemicals, deliveries, workers, etc.). Existing empty orgs can use **Settings → Load sample inventory**.
 
-Still on the demo store: incidents and bug reports.
+Still on the demo store: bug reports.
+
+Apply migrations:
+
+```bash
+npm run supabase:db:push
+# or locally: npm run supabase:db:reset
+```

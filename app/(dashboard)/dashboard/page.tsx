@@ -10,6 +10,8 @@ import { ComplianceBreakdown } from "@/components/dashboard/compliance-breakdown
 import { PendingActions } from "@/components/dashboard/pending-actions";
 import { RecentActivity } from "@/components/dashboard/recent-activity";
 import { getSession } from "@/lib/auth";
+import { trainingRepository } from "@/lib/training/repository";
+import { TrainingAlertCard } from "@/components/dashboard/training-alert-card";
 import type { ComplianceStats } from "@/types/database";
 
 export default async function DashboardPage() {
@@ -40,6 +42,7 @@ export default async function DashboardPage() {
   }
 
   const activity = await activityRepository.getActivityLog(10);
+  const missingTraining = await trainingRepository.getWorkersMissingInitialTraining();
 
   return (
     <>
@@ -55,6 +58,9 @@ export default async function DashboardPage() {
           <div className="lg:col-span-2">
             <ComplianceBreakdown stats={stats} />
           </div>
+        </div>
+        <div className="mb-6">
+          <TrainingAlertCard missingCount={missingTraining} />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
           <PendingActions actions={actions} />

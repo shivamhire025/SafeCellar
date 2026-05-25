@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { SdsUpload } from "@/components/chemicals/sds-upload";
+import { SdsViewer } from "@/components/chemicals/sds-viewer";
 import { Abbr } from "@/components/shared/abbreviation-tooltip";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { formatDate } from "@/lib/utils";
@@ -68,9 +69,7 @@ export function ChemicalDetailClient({
         />
       )}
       {chemical.sds_file_path && !showGate && (
-        <p className="text-sm text-neutral-500 mt-2">
-          <Abbr term="SDS">SDS</Abbr> on file: {chemical.sds_file_path}
-        </p>
+        <SdsViewer chemicalId={chemical.id} hasSds={Boolean(chemical.sds_file_path)} />
       )}
     </div>
   );

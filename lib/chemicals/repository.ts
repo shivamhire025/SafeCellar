@@ -364,6 +364,25 @@ export const chemicalsRepository = {
     return chemical;
   },
 
+  async getSdsSignedUrl(chemicalId: string): Promise<string | null> {
+    const chemical = await this.getChemical(chemicalId);
+    if (!chemical?.sds_file_path) return null;
+
+    if (isDemoMode()) {
+      return `/api/sds/demo/${chemicalId}`;
+    }
+
+    const ctx = await requireAuth();
+    if (!ctx) return null;
+
+    const { data, error } = await ctx.supabase.storage
+      .from("sds-files")
+      .createSignedUrl(chemical.sds_file_path, 3600);
+
+    if (error || !data?.signedUrl) return null;
+    return data.signedUrl;
+  },
+
   async getComplianceStats(): Promise<
     Pick<
       ComplianceStats,
@@ -475,9 +494,12 @@ export const chemicalsRepository = {
     return actions;
   },
 
-  async getSdsReviewQueue(status?: string): Promise<SdsReviewItem[]> {
+  async getSdsReviewQueue(
+    status?: string,
+    options?: { includeResolved?: boolean }
+  ): Promise<SdsReviewItem[]> {
     if (isDemoMode()) {
-      return demoStore.getSdsReviewQueue(status);
+      return demoStore.getSdsReviewQueue(status, options);
     }
 
     const ctx = await requireAuth();
@@ -486,8 +508,11 @@ export const chemicalsRepository = {
     let query = ctx.supabase
       .from("sds_review_queue")
       .select("*, chemicals(*)")
-      .neq("status", "resolved")
       .order("flagged_at", { ascending: false });
+
+    if (!options?.includeResolved) {
+      query = query.neq("status", "resolved");
+    }
 
     if (status && status !== "all") {
       query = query.eq("status", status);

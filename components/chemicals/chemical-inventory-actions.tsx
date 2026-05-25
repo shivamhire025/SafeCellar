@@ -10,9 +10,15 @@ export function ChemicalInventoryActions() {
   return (
     <>
       <Button variant="secondary" asChild>
-        <a href="/api/reports/hazcom" download>
+        <a href="/api/reports/hazcom?format=pdf" download>
           <Download className="h-4 w-4" />
-          <AbbreviationText text="Export HazCom Report" />
+          <AbbreviationText text="HazCom PDF" />
+        </a>
+      </Button>
+      <Button variant="secondary" asChild>
+        <a href="/api/reports/inspection-packet" download>
+          <Download className="h-4 w-4" />
+          Inspection packet
         </a>
       </Button>
       <BulkImportDialog />

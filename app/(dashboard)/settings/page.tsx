@@ -4,6 +4,8 @@ import { organizationRepository } from "@/lib/organization/repository";
 import { chemicalsRepository } from "@/lib/chemicals/repository";
 import { isDemoMode } from "@/lib/demo-mode";
 import { LoadSampleDataButton } from "@/components/settings/load-sample-data-button";
+import { HazcomProgramForm } from "@/components/settings/hazcom-program-form";
+import { AuditExportsCard } from "@/components/settings/audit-exports-card";
 import { getSession } from "@/lib/auth";
 import { PageShell } from "@/components/layout/page-shell";
 import { Topbar } from "@/components/layout/topbar";
@@ -54,6 +56,12 @@ export default async function SettingsPage() {
               <dd className="text-neutral-500">{session?.email}</dd>
             </div>
           </dl>
+        </div>
+        <div className="mt-6">
+          <HazcomProgramForm org={org} />
+        </div>
+        <div className="mt-6">
+          <AuditExportsCard />
         </div>
         <div className="bg-white rounded-xl border border-neutral-200 shadow-sm p-6 max-w-xl mt-6">
           <h3 className="text-base font-semibold text-neutral-900 mb-2">

@@ -8,6 +8,26 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — OSHA documentation readiness
+
+### What changed
+- **HazCom inspection packet**: Settings program editor; PDF/HTML HazCom report (`/api/reports/hazcom?format=pdf`); ZIP inspection packet with SDS files (`/api/reports/inspection-packet`). Honest compliance summary (no false “all SDS on file” footer).
+- **SDS access**: Inline SDS viewer on chemical detail; signed URL API (`/api/sds/[chemicalId]`); public emergency page `/emergency/[token]` with optional SDS iframe.
+- **Training records**: `training_records` table; worker detail `/workers/[id]` to log HazCom training; dashboard alert for missing initial training.
+- **Audit exports**: CSV downloads for activity log, SDS review queue, and deliveries (Settings).
+- **Incidents on Supabase**: `incidents` + `incident_photos` tables and repository (demo mode unchanged).
+- **Phase 2 stubs**: Equipment registry (`/equipment`) and confined space permits (`/permits`) with gas-hazard chemical linkage notes.
+
+### Files
+- `supabase/migrations/003_osha_documentation.sql`
+- `lib/reports/`, `lib/training/`, `lib/incidents/repository.ts`, `lib/equipment/`, `lib/permits/`, `lib/hazcom/defaults.ts`
+- `app/api/reports/`, `app/api/training/`, `app/api/organization/hazcom/`, `app/api/sds/`, `app/api/emergency/`, `app/emergency/`
+- `app/(dashboard)/workers/[id]/`, `app/(dashboard)/equipment/`, `app/(dashboard)/permits/`
+- `components/settings/hazcom-program-form.tsx`, `components/chemicals/sds-viewer.tsx`, `components/dashboard/training-alert-card.tsx`
+- `package.json` (pdfkit, jszip), `docs/SUPABASE.md`
+
+---
+
 ## 2026-05-25 — Marcus Chen production demo account
 
 ### What changed
@@ -522,8 +542,9 @@ Add a **new dated section at the top** of the changelog entries (below Reference
 
 ## Not yet implemented (from PRD)
 
-- Live Supabase auth, storage, and RLS-backed CRUD (demo mode only today).
-- Inline SDS PDF viewer (`react-pdf` modal).
 - Worker invite flow, email notifications (P1).
+- Annual SDS review email reminders (P1).
 - Full onboarding checklist on first dashboard visit.
 - Sidebar expand-on-hover only (current: explicit toggle + persisted state).
+- Full confined space permit create/edit UI (list + demo sample only).
+- OSHA 300/301 structured fields beyond `osha_recordable` flag on incidents.

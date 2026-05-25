@@ -14,7 +14,14 @@ import type {
   SdsReviewItem,
   SessionUser,
   Worker,
+  TrainingRecord,
+  TrainingType,
+  Equipment,
+  ConfinedSpacePermit,
+  SdsAccessMethod,
 } from "@/types/database";
+import type { UpdateOrganizationInput } from "@/lib/organization/repository";
+import type { CreateTrainingInput } from "@/lib/training/repository";
 import { deriveIncidentStatus } from "@/lib/incident-status";
 import { buildHighRiskNotifications } from "@/lib/notifications/build-high-risk-notifications";
 import type { ChemicalImportRow } from "@/lib/validations/chemical-import";
@@ -48,6 +55,8 @@ const demoOrg: Organization = {
   city: "Portland",
   state: "OR",
   zip: "97201",
+  hazcom_responsible_person: "Marcus Chen",
+  sds_access_method: "both",
   created_at: daysAgo(90),
   updated_at: daysAgo(1),
 };
@@ -87,6 +96,7 @@ let chemicals: Chemical[] = [
     first_aid_notes:
       "1. Flush skin with water for 20 minutes.\n2. Remove contaminated clothing.\n3. Seek immediate medical attention if pain persists.",
     emergency_contact: "1-800-424-9300",
+    emergency_public_token: "tok-chem-001",
     is_active: true,
     created_at: daysAgo(60),
     updated_at: daysAgo(30),
@@ -108,6 +118,7 @@ let chemicals: Chemical[] = [
     first_aid_notes:
       "1. Move to fresh air immediately.\n2. Rinse eyes/skin with water 15+ minutes.\n3. Do NOT induce vomiting. Seek medical help.",
     emergency_contact: "1-800-424-9300",
+    emergency_public_token: "tok-chem-002",
     is_active: true,
     created_at: daysAgo(5),
     updated_at: daysAgo(5),
@@ -133,6 +144,7 @@ let chemicals: Chemical[] = [
     first_aid_notes:
       "1. Move victim to fresh air immediately.\n2. Administer oxygen if available.\n3. Call 911. CO2 is IDLH at high concentrations.",
     emergency_contact: "1-800-752-1597",
+    emergency_public_token: "tok-chem-003",
     is_active: true,
     created_at: daysAgo(400),
     updated_at: daysAgo(400),
@@ -154,6 +166,7 @@ let chemicals: Chemical[] = [
     sds_status: "compliant",
     ppe_required: ["nitrile_gloves", "goggles"],
     hazard_class: ["irritant"],
+    emergency_public_token: "tok-chem-004",
     is_active: true,
     created_at: daysAgo(200),
     updated_at: daysAgo(120),
@@ -169,9 +182,80 @@ let chemicals: Chemical[] = [
     storage_location: "Brewhouse - Right Wall",
     sds_status: "missing",
     hazard_class: ["corrosive"],
+    emergency_public_token: "tok-chem-005",
     is_active: true,
     created_at: daysAgo(14),
     updated_at: daysAgo(14),
+  },
+];
+
+let trainingRecords: TrainingRecord[] = [
+  {
+    id: "train-001",
+    organization_id: DEMO_ORG_ID,
+    worker_id: "worker-001",
+    training_type: "hazcom_initial",
+    completed_at: daysAgo(180).slice(0, 10),
+    trainer: "Marcus Chen",
+    created_at: daysAgo(180),
+    worker_name: "Jorge Martinez",
+  },
+  {
+    id: "train-002",
+    organization_id: DEMO_ORG_ID,
+    worker_id: "worker-002",
+    training_type: "hazcom_initial",
+    completed_at: daysAgo(90).slice(0, 10),
+    trainer: "Marcus Chen",
+    created_at: daysAgo(90),
+    worker_name: "Elena Vasquez",
+  },
+];
+
+let equipmentList: Equipment[] = [
+  {
+    id: "equip-001",
+    organization_id: DEMO_ORG_ID,
+    name: "FV-3 Fermenter",
+    equipment_type: "fermenter",
+    location: "Cellar B",
+    is_confined_space: true,
+    linked_chemical_ids: ["chem-003"],
+    is_active: true,
+    created_at: daysAgo(200),
+    updated_at: daysAgo(200),
+  },
+  {
+    id: "equip-002",
+    organization_id: DEMO_ORG_ID,
+    name: "Bright Tank 2",
+    equipment_type: "bright_tank",
+    location: "Cellar A",
+    is_confined_space: true,
+    linked_chemical_ids: ["chem-003"],
+    is_active: true,
+    created_at: daysAgo(200),
+    updated_at: daysAgo(200),
+  },
+];
+
+let confinedSpacePermits: ConfinedSpacePermit[] = [
+  {
+    id: "permit-001",
+    organization_id: DEMO_ORG_ID,
+    equipment_id: "equip-001",
+    permit_number: "CS-2025-014",
+    entry_date: daysAgo(30),
+    entrant_names: ["Jorge Martinez"],
+    attendant_name: "Marcus Chen",
+    supervisor_name: "Marcus Chen",
+    atmospheric_results: { o2: "20.9%", co2: "0.04%", lel: "0%" },
+    hazards_identified: ["CO2 asphyxiation", "Residual CIP chemicals"],
+    rescue_plan: "Tripod and winch at north pad; 911 on speed dial",
+    status: "closed",
+    created_at: daysAgo(30),
+    updated_at: daysAgo(30),
+    equipment_name: "FV-3 Fermenter",
   },
 ];
 
@@ -507,6 +591,7 @@ export const demoStore = {
       id: `chem-${Date.now()}`,
       organization_id: DEMO_ORG_ID,
       sds_status: data.sds_status ?? "missing",
+      emergency_public_token: `tok-${Date.now()}`,
       is_active: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -748,12 +833,18 @@ export const demoStore = {
     return delivery.items[itemIdx];
   },
 
-  getSdsReviewQueue(status?: string): SdsReviewItem[] {
+  getSdsReviewQueue(
+    status?: string,
+    options?: { includeResolved?: boolean }
+  ): SdsReviewItem[] {
     let result = attachChemicalsToReviews();
     if (status && status !== "all") {
       result = result.filter((r) => r.status === status);
     }
-    return result.filter((r) => r.status !== "resolved");
+    if (!options?.includeResolved) {
+      result = result.filter((r) => r.status !== "resolved");
+    }
+    return result;
   },
 
   getWorkers(): Worker[] {
@@ -1067,5 +1158,107 @@ export const demoStore = {
     };
     persistDemoState();
     return bugReports[idx];
+  },
+
+  updateOrganization(input: UpdateOrganizationInput): Organization {
+    Object.assign(demoOrg, input);
+    demoOrg.updated_at = new Date().toISOString();
+    return { ...demoOrg };
+  },
+
+  getChemicalByEmergencyToken(token: string): Chemical | undefined {
+    return chemicals.find((c) => c.emergency_public_token === token && c.is_active);
+  },
+
+  getTrainingRecords(workerId?: string): TrainingRecord[] {
+    let list = [...trainingRecords];
+    if (workerId) list = list.filter((t) => t.worker_id === workerId);
+    return list.sort(
+      (a, b) =>
+        new Date(b.completed_at).getTime() - new Date(a.completed_at).getTime()
+    );
+  },
+
+  createTrainingRecord(input: CreateTrainingInput): TrainingRecord {
+    const worker = workers.find((w) => w.id === input.worker_id);
+    const chemical = input.chemical_id
+      ? chemicals.find((c) => c.id === input.chemical_id)
+      : undefined;
+    const record: TrainingRecord = {
+      id: `train-${Date.now()}`,
+      organization_id: DEMO_ORG_ID,
+      worker_id: input.worker_id,
+      training_type: input.training_type,
+      completed_at: input.completed_at,
+      trainer: input.trainer ?? null,
+      notes: input.notes ?? null,
+      chemical_id: input.chemical_id ?? null,
+      created_at: new Date().toISOString(),
+      worker_name: worker?.full_name,
+      chemical_name: chemical?.name,
+    };
+    trainingRecords.unshift(record);
+    return record;
+  },
+
+  getWorkersMissingInitialTraining(): number {
+    const active = workers.filter((w) => w.is_active);
+    const trained = new Set(
+      trainingRecords
+        .filter((t) => t.training_type === "hazcom_initial")
+        .map((t) => t.worker_id)
+    );
+    return active.filter((w) => !trained.has(w.id)).length;
+  },
+
+  getEquipment(): Equipment[] {
+    return equipmentList.filter((e) => e.is_active);
+  },
+
+  getEquipmentItem(id: string): Equipment | undefined {
+    return equipmentList.find((e) => e.id === id);
+  },
+
+  createEquipment(
+    data: Omit<Equipment, "id" | "organization_id" | "created_at" | "updated_at" | "is_active">
+  ): Equipment {
+    const item: Equipment = {
+      ...data,
+      id: `equip-${Date.now()}`,
+      organization_id: DEMO_ORG_ID,
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    equipmentList.push(item);
+    return item;
+  },
+
+  getConfinedSpacePermits(): ConfinedSpacePermit[] {
+    return [...confinedSpacePermits].sort(
+      (a, b) =>
+        new Date(b.entry_date).getTime() - new Date(a.entry_date).getTime()
+    );
+  },
+
+  createConfinedSpacePermit(
+    data: Omit<
+      ConfinedSpacePermit,
+      "id" | "organization_id" | "created_at" | "updated_at" | "equipment_name"
+    >
+  ): ConfinedSpacePermit {
+    const equipment = data.equipment_id
+      ? equipmentList.find((e) => e.id === data.equipment_id)
+      : undefined;
+    const permit: ConfinedSpacePermit = {
+      ...data,
+      id: `permit-${Date.now()}`,
+      organization_id: DEMO_ORG_ID,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      equipment_name: equipment?.name,
+    };
+    confinedSpacePermits.unshift(permit);
+    return permit;
   },
 };

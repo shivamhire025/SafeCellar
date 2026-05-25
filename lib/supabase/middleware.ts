@@ -11,6 +11,8 @@ const PROTECTED_ROUTES = [
   "/workers",
   "/settings",
   "/bug-reports",
+  "/equipment",
+  "/permits",
 ];
 const AUTH_ROUTES = ["/login", "/signup"];
 

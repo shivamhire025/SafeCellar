@@ -57,6 +57,7 @@ export interface Incident {
   chemical_ids?: string[] | null;
   exposure_details?: string | null;
   conditions?: string | null;
+  osha_recordable?: boolean;
   photos: IncidentPhoto[];
   reported_by_id?: string | null;
   reported_by_name?: string | null;
@@ -82,6 +83,23 @@ export interface BugReportTicket {
   updated_at: string;
 }
 
+export type SdsAccessMethod = "digital" | "binder" | "both";
+
+export type TrainingType =
+  | "hazcom_initial"
+  | "hazcom_refresher"
+  | "chemical_specific"
+  | "confined_space";
+
+export type EquipmentType =
+  | "tank"
+  | "fermenter"
+  | "bright_tank"
+  | "crusher"
+  | "other";
+
+export type PermitStatus = "active" | "closed" | "cancelled";
+
 export interface Organization {
   id: string;
   name: string;
@@ -90,6 +108,12 @@ export interface Organization {
   city?: string | null;
   state?: string | null;
   zip?: string | null;
+  hazcom_responsible_person?: string | null;
+  hazcom_labeling_policy?: string | null;
+  hazcom_non_routine_tasks?: string | null;
+  hazcom_multi_employer?: string | null;
+  hazcom_training_approach?: string | null;
+  sds_access_method?: SdsAccessMethod | null;
   created_at: string;
   updated_at: string;
 }
@@ -128,9 +152,59 @@ export interface Chemical {
   first_aid_notes?: string | null;
   emergency_contact?: string | null;
   notes?: string | null;
+  emergency_public_token?: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export interface TrainingRecord {
+  id: string;
+  organization_id: string;
+  worker_id: string;
+  training_type: TrainingType;
+  completed_at: string;
+  trainer?: string | null;
+  notes?: string | null;
+  chemical_id?: string | null;
+  created_by?: string | null;
+  created_at: string;
+  worker_name?: string;
+  chemical_name?: string;
+}
+
+export interface Equipment {
+  id: string;
+  organization_id: string;
+  name: string;
+  equipment_type: EquipmentType;
+  location?: string | null;
+  is_confined_space: boolean;
+  linked_chemical_ids?: string[] | null;
+  notes?: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ConfinedSpacePermit {
+  id: string;
+  organization_id: string;
+  equipment_id?: string | null;
+  permit_number?: string | null;
+  entry_date: string;
+  entrant_names?: string[] | null;
+  attendant_name?: string | null;
+  supervisor_name?: string | null;
+  atmospheric_results?: Record<string, unknown> | null;
+  hazards_identified?: string[] | null;
+  rescue_plan?: string | null;
+  status: PermitStatus;
+  notes?: string | null;
+  created_by?: string | null;
+  created_at: string;
+  updated_at: string;
+  equipment_name?: string;
 }
 
 export interface Delivery {
