@@ -58,6 +58,25 @@ export const HAZARD_LABEL_INFO: Record<
   irritant: { label: "IRRITANT", labelFr: "IRRITANT" },
 };
 
+export const INCIDENT_TYPES = [
+  { value: "near_miss", label: "Near Miss" },
+  { value: "injury", label: "Injury" },
+  { value: "illness", label: "Illness" },
+  { value: "property_damage", label: "Property Damage" },
+] as const;
+
+export const INCIDENT_CONDITIONS = [
+  "Wet or slippery floor",
+  "Poor lighting",
+  "Confined space",
+  "Chemical spill or splash",
+  "Equipment malfunction",
+  "PPE not worn or inadequate",
+  "Rushing / time pressure",
+  "Inadequate training",
+  "Other",
+] as const;
+
 export const STORAGE_LOCATIONS = [
   "Cellar A",
   "Cellar B",

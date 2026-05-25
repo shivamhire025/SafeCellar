@@ -10,6 +10,7 @@ const pageTitles: Record<string, string> = {
   "/chemicals": "Chemical Inventory",
   "/deliveries": "Deliveries",
   "/sds-review": "SDS Review Queue",
+  "/incidents": "Incident Log",
   "/workers": "Worker Roster",
   "/settings": "Settings",
 };

@@ -16,6 +16,5 @@ export async function decodeBarcodeFromImageFile(file: File): Promise<string> {
     throw new Error("Could not read barcode from image. Try another photo.");
   } finally {
     URL.revokeObjectURL(url);
-    reader.reset();
   }
 }

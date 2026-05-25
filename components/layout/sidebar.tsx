@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ClipboardCheck,
+  ClipboardList,
   FlaskConical,
   LayoutDashboard,
   LogOut,
@@ -26,6 +27,7 @@ const navItems = [
   { href: "/chemicals", icon: FlaskConical, label: "Chemicals" },
   { href: "/deliveries", icon: Truck, label: "Deliveries" },
   { href: "/sds-review", icon: ClipboardCheck, label: "SDS Review" },
+  { href: "/incidents", icon: ClipboardList, label: "Incidents" },
   { href: "/workers", icon: Users, label: "Workers" },
 ];
 

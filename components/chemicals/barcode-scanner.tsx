@@ -33,6 +33,7 @@ export function BarcodeScanner({ onScan, onClose }: BarcodeScannerProps) {
 
   useEffect(() => {
     if (!videoEl) return;
+    const video: HTMLVideoElement = videoEl;
 
     const reader = new BrowserMultiFormatReader();
     let active = true;
@@ -42,7 +43,7 @@ export function BarcodeScanner({ onScan, onClose }: BarcodeScannerProps) {
       try {
         controls = await reader.decodeFromConstraints(
           VIDEO_CONSTRAINTS,
-          videoEl,
+          video,
           (result) => {
             if (result && active) {
               active = false;
@@ -64,7 +65,6 @@ export function BarcodeScanner({ onScan, onClose }: BarcodeScannerProps) {
     return () => {
       active = false;
       controls?.stop();
-      reader.reset();
     };
   }, [videoEl, onScan]);
 

@@ -7,6 +7,7 @@ const PROTECTED_ROUTES = [
   "/chemicals",
   "/deliveries",
   "/sds-review",
+  "/incidents",
   "/workers",
   "/settings",
 ];

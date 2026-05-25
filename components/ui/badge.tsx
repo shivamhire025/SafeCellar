@@ -21,6 +21,12 @@ const badgeVariants = cva(
         delivered: "bg-amber-100 text-amber-700",
         inventory_pending: "bg-amber-100 text-amber-700",
         complete: "bg-brand-100 text-brand-700",
+        near_miss: "bg-sky-100 text-sky-800 border border-sky-200",
+        injury: "bg-red-100 text-red-800 border border-red-200",
+        illness: "bg-orange-100 text-orange-800 border border-orange-200",
+        property_damage:
+          "bg-purple-100 text-purple-800 border border-purple-200",
+        incomplete: "bg-amber-100 text-amber-800 border border-amber-200",
       },
     },
     defaultVariants: {

@@ -4,6 +4,7 @@ import type {
   ActivityLogEntry,
   Chemical,
   Delivery,
+  Incident,
   SdsReviewItem,
   Worker,
 } from "@/types/database";
@@ -15,6 +16,7 @@ export type DemoDataSnapshot = {
   sdsReviewQueue: SdsReviewItem[];
   workers: Worker[];
   activityLog: ActivityLogEntry[];
+  incidents: Incident[];
 };
 
 const SNAPSHOT_PATH = path.join(process.cwd(), ".data", "demo-store.json");
@@ -27,8 +29,16 @@ function isValidSnapshot(value: unknown): value is DemoDataSnapshot {
     Array.isArray(v.deliveries) &&
     Array.isArray(v.sdsReviewQueue) &&
     Array.isArray(v.workers) &&
-    Array.isArray(v.activityLog)
+    Array.isArray(v.activityLog) &&
+    (v.incidents === undefined || Array.isArray(v.incidents))
   );
+}
+
+export function normalizeDemoSnapshot(snapshot: DemoDataSnapshot): DemoDataSnapshot {
+  return {
+    ...snapshot,
+    incidents: snapshot.incidents ?? [],
+  };
 }
 
 export function loadDemoDataSnapshot(fallback: DemoDataSnapshot): DemoDataSnapshot {

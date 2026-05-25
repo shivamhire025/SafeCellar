@@ -6,6 +6,9 @@ import type {
   DeliveryItem,
   HighRiskNotification,
   HighRiskNotificationPriority,
+  Incident,
+  IncidentPhoto,
+  IncidentType,
   Organization,
   Profile,
   SdsReviewItem,
@@ -13,9 +16,11 @@ import type {
   Worker,
 } from "@/types/database";
 import { SDS_REVIEW_REASONS } from "@/lib/constants";
+import { deriveIncidentStatus } from "@/lib/incident-status";
 import type { ChemicalImportRow } from "@/lib/validations/chemical-import";
 import {
   loadDemoDataSnapshot,
+  normalizeDemoSnapshot,
   saveDemoDataSnapshot,
   type DemoDataSnapshot,
 } from "@/lib/demo-store-persist";
@@ -363,6 +368,62 @@ let activityLog: ActivityLogEntry[] = [
   },
 ];
 
+const DEMO_PLACEHOLDER_PHOTO =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
+
+let incidents: Incident[] = [
+  {
+    id: "inc-001",
+    organization_id: DEMO_ORG_ID,
+    incident_type: "near_miss",
+    status: "incomplete",
+    occurred_at: daysAgo(2),
+    location: "Cellar B — tank pad",
+    description:
+      "Operator slipped on wet floor near CIP line but caught railing. No injury. Area was not cordoned after sanitizer rinse.",
+    notes: "Need drip trays and wet-floor signage after CIP cycles.",
+    chemical_exposure: true,
+    chemical_ids: ["chem-002"],
+    exposure_details: "Possible peracetic acid residue on floor; no skin contact.",
+    conditions: "Wet or slippery floor, Poor lighting",
+    photos: [],
+    reported_by_id: DEMO_USER_ID,
+    reported_by_name: "Marcus Chen",
+    created_at: daysAgo(2),
+    updated_at: daysAgo(2),
+  },
+  {
+    id: "inc-002",
+    organization_id: DEMO_ORG_ID,
+    incident_type: "injury",
+    status: "complete",
+    occurred_at: daysAgo(14),
+    location: "Brewhouse — mash tun platform",
+    description:
+      "Minor laceration on forearm from sharp edge on guard panel while clearing blockage. First aid applied on site.",
+    notes: "Guard panel scheduled for replacement.",
+    chemical_exposure: false,
+    chemical_ids: null,
+    exposure_details: null,
+    conditions: "Equipment malfunction",
+    photos: [
+      {
+        id: "photo-inc-002-1",
+        file_name: "guard-panel-edge.jpg",
+        original_data_url: DEMO_PLACEHOLDER_PHOTO,
+        annotated_data_url: DEMO_PLACEHOLDER_PHOTO,
+        annotation_strokes: null,
+        caption: "Sharp edge on guard panel",
+        uploaded_at: daysAgo(14),
+      },
+    ],
+    reported_by_id: DEMO_USER_ID,
+    reported_by_name: "Marcus Chen",
+    created_at: daysAgo(14),
+    updated_at: daysAgo(14),
+  },
+];
+
 function getDemoDataSnapshot(): DemoDataSnapshot {
   return {
     chemicals,
@@ -370,19 +431,22 @@ function getDemoDataSnapshot(): DemoDataSnapshot {
     sdsReviewQueue,
     workers,
     activityLog,
+    incidents,
   };
 }
 
 function applyDemoDataSnapshot(snapshot: DemoDataSnapshot) {
-  chemicals = snapshot.chemicals;
-  deliveries = snapshot.deliveries;
-  sdsReviewQueue = snapshot.sdsReviewQueue;
-  workers = snapshot.workers;
-  activityLog = snapshot.activityLog;
+  const normalized = normalizeDemoSnapshot(snapshot);
+  chemicals = normalized.chemicals;
+  deliveries = normalized.deliveries;
+  sdsReviewQueue = normalized.sdsReviewQueue;
+  workers = normalized.workers;
+  activityLog = normalized.activityLog;
+  incidents = normalized.incidents;
 }
 
 applyDemoDataSnapshot(
-  loadDemoDataSnapshot(getDemoDataSnapshot())
+  normalizeDemoSnapshot(loadDemoDataSnapshot(getDemoDataSnapshot()))
 );
 
 function persistDemoState() {
@@ -883,5 +947,159 @@ export const demoStore = {
     return notifications.sort(
       (a, b) => PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority]
     );
+  },
+
+  getIncidents(filters?: {
+    incident_type?: IncidentType;
+    status?: Incident["status"];
+  }): Incident[] {
+    let result = [...incidents].sort(
+      (a, b) =>
+        new Date(b.occurred_at).getTime() - new Date(a.occurred_at).getTime()
+    );
+    if (filters?.incident_type) {
+      result = result.filter((i) => i.incident_type === filters.incident_type);
+    }
+    if (filters?.status) {
+      result = result.filter((i) => i.status === filters.status);
+    }
+    return result.map((i) => ({
+      ...i,
+      status: deriveIncidentStatus(i.photos),
+    }));
+  },
+
+  getIncident(id: string): Incident | undefined {
+    const incident = incidents.find((i) => i.id === id);
+    if (!incident) return undefined;
+    return {
+      ...incident,
+      status: deriveIncidentStatus(incident.photos),
+    };
+  },
+
+  createIncident(
+    data: Omit<
+      Incident,
+      | "id"
+      | "organization_id"
+      | "status"
+      | "photos"
+      | "created_at"
+      | "updated_at"
+      | "reported_by_id"
+      | "reported_by_name"
+    > & { photos?: IncidentPhoto[] }
+  ): Incident {
+    const photos = data.photos ?? [];
+    const incident: Incident = {
+      id: `inc-${Date.now()}`,
+      organization_id: DEMO_ORG_ID,
+      incident_type: data.incident_type,
+      occurred_at: data.occurred_at,
+      location: data.location,
+      description: data.description,
+      notes: data.notes ?? null,
+      chemical_exposure: data.chemical_exposure,
+      chemical_ids: data.chemical_ids ?? null,
+      exposure_details: data.exposure_details ?? null,
+      conditions: data.conditions ?? null,
+      photos,
+      reported_by_id: DEMO_USER_ID,
+      reported_by_name: "Marcus Chen",
+      status: deriveIncidentStatus(photos),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    incidents.unshift(incident);
+    activityLog.unshift({
+      id: `act-${Date.now()}`,
+      organization_id: DEMO_ORG_ID,
+      actor_id: DEMO_USER_ID,
+      actor_name: "Marcus Chen",
+      action: `logged ${data.incident_type.replace("_", " ")} incident at ${data.location}`,
+      entity_type: "incident",
+      entity_id: incident.id,
+      created_at: new Date().toISOString(),
+    });
+    persistDemoState();
+    return incident;
+  },
+
+  updateIncident(
+    id: string,
+    data: Partial<
+      Omit<Incident, "id" | "organization_id" | "status" | "created_at">
+    >
+  ): Incident | undefined {
+    const idx = incidents.findIndex((i) => i.id === id);
+    if (idx === -1) return undefined;
+    const updated: Incident = {
+      ...incidents[idx],
+      ...data,
+      status: deriveIncidentStatus(
+        data.photos ?? incidents[idx].photos
+      ),
+      updated_at: new Date().toISOString(),
+    };
+    incidents[idx] = updated;
+    persistDemoState();
+    return updated;
+  },
+
+  addIncidentPhoto(
+    incidentId: string,
+    photo: Omit<IncidentPhoto, "id" | "uploaded_at">
+  ): IncidentPhoto | undefined {
+    const idx = incidents.findIndex((i) => i.id === incidentId);
+    if (idx === -1) return undefined;
+    const newPhoto: IncidentPhoto = {
+      ...photo,
+      id: `photo-${Date.now()}`,
+      uploaded_at: new Date().toISOString(),
+    };
+    incidents[idx].photos.push(newPhoto);
+    incidents[idx].status = deriveIncidentStatus(incidents[idx].photos);
+    incidents[idx].updated_at = new Date().toISOString();
+    persistDemoState();
+    return newPhoto;
+  },
+
+  updateIncidentPhoto(
+    incidentId: string,
+    photoId: string,
+    data: Partial<
+      Pick<
+        IncidentPhoto,
+        "annotation_strokes" | "annotated_data_url" | "caption"
+      >
+    >
+  ): IncidentPhoto | undefined {
+    const incident = incidents.find((i) => i.id === incidentId);
+    if (!incident) return undefined;
+    const photoIdx = incident.photos.findIndex((p) => p.id === photoId);
+    if (photoIdx === -1) return undefined;
+    incident.photos[photoIdx] = {
+      ...incident.photos[photoIdx],
+      ...data,
+    };
+    incident.status = deriveIncidentStatus(incident.photos);
+    incident.updated_at = new Date().toISOString();
+    persistDemoState();
+    return incident.photos[photoIdx];
+  },
+
+  removeIncidentPhoto(incidentId: string, photoId: string): boolean {
+    const idx = incidents.findIndex((i) => i.id === incidentId);
+    if (idx === -1) return false;
+    const before = incidents[idx].photos.length;
+    incidents[idx].photos = incidents[idx].photos.filter(
+      (p) => p.id !== photoId
+    );
+    if (incidents[idx].photos.length === before) return false;
+    incidents[idx].status = deriveIncidentStatus(incidents[idx].photos);
+    incidents[idx].updated_at = new Date().toISOString();
+    persistDemoState();
+    return true;
   },
 };

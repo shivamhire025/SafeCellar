@@ -15,6 +15,55 @@ export type SdsReviewStatus = "pending" | "in_progress" | "resolved";
 export type UserRole = "admin" | "worker";
 export type FacilityType = "brewery" | "winery" | "both";
 
+export type IncidentType =
+  | "near_miss"
+  | "injury"
+  | "illness"
+  | "property_damage";
+
+export type IncidentStatus = "complete" | "incomplete";
+
+export type AnnotationTool = "pen" | "arrow" | "circle" | "text";
+
+export interface AnnotationStroke {
+  tool: AnnotationTool;
+  color: string;
+  lineWidth: number;
+  /** Flat [x1,y1,x2,y2,...] in canvas pixel coordinates */
+  points: number[];
+  text?: string;
+}
+
+export interface IncidentPhoto {
+  id: string;
+  file_name: string;
+  original_data_url: string;
+  annotation_strokes?: AnnotationStroke[] | null;
+  annotated_data_url?: string | null;
+  caption?: string | null;
+  uploaded_at: string;
+}
+
+export interface Incident {
+  id: string;
+  organization_id: string;
+  incident_type: IncidentType;
+  status: IncidentStatus;
+  occurred_at: string;
+  location: string;
+  description: string;
+  notes?: string | null;
+  chemical_exposure: boolean;
+  chemical_ids?: string[] | null;
+  exposure_details?: string | null;
+  conditions?: string | null;
+  photos: IncidentPhoto[];
+  reported_by_id?: string | null;
+  reported_by_name?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Organization {
   id: string;
   name: string;

@@ -8,6 +8,21 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Incident logging
+
+### What changed
+- **Incident Log** (`/incidents`): list near misses, injuries, illnesses, and property damage with filters by type and status.
+- **Log incident** (`/incidents/new`): type, date/time, location, description, notes, chemical exposure (with chemical picker), site conditions, and multi-photo upload.
+- **Photo annotation**: draw, arrows, circles, and text labels on uploaded images; annotated preview saved with the record.
+- **Status**: incidents without at least one photo show **Incomplete**; adding photos marks them **Complete**.
+- Sidebar and mobile nav include **Incidents**; demo store persists incidents in `.data/demo-store.json`.
+
+### Files
+- `types/database.ts`, `lib/demo-store.ts`, `lib/demo-store-persist.ts`, `lib/validations/incident.ts`, `lib/incident-status.ts`, `lib/incident-annotation.ts`
+- `app/api/incidents/`, `app/(dashboard)/incidents/`, `components/incidents/`
+
+---
+
 ## 2026-05-25 — Abbreviation hover tooltips
 
 ### What changed
