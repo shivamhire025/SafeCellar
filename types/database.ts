@@ -47,6 +47,7 @@ export interface Chemical {
   supplier?: string | null;
   barcode?: string | null;
   cas_number?: string | null;
+  molecular_formula?: string | null;
   chemical_type: ChemicalType;
   storage_location?: string | null;
   sds_file_path?: string | null;

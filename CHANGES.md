@@ -8,14 +8,38 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Chemical detail tag layout
+
+### What changed
+- PPE and hazard classification moved to the top as floating pill tags (no cards).
+- Compliant SDS badge shows a pulsing green status dot when status is `compliant`.
+
+### Files
+- `app/(dashboard)/chemicals/[id]/page.tsx`, `components/shared/status-badge.tsx`
+
+---
+
+## 2026-05-25 — Emergency Quick Response Card (restored)
+
+### What changed
+- Rebuilt emergency card after revert: alert-red outer card with **black** title and first-aid copy; single first-aid icon on **First Aid Protocol** only.
+- Black right panel (CAS, formula, DANGER, hazard labels, pictograms); print outputs only the card.
+
+### Files
+- `components/chemicals/emergency-qr-card.tsx`, `lib/constants.ts`, `types/database.ts`, `lib/demo-store.ts`, `app/globals.css`
+
+---
+
 ## 2026-05-25 — Brand color green to blue (fix stale CSS)
 
 ### What changed
+
 - Cleared stale `.next` Tailwind output that was still serving old green `brand-*` utilities after the palette change.
 - Replaced remaining `green-*` UI (badges, toasts, compliance score arc, status dots, empty states) with `brand-*` blue tokens.
 - High compliance score color in `getComplianceColor()` now uses brand blue (`#1D4ED8`) instead of green.
 
 ### Files
+
 - `lib/constants.ts`, `components/ui/badge.tsx`, `components/ui/toast.tsx`, `components/dashboard/pending-actions.tsx`, `app/(dashboard)/sds-review/page.tsx`, `app/(dashboard)/workers/page.tsx`, `app/(dashboard)/deliveries/[id]/delivery-detail-client.tsx`
 
 ---
@@ -23,10 +47,12 @@ This file tracks implementation and UX changes made during development.
 ## 2026-05-25 — Brand color green to blue
 
 ### What changed
+
 - Replaced the green brand palette with blue across design tokens (`brand-50`–`brand-900`), CSS variables, sidebar/mobile nav, and HazCom report heading color.
 - Sidebar and mobile nav now use `bg-brand-900`, `text-brand-200`, and `hover:bg-brand-800` instead of hardcoded green hex values.
 
 ### Files
+
 - `tailwind.config.ts`, `app/globals.css`, `components/layout/sidebar.tsx`, `components/layout/mobile-nav.tsx`, `app/api/reports/hazcom/route.ts`
 
 ---
@@ -34,9 +60,11 @@ This file tracks implementation and UX changes made during development.
 ## 2026-05-25 — Landing page brewery hero image
 
 ### What changed
+
 - Added `public/images/brewery-hero.jpg` as full-bleed hero background with brand gradient overlay for readable copy.
 
 ### Files
+
 - `public/images/brewery-hero.jpg`, `components/landing/landing-page.tsx`
 
 ---
@@ -44,6 +72,7 @@ This file tracks implementation and UX changes made during development.
 ## 2026-05-25 — Landing page import fix
 
 ### What changed
+
 - Restored `FlaskConical` import in `landing-page.tsx` (used by Chemical inventory feature card).
 
 ---
@@ -51,10 +80,12 @@ This file tracks implementation and UX changes made during development.
 ## 2026-05-25 — Login page logo and back navigation
 
 ### What changed
+
 - Shared `Logo` component (`components/brand/logo.tsx`) used on landing and login.
 - Login: larger logo above the card (links to `/`), **Back** button top-left to landing page.
 
 ### Files
+
 - `components/brand/logo.tsx`, `app/(auth)/login/page.tsx`, `components/landing/landing-page.tsx`
 
 ---
@@ -62,11 +93,13 @@ This file tracks implementation and UX changes made during development.
 ## 2026-05-25 — Marketing landing page
 
 ### What changed
+
 - Replaced root redirect with a single-page marketing landing at `/`.
 - Nav **Try Now**, hero CTA, and bottom CTA all link to `/login`.
 - Features section highlights Phase 1 P0 capabilities (inventory, SDS, scanning, deliveries, compliance, HazCom export).
 
 ### Files
+
 - `app/page.tsx`, `components/landing/landing-page.tsx`
 
 ---
@@ -74,6 +107,7 @@ This file tracks implementation and UX changes made during development.
 ## 2026-05-25 — Fix Vercel 404: move app to repository root
 
 ### What changed
+
 - Moved Next.js app from `safecellar/` to **repository root** so Vercel builds with default Root Directory (`.`).
 - Added `/api/health` for deployment smoke tests.
 - Split `lib/demo-mode.ts` from `demo-store` for lighter Edge middleware.
@@ -81,6 +115,7 @@ This file tracks implementation and UX changes made during development.
 - Updated README and `docs/VERCEL.md` (Root Directory must **not** be `safecellar` anymore).
 
 ### Files
+
 - All app paths now at repo root; `safecellar/` removed from git.
 
 ---
@@ -88,10 +123,12 @@ This file tracks implementation and UX changes made during development.
 ## 2026-05-25 — Vercel 404 fix (root directory)
 
 ### What changed
+
 - Added `safecellar/vercel.json` with Next.js framework preset and demo env vars.
 - Added `docs/VERCEL.md` with Root Directory = `safecellar` instructions (fixes Vercel 404 when building repo root).
 
 ### Files
+
 - `safecellar/vercel.json`, `docs/VERCEL.md`, `README.md`
 
 ---
@@ -99,12 +136,14 @@ This file tracks implementation and UX changes made during development.
 ## 2026-05-25 — GitHub documentation and push (empty remote)
 
 ### What changed
+
 - Root `README.md` expanded: features, quick start, scripts, private-docs policy.
 - `safecellar/README.md` rewritten: env table, structure, routes, API, Supabase steps.
 - Added `docs/ARCHITECTURE.md` (public-safe architecture overview).
 - Pushed to empty [github.com/shivamhire025/SafeCellar](https://github.com/shivamhire025/SafeCellar) without `PRD.md` / `DESIGN.md`.
 
 ### Files
+
 - `README.md`, `safecellar/README.md`, `docs/ARCHITECTURE.md`
 
 ---
@@ -112,11 +151,13 @@ This file tracks implementation and UX changes made during development.
 ## 2026-05-25 — Exclude PRD/DESIGN from public GitHub
 
 ### What changed
+
 - Root `.gitignore` added: `PRD.md`, `DESIGN.md` not tracked for public remotes.
 - Removed `PRD.md` and `DESIGN.md` from git index (`git rm --cached`); files remain on disk locally.
 - Root and `safecellar/README.md` updated to describe local-only docs.
 
 ### Rationale
+
 Product requirements and design spec should not ship to a public repository. Application code in `safecellar/` is still publishable; use a **private** GitHub repo if the whole monorepo must be remote-backed.
 
 ---
@@ -124,11 +165,13 @@ Product requirements and design spec should not ship to a public repository. App
 ## 2026-05-25 — GitHub remote linked
 
 ### What changed
+
 - Local repo connected to [github.com/shivamhire025/SafeCellar](https://github.com/shivamhire025/SafeCellar).
 - Merged GitHub's initial `README.md` commit with local history (`--allow-unrelated-histories`).
 - Pushed full prototype to `origin/main`; local `main` tracks `origin/main`.
 
 ### Files
+
 - Git only (no app code changes). Root `README.md` from GitHub preserved alongside `safecellar/README.md`.
 
 ---
@@ -136,6 +179,7 @@ Product requirements and design spec should not ship to a public repository. App
 ## 2026-05-24 — Initial MVP scaffold (Phase 1 P0)
 
 ### Project setup
+
 - Created `safecellar/` Next.js 14 App Router app (manual scaffold; `create-next-app` did not complete interactively).
 - Tech stack per PRD §5: Tailwind CSS v3, shadcn-style UI primitives, Supabase client stubs, `@zxing/browser`, `recharts`, `react-pdf` (deps installed; PDF viewer not fully wired).
 - Folder structure per PRD §6: `app/(auth)`, `app/(dashboard)`, `components/`, `lib/`, `hooks/`, `types/`, `supabase/migrations/`.
@@ -143,21 +187,23 @@ Product requirements and design spec should not ship to a public repository. App
 - Demo mode: `NEXT_PUBLIC_DEMO_MODE=true` with in-memory `lib/demo-store.ts` (no Supabase required for local prototype).
 
 ### Phase 1 P0 features
-| Feature | Routes / notes |
-|--------|----------------|
-| Auth + signup | `/login`, `/signup` (2-step org setup UI) |
-| Compliance dashboard | `/dashboard` — score card, breakdown, pending actions, activity |
-| Chemical inventory | `/chemicals`, `/chemicals/new`, `/chemicals/[id]` |
+
+| Feature                      | Routes / notes                                                  |
+| ---------------------------- | --------------------------------------------------------------- |
+| Auth + signup                | `/login`, `/signup` (2-step org setup UI)                       |
+| Compliance dashboard         | `/dashboard` — score card, breakdown, pending actions, activity |
+| Chemical inventory           | `/chemicals`, `/chemicals/new`, `/chemicals/[id]`               |
 | Compliance gate + SDS upload | Red banner when `sds_status !== 'compliant'`; `/api/sds/upload` |
-| Barcode scanning | `@zxing/browser` on add chemical + delivery receiving |
-| Deliveries | `/deliveries`, `/deliveries/new`, `/deliveries/[id]` + scan API |
-| SDS review queue | `/sds-review` |
-| Emergency QR card | Dark card on chemical detail + print |
-| HazCom export | `/api/reports/hazcom` (HTML report download) |
-| Workers (P1 stub) | `/workers` — roster table, training column placeholder |
-| Settings | `/settings` — org info display |
+| Barcode scanning             | `@zxing/browser` on add chemical + delivery receiving           |
+| Deliveries                   | `/deliveries`, `/deliveries/new`, `/deliveries/[id]` + scan API |
+| SDS review queue             | `/sds-review`                                                   |
+| Emergency QR card            | Dark card on chemical detail + print                            |
+| HazCom export                | `/api/reports/hazcom` (HTML report download)                    |
+| Workers (P1 stub)            | `/workers` — roster table, training column placeholder          |
+| Settings                     | `/settings` — org info display                                  |
 
 ### API routes (demo-backed)
+
 - `POST /api/auth/signin`, `POST /api/auth/signout`
 - `GET|POST /api/chemicals`, `POST /api/chemicals/[id]/verify`
 - `GET|POST /api/deliveries`, `GET|PATCH /api/deliveries/[id]`, `POST /api/deliveries/[id]/scan`
@@ -165,9 +211,11 @@ Product requirements and design spec should not ship to a public repository. App
 - `GET /api/compliance`, `GET /api/reports/hazcom`
 
 ### Database
+
 - `supabase/migrations/001_initial_schema.sql` — full schema + RLS helpers (for live Supabase; not required in demo mode).
 
 ### Demo data
+
 - Organization: Cascade Creek Brewery (Portland, OR).
 - Sample chemicals, deliveries, SDS review queue items, workers, activity log.
 
@@ -177,15 +225,15 @@ Product requirements and design spec should not ship to a public repository. App
 
 Replaced em dashes (`—`) in user-facing copy with periods, colons, middots (`·`), pipes (`|`), or `N/A`.
 
-| Area | Change |
-|------|--------|
-| Page title (`app/layout.tsx`) | `SafeCellar \| Inspection-ready. Always.` |
-| Compliance gate | `SDS Required:` (colon) |
-| Chemicals, workers, SDS review descriptions | Periods instead of em dash clauses |
-| Delivery headers | `·` between order # and supplier |
-| Empty table cells / HazCom report | `N/A` instead of `—` |
-| Demo store (first aid, SDS version, pending actions) | Punctuation updates |
-| `README.md` | Same style |
+| Area                                                 | Change                                    |
+| ---------------------------------------------------- | ----------------------------------------- |
+| Page title (`app/layout.tsx`)                        | `SafeCellar \| Inspection-ready. Always.` |
+| Compliance gate                                      | `SDS Required:` (colon)                   |
+| Chemicals, workers, SDS review descriptions          | Periods instead of em dash clauses        |
+| Delivery headers                                     | `·` between order # and supplier          |
+| Empty table cells / HazCom report                    | `N/A` instead of `—`                      |
+| Demo store (first aid, SDS version, pending actions) | Punctuation updates                       |
+| `README.md`                                          | Same style                                |
 
 **Files touched:** `app/`, `components/`, `lib/demo-store.ts`, `app/api/reports/hazcom/route.ts`, `README.md`
 
@@ -194,6 +242,7 @@ Replaced em dashes (`—`) in user-facing copy with periods, colons, middots (`�
 ## 2026-05-25 — Collapsible sidebar
 
 ### Behavior
+
 - **Expanded (220px):** Icon + label for each nav item; SafeCellar wordmark; Settings + Sign out labels; user name by avatar; collapse control (chevron left) in header.
 - **Collapsed (64px):** Icons only; `SC` logo mark; expand control (chevron right) below header; **hover tooltips** show labels (nav, Settings, Sign out, expand, user name).
 - Preference persisted in `localStorage` key `safecellar-sidebar-collapsed`.
@@ -201,6 +250,7 @@ Replaced em dashes (`—`) in user-facing copy with periods, colons, middots (`�
 - Mobile (`< md`): unchanged bottom nav (`components/layout/mobile-nav.tsx`).
 
 ### Files
+
 - `components/layout/sidebar.tsx` — full rewrite with `SidebarTooltip`, `NavLink`, collapse state.
 
 ---
@@ -208,6 +258,7 @@ Replaced em dashes (`—`) in user-facing copy with periods, colons, middots (`�
 ## 2026-05-25 — Changelog maintenance policy
 
 ### What changed
+
 - Agent rule added: `.cursor/rules/changelog.mdc` (`alwaysApply: true`) so future sessions update this file after app changes.
 - This file documents the update template and when to skip (typos-only, no code, etc.).
 
@@ -221,9 +272,11 @@ Add a **new dated section at the top** of the changelog entries (below Reference
 ## YYYY-MM-DD — Short title
 
 ### What changed
+
 - Bullet list of behavior or files
 
 ### Files (optional)
+
 - path/to/file.tsx
 ```
 

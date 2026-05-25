@@ -45,6 +45,19 @@ export const HAZARD_CLASSES = [
   "irritant",
 ] as const;
 
+/** GHS-style label text for emergency response cards. */
+export const HAZARD_LABEL_INFO: Record<
+  (typeof HAZARD_CLASSES)[number],
+  { label: string; labelFr?: string }
+> = {
+  corrosive: { label: "CORROSIVE", labelFr: "CORROSIF" },
+  toxic: { label: "POISON" },
+  flammable: { label: "FLAMMABLE", labelFr: "INFLAMMABLE" },
+  oxidizer: { label: "OXIDIZER", labelFr: "COMBURANT" },
+  asphyxiant: { label: "ASPHYXIANT", labelFr: "ASPHYSIANT" },
+  irritant: { label: "IRRITANT", labelFr: "IRRITANT" },
+};
+
 export const STORAGE_LOCATIONS = [
   "Cellar A",
   "Cellar B",

@@ -30,7 +30,7 @@ export default async function ChemicalDetailPage({
       <PageShell
         title={chemical.name}
         description={chemical.trade_name ?? undefined}
-        actions={
+        leading={
           <Link
             href="/chemicals"
             className="text-sm text-brand-700 hover:underline"
@@ -39,9 +39,48 @@ export default async function ChemicalDetailPage({
           </Link>
         }
       >
-        <div className="flex flex-wrap gap-2 mb-6">
-          <ChemicalTypeBadge type={chemical.chemical_type} />
-          <StatusBadge status={chemical.sds_status} />
+        <div className="space-y-3 mb-6">
+          <div className="flex flex-wrap items-center gap-2">
+            <ChemicalTypeBadge type={chemical.chemical_type} />
+            <StatusBadge status={chemical.sds_status} />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mr-1">
+              PPE
+            </span>
+            {(chemical.ppe_required ?? []).length > 0 ? (
+              chemical.ppe_required!.map((ppe) => {
+                const opt = PPE_OPTIONS.find((o) => o.value === ppe);
+                return (
+                  <span
+                    key={ppe}
+                    className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-800 shadow-sm"
+                  >
+                    {opt?.label ?? ppe}
+                  </span>
+                );
+              })
+            ) : (
+              <span className="text-xs text-neutral-500">Not specified</span>
+            )}
+          </div>
+
+          {(chemical.hazard_class ?? []).length > 0 && (
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mr-1">
+                Hazards
+              </span>
+              {chemical.hazard_class!.map((h) => (
+                <span
+                  key={h}
+                  className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-medium capitalize text-amber-900 shadow-sm"
+                >
+                  {h}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {showGate && (
@@ -87,47 +126,6 @@ export default async function ChemicalDetailPage({
             </div>
 
             <ChemicalDetailClient chemical={chemical} showGate={showGate} />
-
-            <div className="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
-              <h3 className="text-base font-semibold text-neutral-900 mb-4">
-                PPE Requirements
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {(chemical.ppe_required ?? []).length > 0 ? (
-                  chemical.ppe_required!.map((ppe) => {
-                    const opt = PPE_OPTIONS.find((o) => o.value === ppe);
-                    return (
-                      <span
-                        key={ppe}
-                        className="px-2 py-1 bg-neutral-100 rounded-md text-xs font-medium text-neutral-700"
-                      >
-                        {opt?.label ?? ppe}
-                      </span>
-                    );
-                  })
-                ) : (
-                  <p className="text-sm text-neutral-500">Not specified</p>
-                )}
-              </div>
-            </div>
-
-            {chemical.hazard_class && chemical.hazard_class.length > 0 && (
-              <div className="bg-white rounded-xl border border-neutral-200 shadow-sm p-6">
-                <h3 className="text-base font-semibold text-neutral-900 mb-4">
-                  Hazard Classification
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {chemical.hazard_class.map((h) => (
-                    <span
-                      key={h}
-                      className="px-2 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-full text-xs font-medium capitalize"
-                    >
-                      {h}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
 
           <div>

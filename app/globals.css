@@ -59,3 +59,25 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08),
     0 2px 4px -1px rgba(0, 0, 0, 0.05);
 }
+
+/* Emergency card: print only the cloned card (see emergency-qr-card.tsx). */
+@media print {
+  body.print-emergency-only > *:not(#emergency-print-root) {
+    display: none !important;
+  }
+
+  body.print-emergency-only #emergency-print-root {
+    display: block !important;
+  }
+
+  body.print-emergency-only #emergency-print-card,
+  body.print-emergency-only #emergency-print-card * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body.print-emergency-only #emergency-print-card {
+    margin: 0 auto;
+    max-width: 7in;
+  }
+}

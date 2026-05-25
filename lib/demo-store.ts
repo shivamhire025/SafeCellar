@@ -59,6 +59,7 @@ let chemicals: Chemical[] = [
     supplier: "Pacific Chemical Supply",
     barcode: "0123456789012",
     cas_number: "1310-73-2",
+    molecular_formula: "NaOH",
     chemical_type: "cip",
     storage_location: "Cellar B - Chemical Cage",
     sds_file_path: "/demo/sds/sodium-hydroxide.pdf",
@@ -68,7 +69,7 @@ let chemicals: Chemical[] = [
     sds_review_due_at: addMonths(new Date(daysAgo(30)), 12).toISOString(),
     sds_status: "compliant",
     ppe_required: ["nitrile_gloves", "face_shield", "apron"],
-    hazard_class: ["corrosive"],
+    hazard_class: ["corrosive", "toxic"],
     first_aid_notes:
       "1. Flush skin with water for 20 minutes.\n2. Remove contaminated clothing.\n3. Seek immediate medical attention if pain persists.",
     emergency_contact: "1-800-424-9300",
