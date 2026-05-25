@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type {
   ActivityLogEntry,
+  BugReportTicket,
   Chemical,
   Delivery,
   Incident,
@@ -17,6 +18,7 @@ export type DemoDataSnapshot = {
   workers: Worker[];
   activityLog: ActivityLogEntry[];
   incidents: Incident[];
+  bugReports: BugReportTicket[];
 };
 
 const SNAPSHOT_PATH = path.join(process.cwd(), ".data", "demo-store.json");
@@ -30,7 +32,8 @@ function isValidSnapshot(value: unknown): value is DemoDataSnapshot {
     Array.isArray(v.sdsReviewQueue) &&
     Array.isArray(v.workers) &&
     Array.isArray(v.activityLog) &&
-    (v.incidents === undefined || Array.isArray(v.incidents))
+    (v.incidents === undefined || Array.isArray(v.incidents)) &&
+    (v.bugReports === undefined || Array.isArray(v.bugReports))
   );
 }
 
@@ -38,6 +41,7 @@ export function normalizeDemoSnapshot(snapshot: DemoDataSnapshot): DemoDataSnaps
   return {
     ...snapshot,
     incidents: snapshot.incidents ?? [],
+    bugReports: snapshot.bugReports ?? [],
   };
 }
 

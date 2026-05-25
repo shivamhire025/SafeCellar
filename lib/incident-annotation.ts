@@ -83,9 +83,17 @@ export function renderAnnotatedImage(
         reject(new Error("Canvas not supported"));
         return;
       }
-      ctx.drawImage(img, 0, 0);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const scaleX = canvas.width / img.naturalWidth;
+      const scaleY = canvas.height / img.naturalHeight;
       for (const stroke of strokes) {
-        drawStroke(ctx, stroke);
+        drawStroke(ctx, {
+          ...stroke,
+          lineWidth: stroke.lineWidth * Math.min(scaleX, scaleY),
+          points: stroke.points.map((p, i) =>
+            i % 2 === 0 ? p * scaleX : p * scaleY
+          ),
+        });
       }
       resolve(canvas.toDataURL("image/jpeg", 0.85));
     };

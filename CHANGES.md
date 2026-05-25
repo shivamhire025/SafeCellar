@@ -8,6 +8,48 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Annotation viewport shows full image
+
+### What changed
+- Photo annotator scales the image to fit width and height (fixes cropped tall screenshots in bug reports).
+- Saved annotations export from the same canvas view so markup aligns with the preview.
+
+### Files
+- `components/incidents/incident-photo-annotator.tsx`, `lib/incident-annotation.ts`, `components/feedback/bug-report-dialog.tsx`
+
+---
+
+## 2026-05-25 — Bug report dialog fix
+
+### What changed
+- Fixed crash opening Report a bug: `DialogDescription` is now exported from `components/ui/dialog.tsx`.
+
+### Files
+- `components/ui/dialog.tsx`
+
+---
+
+## 2026-05-25 — Floating bug report button
+
+### What changed
+- **Report a bug** floating button (bottom-right) on all dashboard pages opens a dialog to describe the issue, optionally upload a screenshot, and annotate it (same tools as incident photos).
+- Submissions create tickets stored in demo mode (`.data/demo-store.json`); **Bug report log** at `/bug-reports` (linked from Settings) lists open/resolved tickets with screenshots.
+
+### Files
+- `types/database.ts`, `lib/demo-store.ts`, `lib/validations/bug-report.ts`, `app/api/bug-reports/`, `components/feedback/`, `app/(dashboard)/bug-reports/page.tsx`, `app/(dashboard)/layout.tsx`, `app/(dashboard)/settings/page.tsx`
+
+---
+
+## 2026-05-25 — Incomplete incidents in notifications
+
+### What changed
+- Topbar **High-risk reminders** now include incidents missing photo documentation (status incomplete), linking to the incident detail page to add photos.
+
+### Files
+- `lib/demo-store.ts`, `types/database.ts`, `components/layout/notifications-menu.tsx`
+
+---
+
 ## 2026-05-25 — Incident logging
 
 ### What changed

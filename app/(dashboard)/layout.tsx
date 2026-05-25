@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { BugReportFab } from "@/components/feedback/bug-report-fab";
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileNav } from "@/components/layout/mobile-nav";
 
@@ -30,6 +31,7 @@ export default async function DashboardLayout({
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
       <MobileNav />
+      <BugReportFab />
     </div>
   );
 }

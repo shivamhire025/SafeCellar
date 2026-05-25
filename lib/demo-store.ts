@@ -6,6 +6,7 @@ import type {
   DeliveryItem,
   HighRiskNotification,
   HighRiskNotificationPriority,
+  BugReportTicket,
   Incident,
   IncidentPhoto,
   IncidentType,
@@ -15,7 +16,7 @@ import type {
   SessionUser,
   Worker,
 } from "@/types/database";
-import { SDS_REVIEW_REASONS } from "@/lib/constants";
+import { INCIDENT_TYPES, SDS_REVIEW_REASONS } from "@/lib/constants";
 import { deriveIncidentStatus } from "@/lib/incident-status";
 import type { ChemicalImportRow } from "@/lib/validations/chemical-import";
 import {
@@ -371,6 +372,8 @@ let activityLog: ActivityLogEntry[] = [
 const DEMO_PLACEHOLDER_PHOTO =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
 
+let bugReports: BugReportTicket[] = [];
+
 let incidents: Incident[] = [
   {
     id: "inc-001",
@@ -432,6 +435,7 @@ function getDemoDataSnapshot(): DemoDataSnapshot {
     workers,
     activityLog,
     incidents,
+    bugReports,
   };
 }
 
@@ -443,6 +447,7 @@ function applyDemoDataSnapshot(snapshot: DemoDataSnapshot) {
   workers = normalized.workers;
   activityLog = normalized.activityLog;
   incidents = normalized.incidents;
+  bugReports = normalized.bugReports;
 }
 
 applyDemoDataSnapshot(
@@ -944,6 +949,31 @@ export const demoStore = {
         });
       });
 
+    const incidentTypeLabels = Object.fromEntries(
+      INCIDENT_TYPES.map((t) => [t.value, t.label])
+    ) as Record<IncidentType, string>;
+
+    this.getIncidents()
+      .filter((i) => deriveIncidentStatus(i.photos) === "incomplete")
+      .forEach((incident) => {
+        const typeLabel =
+          incidentTypeLabels[incident.incident_type] ?? incident.incident_type;
+        const priority: HighRiskNotificationPriority =
+          incident.incident_type === "injury" ||
+          incident.incident_type === "illness" ||
+          incident.chemical_exposure
+            ? "high"
+            : "medium";
+        push({
+          id: `incident-${incident.id}`,
+          priority,
+          title: `${typeLabel} — ${incident.location}`,
+          subtitle: "Incident log incomplete — add photo documentation",
+          href: `/incidents/${incident.id}`,
+          badge: "incident_incomplete",
+        });
+      });
+
     return notifications.sort(
       (a, b) => PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority]
     );
@@ -1101,5 +1131,68 @@ export const demoStore = {
     incidents[idx].updated_at = new Date().toISOString();
     persistDemoState();
     return true;
+  },
+
+  getBugReports(): BugReportTicket[] {
+    return [...bugReports].sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+  },
+
+  getBugReport(id: string): BugReportTicket | undefined {
+    return bugReports.find((t) => t.id === id);
+  },
+
+  createBugReport(
+    data: Omit<
+      BugReportTicket,
+      | "id"
+      | "organization_id"
+      | "status"
+      | "reported_by_id"
+      | "reported_by_name"
+      | "created_at"
+      | "updated_at"
+    >
+  ): BugReportTicket {
+    const ticket: BugReportTicket = {
+      id: `bug-${Date.now()}`,
+      organization_id: DEMO_ORG_ID,
+      status: "open",
+      reported_by_id: DEMO_USER_ID,
+      reported_by_name: "Marcus Chen",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      ...data,
+    };
+    bugReports.unshift(ticket);
+    activityLog.unshift({
+      id: `act-${Date.now()}`,
+      organization_id: DEMO_ORG_ID,
+      actor_id: DEMO_USER_ID,
+      actor_name: "Marcus Chen",
+      action: "submitted a bug report",
+      entity_type: "bug_report",
+      entity_id: ticket.id,
+      created_at: new Date().toISOString(),
+    });
+    persistDemoState();
+    return ticket;
+  },
+
+  updateBugReportStatus(
+    id: string,
+    status: BugReportTicket["status"]
+  ): BugReportTicket | undefined {
+    const idx = bugReports.findIndex((t) => t.id === id);
+    if (idx === -1) return undefined;
+    bugReports[idx] = {
+      ...bugReports[idx],
+      status,
+      updated_at: new Date().toISOString(),
+    };
+    persistDemoState();
+    return bugReports[idx];
   },
 };

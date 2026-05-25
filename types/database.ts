@@ -64,6 +64,24 @@ export interface Incident {
   updated_at: string;
 }
 
+export type BugReportStatus = "open" | "resolved";
+
+export interface BugReportTicket {
+  id: string;
+  organization_id: string;
+  description: string;
+  page_url: string;
+  screenshot_file_name?: string | null;
+  screenshot_original_url?: string | null;
+  screenshot_annotated_url?: string | null;
+  annotation_strokes?: AnnotationStroke[] | null;
+  status: BugReportStatus;
+  reported_by_id?: string | null;
+  reported_by_name?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Organization {
   id: string;
   name: string;
@@ -208,7 +226,8 @@ export type HighRiskNotificationBadge =
   | "review_due"
   | "gas_hazard"
   | "sds_queue"
-  | "delivery";
+  | "delivery"
+  | "incident_incomplete";
 
 export interface HighRiskNotification {
   id: string;

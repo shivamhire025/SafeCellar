@@ -9,7 +9,7 @@ import {
   Type,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { drawStroke, renderAnnotatedImage } from "@/lib/incident-annotation";
+import { drawStroke } from "@/lib/incident-annotation";
 import type { AnnotationStroke, AnnotationTool } from "@/types/database";
 import { cn } from "@/lib/utils";
 
@@ -20,9 +20,28 @@ const TOOLS: { id: AnnotationTool; label: string; icon: typeof Pencil }[] = [
   { id: "text", label: "Text", icon: Type },
 ];
 
+function fitImageToBounds(
+  naturalWidth: number,
+  naturalHeight: number,
+  maxWidth: number,
+  maxHeight: number
+) {
+  const scale = Math.min(
+    1,
+    maxWidth / naturalWidth,
+    maxHeight / naturalHeight
+  );
+  return {
+    width: Math.max(1, Math.round(naturalWidth * scale)),
+    height: Math.max(1, Math.round(naturalHeight * scale)),
+  };
+}
+
 interface IncidentPhotoAnnotatorProps {
   imageUrl: string;
   initialStrokes?: AnnotationStroke[];
+  /** Max height for the annotation viewport (keeps tall screenshots fully visible). */
+  maxDisplayHeight?: number;
   onSave: (result: {
     strokes: AnnotationStroke[];
     annotatedDataUrl: string;
@@ -34,6 +53,7 @@ interface IncidentPhotoAnnotatorProps {
 export function IncidentPhotoAnnotator({
   imageUrl,
   initialStrokes = [],
+  maxDisplayHeight = 480,
   onSave,
   onCancel,
   saving = false,
@@ -73,27 +93,49 @@ export function IncidentPhotoAnnotator({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     for (const s of strokes) drawStroke(ctx, s);
     if (currentStroke) drawStroke(ctx, currentStroke);
   }, [strokes, currentStroke]);
 
+  const setupCanvas = useCallback(() => {
+    const img = imageRef.current;
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!img?.complete || !canvas || !container) return;
+
+    const maxW = container.clientWidth || 400;
+    const { width, height } = fitImageToBounds(
+      img.naturalWidth,
+      img.naturalHeight,
+      maxW,
+      maxDisplayHeight
+    );
+    canvas.width = width;
+    canvas.height = height;
+    setReady(true);
+    redraw();
+  }, [maxDisplayHeight, redraw]);
+
   useEffect(() => {
+    setReady(false);
     const img = new Image();
     img.onload = () => {
       imageRef.current = img;
-      const canvas = canvasRef.current;
-      const container = containerRef.current;
-      if (!canvas || !container) return;
-      const maxW = container.clientWidth;
-      const scale = Math.min(1, maxW / img.naturalWidth);
-      canvas.width = Math.round(img.naturalWidth * scale);
-      canvas.height = Math.round(img.naturalHeight * scale);
-      setReady(true);
-      redraw();
+      setupCanvas();
     };
     img.src = imageUrl;
-  }, [imageUrl, redraw]);
+  }, [imageUrl, setupCanvas]);
+
+  useEffect(() => {
+    if (!ready) return;
+    const container = containerRef.current;
+    if (!container || typeof ResizeObserver === "undefined") return;
+
+    const observer = new ResizeObserver(() => setupCanvas());
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [ready, setupCanvas]);
 
   useEffect(() => {
     if (ready) redraw();
@@ -160,7 +202,10 @@ export function IncidentPhotoAnnotator({
   };
 
   const handleSave = async () => {
-    const annotatedDataUrl = await renderAnnotatedImage(imageUrl, strokes);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    redraw();
+    const annotatedDataUrl = canvas.toDataURL("image/jpeg", 0.85);
     await onSave({ strokes, annotatedDataUrl });
   };
 
@@ -206,11 +251,11 @@ export function IncidentPhotoAnnotator({
       </div>
       <div
         ref={containerRef}
-        className="relative w-full rounded-lg border border-neutral-200 bg-neutral-900 overflow-hidden"
+        className="relative w-full rounded-lg border border-neutral-200 bg-neutral-900"
       >
         <canvas
           ref={canvasRef}
-          className="w-full h-auto cursor-crosshair touch-none"
+          className="block w-full h-auto max-w-full cursor-crosshair touch-none"
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
