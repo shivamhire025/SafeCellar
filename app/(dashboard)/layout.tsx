@@ -3,6 +3,8 @@ import { getSession } from "@/lib/auth";
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileNav } from "@/components/layout/mobile-nav";
 
+export const dynamic = "force-dynamic";
+
 const pageTitles: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/chemicals": "Chemical Inventory",

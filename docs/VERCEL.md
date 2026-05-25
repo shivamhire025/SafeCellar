@@ -1,63 +1,54 @@
 # Deploy SafeCellar on Vercel
 
-## Why you might see a 404
+## Repository layout (updated)
 
-The Next.js app is in **`safecellar/`**, not the repository root. If Vercel’s **Root Directory** is `.` (default), it does not build the app and routes return **404**.
+The Next.js app is at the **repository root** (`app/`, `package.json`, etc.), not in a subfolder. Vercel **Root Directory** should be **`.`** (default).
 
-## Fix (required)
+## Setup
 
-1. Open [Vercel Dashboard](https://vercel.com/dashboard) → your **SafeCellar** project.
-2. **Settings** → **Build and Deployment**.
-3. Set **Root Directory** to: `safecellar`
-4. Confirm:
-   - **Framework Preset:** Next.js
-   - **Build Command:** `npm run build` (default)
-   - **Install Command:** `npm install` (default)
-   - **Output Directory:** leave empty (Next.js default)
-5. **Settings** → **Environment Variables** (Production + Preview):
+1. [Vercel Dashboard](https://vercel.com/dashboard) → **Add New Project** → import `shivamhire025/SafeCellar`.
+2. **Root Directory:** `.` or leave empty (do **not** use `safecellar` — that folder was removed).
+3. **Framework Preset:** Next.js
+4. **Environment Variables** (Production + Preview):
 
    | Name | Value |
    |------|--------|
    | `NEXT_PUBLIC_DEMO_MODE` | `true` |
    | `NEXT_PUBLIC_APP_NAME` | `SafeCellar` |
 
-   Optional after first deploy (replace with your Vercel URL):
+5. Deploy.
 
-   | Name | Value |
-   |------|--------|
-   | `NEXT_PUBLIC_APP_URL` | `https://your-project.vercel.app` |
+If you previously set Root Directory to `safecellar`, clear it and **Redeploy**.
 
-6. **Deployments** → open latest → **Redeploy** (use “Redeploy” so settings apply).
+## Verify deployment
 
-## First-time import from GitHub
+| URL | Expected |
+|-----|----------|
+| `/api/health` | JSON `{ "ok": true }` |
+| `/login` | Sign-in page |
+| `/` | Redirect to `/dashboard` or `/login` |
 
-1. **Add New Project** → import `shivamhire025/SafeCellar`.
-2. Before deploy, click **Edit** next to **Root Directory** → enter `safecellar`.
-3. Add environment variables above.
-4. Deploy.
+Demo login: `demo@safecellar.app` / any password.
 
-## Verify
+## Build log checklist
 
-After a successful deploy:
-
-- `/` redirects to `/dashboard` or `/login`
-- `/login` shows the SafeCellar sign-in card
-- Demo login: `demo@safecellar.app` / any password
-
-## Build logs
-
-A correct build log includes:
+You should see:
 
 ```
-Running "install" command: npm install
-...
-Running "build" command: npm run build
-...
 ▲ Next.js 14.x
+Creating an optimized production build ...
 ```
 
-If you only see a static deploy or “Other” framework with no Next.js compile step, Root Directory is still wrong.
+If the build skips Next.js or only publishes a static file, check Root Directory and Framework settings.
 
-## Production Supabase (later)
+## Still seeing 404?
 
-Set `NEXT_PUBLIC_DEMO_MODE=false` and add Supabase env vars from `safecellar/.env.example`. Run `supabase/migrations/001_initial_schema.sql` in your Supabase project first.
+1. **Redeploy** after changing settings (Deployments → ⋯ → Redeploy).
+2. Confirm the deployment status is **Ready**, not **Error**.
+3. Open the deployment URL from the Vercel dashboard (not an old project URL).
+4. Try `/login` directly, not `/safecellar/login`.
+5. Check **Deployment Protection** (Settings → Deployment Protection) is not blocking access.
+
+## Supabase (production)
+
+Set `NEXT_PUBLIC_DEMO_MODE=false` and add Supabase keys from `.env.example`. Run `supabase/migrations/001_initial_schema.sql` first.

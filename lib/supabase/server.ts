@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { isDemoMode } from "@/lib/demo-store";
+import { isDemoMode } from "@/lib/demo-mode";
 
 export async function createClient() {
   if (isDemoMode()) return null;

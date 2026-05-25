@@ -1,5 +1,5 @@
 import { createBrowserClient } from "@supabase/ssr";
-import { isDemoMode } from "@/lib/demo-store";
+import { isDemoMode } from "@/lib/demo-mode";
 
 export function createClient() {
   if (isDemoMode()) return null;

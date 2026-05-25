@@ -8,6 +8,20 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Fix Vercel 404: move app to repository root
+
+### What changed
+- Moved Next.js app from `safecellar/` to **repository root** so Vercel builds with default Root Directory (`.`).
+- Added `/api/health` for deployment smoke tests.
+- Split `lib/demo-mode.ts` from `demo-store` for lighter Edge middleware.
+- `export const dynamic = "force-dynamic"` on dashboard layout.
+- Updated README and `docs/VERCEL.md` (Root Directory must **not** be `safecellar` anymore).
+
+### Files
+- All app paths now at repo root; `safecellar/` removed from git.
+
+---
+
 ## 2026-05-25 — Vercel 404 fix (root directory)
 
 ### What changed
