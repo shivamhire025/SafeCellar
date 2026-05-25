@@ -36,18 +36,16 @@ export default function SignupPage() {
     }
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/signin", {
+      const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: form.email || "demo@safecellar.app",
-          password: form.password,
-        }),
+        body: JSON.stringify(form),
       });
-      if (res.ok) {
-        router.push("/dashboard");
-        router.refresh();
+      if (!res.ok) {
+        return;
       }
+      router.push("/dashboard");
+      router.refresh();
     } finally {
       setLoading(false);
     }

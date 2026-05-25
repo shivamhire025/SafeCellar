@@ -34,11 +34,19 @@ Troubleshooting: **[docs/VERCEL.md](./docs/VERCEL.md)**
 - Emergency Quick Response Card, HazCom export
 - Collapsible sidebar with tooltips
 
+## Supabase (optional)
+
+The app runs in **demo mode** by default. To use Postgres, Auth, and SDS storage:
+
+1. Follow **[docs/SUPABASE.md](./docs/SUPABASE.md)**
+2. Set `NEXT_PUBLIC_DEMO_MODE=false` and your Supabase keys in `.env.local`
+
 ## Documentation
 
 | Doc | Description |
 |-----|-------------|
 | [CHANGES.md](./CHANGES.md) | Implementation changelog |
+| [docs/SUPABASE.md](./docs/SUPABASE.md) | Supabase project setup |
 | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Public architecture overview |
 | [docs/VERCEL.md](./docs/VERCEL.md) | Vercel deployment guide |
 

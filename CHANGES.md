@@ -8,6 +8,33 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Vercel + Supabase deployment guide
+
+### What changed
+- **[docs/VERCEL.md](./docs/VERCEL.md)** documents production Supabase env vars (`NEXT_PUBLIC_SUPABASE_*`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_DEMO_MODE=false`, `NEXT_PUBLIC_APP_URL`), Auth redirect URLs, and redeploy steps.
+- Pushed live auth integration (sign-in, sign-up, sign-out, session) and Supabase CLI/migrations to `main` for Vercel builds.
+
+### Files
+- `docs/VERCEL.md`, plus Supabase setup files listed in the “Supabase project setup” entry below
+
+---
+
+## 2026-05-25 — Supabase project setup
+
+### What changed
+- Initialized **Supabase CLI** (`supabase/config.toml`, local `sds-files` bucket, npm scripts).
+- Added migration `002_rls_and_storage.sql` (org RLS policies, delivery items, workers, activity log, SDS storage bucket).
+- Live auth: sign-in, sign-up (org + admin profile via service role), sign-out, and `getSession()` from Supabase when `NEXT_PUBLIC_DEMO_MODE=false`.
+- New docs: **[docs/SUPABASE.md](./docs/SUPABASE.md)** (hosted + local setup). README and `.env.example` updated.
+
+### Files
+- `supabase/config.toml`, `supabase/migrations/002_rls_and_storage.sql`
+- `lib/supabase/env.ts`, `lib/supabase/admin.ts`, `lib/auth.ts`, `lib/demo-mode.ts`
+- `app/api/auth/signup/route.ts`, `app/api/auth/signin/route.ts`, `app/api/auth/signout/route.ts`
+- `app/(auth)/signup/page.tsx`, `package.json`, `.env.example`, `docs/SUPABASE.md`, `README.md`, `docs/VERCEL.md`
+
+---
+
 ## 2026-05-25 — Annotation viewport shows full image
 
 ### What changed
