@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 const panels = [
   {
     title: "Operations & visibility",
-    image: landingImages.production,
-    imageAlt: "Beer bottling line in a production facility",
+    image: landingImages.operations,
+    imageAlt: "Stainless tanks and oak barrels on a brewery production floor with gauges and valves",
     featured: true,
     bullets: [
       "Compliance dashboard with score and queue tiles",
@@ -17,20 +17,20 @@ const panels = [
   },
   {
     title: "Chemicals & SDS",
-    image: landingImages.cellar,
-    imageAlt: "Beer kegs and bottles stored in a brewery cellar",
+    image: landingImages.chemicalsSds,
+    imageAlt: "Safety officer reviewing a hazardous chemical form with NFPA hazard symbols",
     bullets: ["Inventory with compliance gate", "SDS review queue and emergency QR"],
   },
   {
     title: "People & safety",
     image: landingImages.safetyWalk,
-    imageAlt: "Team walking through a production facility for a safety check",
+    imageAlt: "Warehouse team in high-visibility vests collaborating on the production floor",
     bullets: ["Workers, training, and incidents", "Equipment registry and CS permits"],
   },
   {
     title: "Inspection exports",
-    image: landingImages.barrelRoom,
-    imageAlt: "Stainless tanks in a brewery ready for inspection walkthrough",
+    image: landingImages.inspectionWalk,
+    imageAlt: "Brewery workers inspecting stainless tanks and logging data on a tablet",
     bullets: ["Compliance & Exports hub", "HazCom / WHMIS program and packet ZIP"],
   },
 ];
@@ -78,7 +78,7 @@ export function LandingFeatures() {
               >
                 {panel.title}
               </h3>
-              <ul className="mt-2 space-y-1 text-sm text-stone-200/95">
+              <ul className="mt-2 space-y-1.5 text-base leading-snug text-stone-200/95">
                 {panel.bullets.map((b) => (
                   <li key={b}>· {b}</li>
                 ))}

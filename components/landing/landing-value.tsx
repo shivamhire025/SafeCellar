@@ -33,7 +33,7 @@ export function LandingValue() {
         <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-stone-200 shadow-[0_20px_50px_-20px_rgba(28,25,23,0.35)] sm:aspect-[3/4] lg:order-2">
           <Image
             src={landingImages.cellar}
-            alt="Beer kegs and bottles in a brewery storage cellar"
+            alt="Wooden barrels stacked in a brewery aging cellar"
             fill
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"

@@ -60,13 +60,14 @@
     0 2px 4px -1px rgba(0, 0, 0, 0.05);
 }
 
-/* Marketing landing (craft editorial) */
+/* Marketing landing */
 [data-landing] {
   font-family: var(--font-landing-body), system-ui, sans-serif;
 }
 
 [data-landing] .font-landing-display {
-  font-family: var(--font-landing-display), Georgia, "Times New Roman", serif;
+  font-family: var(--font-landing-display), "Source Serif 4", Georgia, serif;
+  letter-spacing: -0.015em;
 }
 
 [data-landing] .font-landing-body {

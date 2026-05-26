@@ -8,6 +8,89 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Landing typography: professional serif headings
+
+### What changed
+- Replaced Fraunces (soft editorial serif) with **Source Serif 4** for landing headings; body remains Source Sans 3 for a restrained, product-grade pairing.
+
+### Files
+- `components/landing/landing-shell.tsx`, `app/globals.css`
+
+---
+
+## 2026-05-25 — Inspection ready two-column layout
+
+### What changed
+- **Inspection ready** section: eyebrow, heading, description, and checklist stack in the left column; compliance photo stays on the right (no full-width header above the grid).
+
+### Files
+- `components/landing/landing-packet.tsx`, `landing-section.tsx`
+
+---
+
+## 2026-05-25 — Landing bullet list typography
+
+### What changed
+- Increased bullet list font size from `text-sm` to `text-base` on the Inspection ready checklist and Platform feature cards; slightly larger check icons on the checklist.
+
+### Files
+- `components/landing/landing-packet.tsx`, `landing-features.tsx`
+
+---
+
+## 2026-05-25 — Operations & visibility landing photo
+
+### What changed
+- **Features → Operations & visibility** panel now uses the provided brewery floor photo with tanks, barrels, and gauges (`brewery-operations.png`) instead of stock bottling-line imagery.
+
+### Files
+- `public/images/brewery-operations.png`, `components/landing/landing-images.ts`, `landing-features.tsx`, `public/images/ATTRIBUTION.md`
+
+---
+
+## 2026-05-25 — Chemicals & SDS landing photo
+
+### What changed
+- **Features → Chemicals & SDS** panel now uses the provided hazardous chemical / SDS assessment photo (`brewery-chemicals-sds.png`) instead of keg stock imagery.
+
+### Files
+- `public/images/brewery-chemicals-sds.png`, `components/landing/landing-images.ts`, `landing-features.tsx`, `public/images/ATTRIBUTION.md`
+
+---
+
+## 2026-05-25 — Inspection exports landing photo
+
+### What changed
+- **Features → Inspection exports** panel now uses the provided brewery tank inspection photo (`brewery-inspection.png`) instead of stock imagery.
+
+### Files
+- `public/images/brewery-inspection.png`, `components/landing/landing-images.ts`, `landing-features.tsx`, `public/images/ATTRIBUTION.md`
+
+---
+
+## 2026-05-25 — People & safety landing photo
+
+### What changed
+- **Features → People & safety** panel now uses the provided warehouse team photo (`brewery-safety-walk.png`) instead of stock Unsplash imagery.
+
+### Files
+- `public/images/brewery-safety-walk.png`, `components/landing/landing-images.ts`, `landing-features.tsx`, `public/images/ATTRIBUTION.md`
+
+---
+
+## 2026-05-25 — Landing page: distinct section photography
+
+### What changed
+- Replaced duplicate copies of `brewery-hero.jpg` with context-specific photos: barrel cellar (value), keg storage (chemicals panel), bottling line (operations), tank room (CTA), floor safety walk (people panel), and production aisle (inspection exports panel).
+- Hero and compliance packet sections keep the existing project hero and desk documentation images.
+
+### Files
+- `public/images/brewery-cellar.jpg`, `brewery-kegs.jpg`, `brewery-production.jpg`, `barrel-room.jpg`, `brewery-safety-walk.jpg`, `brewery-inspection.jpg`
+- `components/landing/landing-images.ts`, `landing-features.tsx`, `landing-value.tsx`
+- `public/images/ATTRIBUTION.md`
+
+---
+
 ## 2026-05-25 — Landing dashboard preview layout fix
 
 ### What changed

@@ -1,10 +1,11 @@
-import { Fraunces, Source_Sans_3 } from "next/font/google";
+import { Source_Sans_3, Source_Serif_4 } from "next/font/google";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-const fraunces = Fraunces({
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
   variable: "--font-landing-display",
+  weight: ["400", "600", "700"],
   display: "swap",
 });
 
@@ -25,7 +26,7 @@ export function LandingShell({
     <div
       data-landing
       className={cn(
-        fraunces.variable,
+        sourceSerif.variable,
         sourceSans.variable,
         "landing-page min-h-screen flex flex-col bg-stone-50 font-landing-body text-stone-900 antialiased",
         className

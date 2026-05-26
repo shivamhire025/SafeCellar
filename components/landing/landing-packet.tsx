@@ -1,6 +1,9 @@
 import Image from "next/image";
 import { Check, FileArchive } from "lucide-react";
-import { LandingSection } from "@/components/landing/landing-section";
+import {
+  LandingSection,
+  LandingSectionHeader,
+} from "@/components/landing/landing-section";
 import { landingImages } from "@/components/landing/landing-images";
 
 const checklist = [
@@ -13,22 +16,30 @@ export function LandingPacket() {
   return (
     <LandingSection
       id="inspection-ready"
-      eyebrow="Inspection ready"
-      title="Built for the walkthrough, not just the binder"
-      description="The Compliance & Exports hub shows readiness, your regulatory profile (US HazCom, Canadian WHMIS, or both), and lets you download everything in one pass."
       className="border-y border-stone-200/80 bg-white"
+      headerInChildren
     >
       <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-        <ul className="space-y-4">
-          {checklist.map((item) => (
-            <li key={item} className="flex gap-3 text-sm text-stone-700">
-              <span className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
-                <Check className="h-3.5 w-3.5" aria-hidden />
-              </span>
-              {item}
-            </li>
-          ))}
-        </ul>
+        <div>
+          <LandingSectionHeader
+            eyebrow="Inspection ready"
+            title="Built for the walkthrough, not just the binder"
+            description="The Compliance & Exports hub shows readiness, your regulatory profile (US HazCom, Canadian WHMIS, or both), and lets you download everything in one pass."
+          />
+          <ul className="mt-8 space-y-4">
+            {checklist.map((item) => (
+              <li
+                key={item}
+                className="flex gap-3 text-base leading-relaxed text-stone-700"
+              >
+                <span className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
+                  <Check className="h-4 w-4" aria-hidden />
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-stone-200 shadow-lg">
           <Image
