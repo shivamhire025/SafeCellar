@@ -22,7 +22,7 @@ export default async function PermitsPage() {
       <Topbar title="Confined Space Permits" userName={session?.full_name ?? "User"} />
       <PageShell
         title="Confined Space Entry Permits"
-        description="Document authorized entries into confined spaces (29 CFR 1910.146). Equipment registry and entry permits are separate — create a permit for each entry event."
+        description="Document authorized entries into confined spaces (29 CFR 1910.146). Equipment registry and entry permits are separate: create a permit for each entry event."
       >
         <EligibleEquipmentTable equipment={confined} />
 
@@ -43,7 +43,7 @@ export default async function PermitsPage() {
               </li>
               <li>
                 Create an <strong>entry permit</strong> here for each authorized
-                entry — one permit per event, not per asset.
+                entry: one permit per event, not per asset.
               </li>
               <li>
                 Hazards can prefill from gas-hazard chemicals and equipment

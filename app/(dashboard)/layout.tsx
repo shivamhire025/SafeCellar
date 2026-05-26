@@ -37,7 +37,7 @@ export default async function DashboardLayout({
             className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-sm text-amber-900"
             role="status"
           >
-            Demo mode — you are signed in as sample user Marcus Chen. Sign-up does not
+            Demo mode: you are signed in as sample user Marcus Chen. Sign-up does not
             create Supabase users until{" "}
             <code className="text-xs">NEXT_PUBLIC_DEMO_MODE=false</code> and Supabase
             keys are set on Vercel, then redeployed.

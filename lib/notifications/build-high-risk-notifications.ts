@@ -57,7 +57,7 @@ export function buildHighRiskNotifications(input: {
         title: c.name,
         subtitle:
           c.chemical_type === "gas_hazard"
-            ? "Missing SDS — confined space gas hazard"
+            ? "Missing SDS: confined space gas hazard"
             : "SDS missing. Upload before use.",
         href: `/chemicals/${c.id}#sds-upload`,
         badge: c.chemical_type === "gas_hazard" ? "gas_hazard" : "missing",
@@ -73,7 +73,7 @@ export function buildHighRiskNotifications(input: {
         title: c.name,
         subtitle:
           c.chemical_type === "gas_hazard"
-            ? "Annual SDS review overdue — gas hazard"
+            ? "Annual SDS review overdue: gas hazard"
             : "Annual SDS review due",
         href: `/chemicals/${c.id}`,
         badge: c.chemical_type === "gas_hazard" ? "gas_hazard" : "review_due",
@@ -97,7 +97,7 @@ export function buildHighRiskNotifications(input: {
         id: `queue-${item.id}`,
         priority: chemical ? chemicalRiskPriority(chemical) : "medium",
         title: chemical?.name ?? "Unknown chemical",
-        subtitle: `SDS review queue — ${reasonLabel}`,
+        subtitle: `SDS review queue: ${reasonLabel}`,
         href: `/chemicals/${item.chemical_id}#sds-upload`,
         badge: "sds_queue",
       });
@@ -139,8 +139,8 @@ export function buildHighRiskNotifications(input: {
       push({
         id: `incident-${incident.id}`,
         priority,
-        title: `${typeLabel} — ${incident.location}`,
-        subtitle: "Incident log incomplete — add photo documentation",
+        title: `${typeLabel}: ${incident.location}`,
+        subtitle: "Incident log incomplete: add photo documentation",
         href: `/incidents/${incident.id}`,
         badge: "incident_incomplete",
       });

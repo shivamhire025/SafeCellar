@@ -200,7 +200,7 @@ export function BulkImportDialog() {
                     <tr key={row.rowNumber}>
                       <td className="px-2 py-2 text-neutral-500">{row.rowNumber}</td>
                       <td className="px-2 py-2 font-medium text-neutral-900">
-                        {row.data?.name ?? row.raw.name ?? "—"}
+                        {row.data?.name ?? row.raw.name ?? "N/A"}
                       </td>
                       <td className="px-2 py-2">
                         {row.error ? (

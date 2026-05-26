@@ -8,6 +8,43 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Landing workflow layout fix
+
+### What changed
+- **How it works**: Workflow steps span full section width (no longer squeezed into a half-column grid).
+- **Workflow cards**: Responsive CSS grid (1 / 2 / 5 columns) replaces flex row with arrows that caused overlap.
+
+### Files
+- `components/landing/landing-workflow.tsx`, `components/landing/landing-page.tsx`
+
+---
+
+## 2026-05-25 — Copy: remove em dashes (landing and follow-up)
+
+### What changed
+- Removed em dashes (`—`) from landing page, notifications, compliance packet readme, demo data, empty table/date placeholders (`N/A`), and related UI strings. Replaced with periods, commas, or colons per existing style guide.
+
+### Files
+- `components/landing/`, `components/dashboard/compliance-breakdown.tsx`, `components/layout/notifications-menu.tsx`, `components/compliance/compliance-exports-card.tsx`, `components/feedback/bug-report-dialog.tsx`, `components/chemicals/bulk-import-dialog.tsx`, `components/incidents/new-incident-form.tsx`
+- `app/(dashboard)/layout.tsx`, `app/(dashboard)/permits/page.tsx`, `app/(auth)/login/page.tsx`, `app/(dashboard)/incidents/[id]/incident-detail-client.tsx`
+- `lib/utils.ts`, `lib/demo-store.ts`, `lib/notifications/build-high-risk-notifications.ts`, `lib/reports/packet-readme.ts`, `README.md`
+
+---
+
+## 2026-05-25 — Landing page reflects full product
+
+### What changed
+- **Marketing home (`/`)**: Hero and navigation updated; new sections for value pillars, end-to-end workflow diagram, static compliance-dashboard preview, inspection packet diagram, and grouped feature areas (operations, chemicals/SDS, people/incidents/safety, exports).
+- Copy covers dashboard deep links, notifications bell, workers/training, incidents, equipment, CS permits, Compliance & Exports packet, and US/Canada regulatory profiles.
+
+### Files
+- `components/landing/landing-page.tsx`
+- `components/landing/landing-workflow.tsx`
+- `components/landing/landing-dashboard-preview.tsx`
+- `components/landing/landing-packet-diagram.tsx`
+
+---
+
 ## 2026-05-25 — Dashboard cards URL sync fix
 
 ### What changed

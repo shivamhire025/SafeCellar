@@ -86,7 +86,7 @@ export function NotificationsMenu() {
           aria-label={
             count > 0
               ? `${count} high-risk reminders`
-              : "Notifications — no reminders"
+              : "Notifications: no reminders"
           }
         >
           <Bell className="h-5 w-5" />

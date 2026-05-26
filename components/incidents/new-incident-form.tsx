@@ -198,7 +198,7 @@ export function NewIncidentForm({
                 </Label>
                 <Input
                   {...register("location")}
-                  placeholder="e.g. Cellar B — tank pad"
+                  placeholder="e.g. Cellar B, tank pad"
                 />
                 {errors.location && (
                   <p className="text-xs text-red-600">{errors.location.message}</p>

@@ -139,7 +139,7 @@ export function ComplianceBreakdown({
         previews={deliveryPreviews}
         previewAriaPrefix="Open delivery"
         emptyMessage={
-          stats.pendingDeliveries === 0 ? "Queue clear — no pending scans" : undefined
+          stats.pendingDeliveries === 0 ? "Queue clear: no pending scans" : undefined
         }
         primaryMetric={
           stats.pendingDeliveries > 0 ? stats.pendingDeliveries : undefined
@@ -161,7 +161,7 @@ export function ComplianceBreakdown({
         previewAriaPrefix="Review chemical"
         emptyMessage={
           stats.reviewQueueCount === 0
-            ? "Queue clear — no pending reviews"
+            ? "Queue clear: no pending reviews"
             : undefined
         }
         primaryMetric={

@@ -31,7 +31,7 @@ export function formatDate(date: string | Date | null | undefined): string {
 }
 
 export function formatDateTime(date: string | Date | null | undefined): string {
-  if (!date) return "—";
+  if (!date) return "N/A";
   const d = typeof date === "string" ? new Date(date) : date;
   return d.toLocaleString("en-US", {
     month: "short",

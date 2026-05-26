@@ -70,7 +70,7 @@ export function IncidentDetailClient({
               <div>
                 <dt className="text-neutral-500">Reported by</dt>
                 <dd className="font-medium">
-                  {incident.reported_by_name ?? "—"}
+                  {incident.reported_by_name ?? "N/A"}
                 </dd>
               </div>
               <div>

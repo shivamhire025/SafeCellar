@@ -19,7 +19,7 @@ Open [http://localhost:3000](http://localhost:3000). Demo login: `demo@safecella
 ## Deploy on Vercel
 
 1. Import [github.com/shivamhire025/SafeCellar](https://github.com/shivamhire025/SafeCellar) on Vercel.
-2. **Root Directory:** leave as `.` (repository root — the Next.js app lives here).
+2. **Root Directory:** leave as `.` (repository root; the Next.js app lives here).
 3. **Framework:** Next.js (auto-detected).
 4. **Environment variables:**
    - `NEXT_PUBLIC_DEMO_MODE` = `true`
@@ -62,4 +62,4 @@ The app runs in **demo mode** by default. To use Postgres, Auth, and SDS storage
 
 ## License
 
-Proprietary — All rights reserved unless otherwise specified by the repository owner.
+Proprietary. All rights reserved unless otherwise specified by the repository owner.

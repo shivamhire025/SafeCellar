@@ -443,7 +443,7 @@ let incidents: Incident[] = [
     incident_type: "near_miss",
     status: "incomplete",
     occurred_at: daysAgo(2),
-    location: "Cellar B — tank pad",
+    location: "Cellar B, tank pad",
     description:
       "Operator slipped on wet floor near CIP line but caught railing. No injury. Area was not cordoned after sanitizer rinse.",
     notes: "Need drip trays and wet-floor signage after CIP cycles.",
@@ -463,7 +463,7 @@ let incidents: Incident[] = [
     incident_type: "injury",
     status: "complete",
     occurred_at: daysAgo(14),
-    location: "Brewhouse — mash tun platform",
+    location: "Brewhouse, mash tun platform",
     description:
       "Minor laceration on forearm from sharp edge on guard panel while clearing blockage. First aid applied on site.",
     notes: "Guard panel scheduled for replacement.",

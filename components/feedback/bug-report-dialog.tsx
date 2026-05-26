@@ -98,7 +98,7 @@ export function BugReportDialog({
       if (!res.ok) throw new Error("Failed");
       toast({
         title: "Bug report submitted",
-        description: "Thank you — the team can review it in Bug reports.",
+        description: "Thank you. The team can review it in Bug reports.",
         variant: "success",
       });
       handleClose(false);
