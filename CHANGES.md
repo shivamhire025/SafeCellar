@@ -8,6 +8,44 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Landing dashboard preview layout fix
+
+### What changed
+- Fixed compliance gauge SVG blowing up to full-page size (explicit `width`/`height` on SVG container).
+- Product preview always uses the in-browser mock (removed broken `useImage` PNG path in hero/how-it-works).
+- Landing display fonts use stable `.font-landing-display` CSS classes instead of Tailwind arbitrary `font-[family-name:...]` values.
+
+### Files
+- `components/landing/landing-dashboard-preview.tsx`, `landing-product-shot.tsx`, `landing-how-it-works.tsx`, `landing-hero.tsx`, `app/globals.css`, other `components/landing/*`
+
+---
+
+## 2026-05-25 — Landing images: brewery-relevant photos
+
+### What changed
+- Replaced all mismatched stock downloads (food, street graffiti, bar, auto shop) with the verified `brewery-hero.jpg` facility photo for cellar, production, CTA, feature panels, and safety walk assets.
+- Kept `compliance-floor.jpg` for the documentation/inspection packet section only.
+
+### Files
+- `public/images/*.jpg`, `public/images/ATTRIBUTION.md`
+
+---
+
+## 2026-05-25 — Landing craft editorial redesign
+
+### What changed
+- **Marketing home (`/`)**: Craft editorial layout with Fraunces + Source Sans 3 (landing-scoped), warm stone palette, photography in every major section, fixed glass nav, and split hero with browser-frame product preview.
+- **New images**: `brewery-cellar.jpg`, `brewery-production.jpg`, `compliance-floor.jpg`, `barrel-room.jpg`, `dashboard-preview.png`; compressed `brewery-hero.jpg`; [`public/images/ATTRIBUTION.md`](public/images/ATTRIBUTION.md).
+- **Sections**: Value pillars with cellar photo, connected workflow timeline, inspection packet with floor photo overlay, image-backed feature bento (4 panels), CTA on barrel-room photo.
+- Removed generic 16-card feature grid and `landing-packet-diagram.tsx`.
+
+### Files
+- `components/landing/` (shell, nav, hero, value, how-it-works, packet, features, cta, footer, browser-frame, product-shot, images.ts)
+- `components/landing/landing-page.tsx`, `app/globals.css`
+- `public/images/*`
+
+---
+
 ## 2026-05-25 — Landing workflow layout fix
 
 ### What changed

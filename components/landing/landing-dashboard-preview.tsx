@@ -1,20 +1,40 @@
-/** Static marketing mock of the compliance overview (not live data). */
-export function LandingDashboardPreview() {
+/** High-fidelity static mock of the compliance dashboard for marketing. */
+export function LandingDashboardPreview({ compact = false }: { compact?: boolean }) {
   return (
     <div
-      className="rounded-xl border border-neutral-200 bg-white p-5 shadow-elevated"
+      className={
+        compact
+          ? "max-w-full overflow-hidden rounded-lg bg-white p-3 shadow-sm"
+          : "max-w-full overflow-hidden rounded-lg bg-white p-4 shadow-sm sm:p-5"
+      }
       aria-hidden
     >
-      <p className="text-xs font-bold uppercase tracking-wide text-red-700">
-        Compliance Score
-      </p>
-      <div className="mt-4 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-        <div className="relative w-32 aspect-[9/5] flex-shrink-0">
-          <svg viewBox="0 0 180 100" className="h-full w-full">
+      <div className="flex items-center justify-between gap-2 border-b border-neutral-100 pb-3">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-stone-500 sm:text-xs">
+          Compliance overview
+        </p>
+        <span className="rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[10px] font-semibold text-red-800">
+          Not inspection-ready
+        </span>
+      </div>
+
+      <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-start">
+        <div
+          className="relative mx-auto shrink-0 sm:mx-0"
+          style={{ width: 144, height: 80, maxWidth: "100%" }}
+        >
+          <svg
+            width={144}
+            height={80}
+            viewBox="0 0 180 100"
+            className="block max-w-full"
+            preserveAspectRatio="xMidYMid meet"
+            aria-hidden
+          >
             <path
               d="M 20 90 A 70 70 0 0 1 160 90"
               fill="none"
-              stroke="#E5E7EB"
+              stroke="#E7E5E4"
               strokeWidth="12"
               strokeLinecap="round"
             />
@@ -25,53 +45,51 @@ export function LandingDashboardPreview() {
               strokeWidth="12"
               strokeLinecap="butt"
             />
-            {[0, 25, 50, 75, 100].map((pct) => {
-              const angle = Math.PI + (pct / 100) * Math.PI;
-              const cx = 90;
-              const cy = 90;
-              const r1 = 78;
-              const r2 = 85;
-              return (
-                <line
-                  key={pct}
-                  x1={cx + r1 * Math.cos(angle)}
-                  y1={cy + r1 * Math.sin(angle)}
-                  x2={cx + r2 * Math.cos(angle)}
-                  y2={cy + r2 * Math.sin(angle)}
-                  stroke="#9CA3AF"
-                  strokeWidth="1.5"
-                />
-              );
-            })}
           </svg>
           <span className="absolute inset-0 flex items-end justify-center pb-1 text-2xl font-bold text-red-600">
             40%
           </span>
         </div>
-        <div className="text-sm text-neutral-600 space-y-1">
-          <span className="inline-block rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-900">
-            Not inspection-ready
-          </span>
+        <div className="min-w-0 flex-1 space-y-2 text-sm text-stone-600">
           <p>
-            <span className="font-semibold text-neutral-900">2</span> of 5 chemicals
+            <span className="font-semibold text-stone-900">2</span> of 5 chemicals
             compliant
           </p>
-          <p className="text-xs">2 missing SDS · 1 review due</p>
+          <p className="text-xs text-stone-500">2 missing SDS · 1 review due</p>
+          <p className="text-xs font-medium text-brand-700">View pending actions</p>
         </div>
       </div>
+
       <div className="mt-4 grid grid-cols-3 gap-2">
         {[
-          { label: "SDS Status", value: "2", sub: "missing", color: "text-red-700" },
-          { label: "Deliveries", value: "1", sub: "pending scan", color: "text-amber-700" },
-          { label: "Review queue", value: "3", sub: "items", color: "text-amber-700" },
+          {
+            label: "SDS status",
+            value: "2",
+            sub: "missing",
+            tone: "text-red-700 bg-red-50 border-red-100",
+          },
+          {
+            label: "Deliveries",
+            value: "1",
+            sub: "pending",
+            tone: "text-amber-800 bg-amber-50 border-amber-100",
+          },
+          {
+            label: "Review",
+            value: "3",
+            sub: "in queue",
+            tone: "text-amber-800 bg-amber-50 border-amber-100",
+          },
         ].map((c) => (
           <div
             key={c.label}
-            className="rounded-lg border border-neutral-100 bg-neutral-50 px-2 py-2"
+            className={`rounded-md border px-2 py-2 ${c.tone}`}
           >
-            <p className="text-[10px] font-bold uppercase text-neutral-500">{c.label}</p>
-            <p className={`text-lg font-bold ${c.color}`}>{c.value}</p>
-            <p className="text-[10px] text-neutral-500">{c.sub}</p>
+            <p className="text-[9px] font-bold uppercase tracking-wide opacity-80">
+              {c.label}
+            </p>
+            <p className="text-lg font-bold leading-none">{c.value}</p>
+            <p className="text-[9px] opacity-80">{c.sub}</p>
           </div>
         ))}
       </div>
