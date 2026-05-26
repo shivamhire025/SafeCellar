@@ -18,6 +18,28 @@ This file tracks implementation and UX changes made during development.
 
 ---
 
+## 2026-05-25 — Dev server recovery: stale `.next` chunk + watcher EMFILE
+
+### What changed
+- Documented the fix for local dev “Cannot find module `./XXXX.js`” (stale `.next`) and Watchpack `EMFILE` errors: stop duplicate Next processes, clear `.next`, restart dev with polling when needed.
+
+### Files
+- N/A (local dev environment)
+
+## 2026-05-25 — Forgot password flow (Supabase Auth)
+
+### What changed
+- Added password reset flow: request reset email (`/forgot-password`), token exchange endpoint (`/auth/confirm`), and set-new-password screen (`/reset-password`).
+- Login screen “Forgot your password?” now links to the real reset flow.
+- Demo mode shows a clear message that password reset is unavailable.
+
+### Files
+- `app/(auth)/login/page.tsx`
+- `app/(auth)/forgot-password/page.tsx`
+- `app/(auth)/reset-password/page.tsx`
+- `app/(auth)/auth-code-error/page.tsx`
+- `app/auth/confirm/route.ts`
+
 ## 2026-05-25 — Inspection ready two-column layout
 
 ### What changed
